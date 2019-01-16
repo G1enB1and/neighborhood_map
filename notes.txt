@@ -1,0 +1,6 @@
+my google maps key:
+AIzaSyDqQry8xCE6UqTuRaXy1OQnIOhZa0AIo2A
+
+To find coordinates use this geocoder:
+https://google-developers.appspot.com/maps/documentation/utils/geocoder/
+
