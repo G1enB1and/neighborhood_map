@@ -8,151 +8,16 @@ function initMap() {
   // Create a styles array to use with the map.
   var styles = [
     {
-        "featureType": "all",
-        "elementType": "geometry.fill",
-        "stylers": [
-            {
-                "visibility": "on"
-            },
-            {
-                "color": "#faeac6"
-            }
-        ]
-    },
-    {
-        "featureType": "all",
-        "elementType": "geometry.stroke",
-        "stylers": [
-            {
-                "color": "#231201"
-            }
-        ]
-    },
-    {
-        "featureType": "all",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            {
-                "color": "#ff0000"
-            }
-        ]
-    },
-    {
-        "featureType": "all",
-        "elementType": "labels.icon",
-        "stylers": [
-            {
-                "visibility": "on"
-            }
-        ]
-    },
-    {
         "featureType": "administrative",
-        "elementType": "geometry.fill",
-        "stylers": [
-            {
-                "color": "#4b1616"
-            },
-            {
-                "visibility": "simplified"
-            }
-        ]
-    },
-    {
-        "featureType": "administrative",
-        "elementType": "labels.text",
-        "stylers": [
-            {
-                "color": "#583816"
-            },
-            {
-                "visibility": "on"
-            }
-        ]
-    },
-    {
-        "featureType": "administrative",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            {
-                "color": "#ffffff"
-            }
-        ]
-    },
-    {
-        "featureType": "administrative",
-        "elementType": "labels.text.stroke",
-        "stylers": [
-            {
-                "color": "#583816"
-            }
-        ]
-    },
-    {
-        "featureType": "administrative",
-        "elementType": "labels.icon",
-        "stylers": [
-            {
-                "color": "#ff0000"
-            }
-        ]
-    },
-    {
-        "featureType": "landscape",
         "elementType": "all",
         "stylers": [
             {
-                "color": "#f2f2f2"
+                "saturation": "-100"
             }
         ]
     },
     {
-        "featureType": "landscape",
-        "elementType": "geometry.fill",
-        "stylers": [
-            {
-                "color": "#f8f6f4"
-            },
-            {
-                "visibility": "on"
-            }
-        ]
-    },
-    {
-        "featureType": "landscape",
-        "elementType": "geometry.stroke",
-        "stylers": [
-            {
-                "color": "#231201"
-            },
-            {
-                "saturation": "0"
-            },
-            {
-                "weight": "1"
-            }
-        ]
-    },
-    {
-        "featureType": "landscape",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            {
-                "color": "#544f4f"
-            }
-        ]
-    },
-    {
-        "featureType": "landscape",
-        "elementType": "labels.text.stroke",
-        "stylers": [
-            {
-                "color": "#ffffff"
-            }
-        ]
-    },
-    {
-        "featureType": "poi",
+        "featureType": "administrative.province",
         "elementType": "all",
         "stylers": [
             {
@@ -161,11 +26,41 @@ function initMap() {
         ]
     },
     {
-        "featureType": "poi",
-        "elementType": "geometry.fill",
+        "featureType": "landscape",
+        "elementType": "all",
         "stylers": [
             {
-                "color": "#583816"
+                "saturation": -100
+            },
+            {
+                "lightness": 65
+            },
+            {
+                "visibility": "on"
+            }
+        ]
+    },
+    {
+        "featureType": "poi",
+        "elementType": "all",
+        "stylers": [
+            {
+                "saturation": -100
+            },
+            {
+                "lightness": "50"
+            },
+            {
+                "visibility": "simplified"
+            }
+        ]
+    },
+    {
+        "featureType": "poi",
+        "elementType": "labels.icon",
+        "stylers": [
+            {
+                "visibility": "off"
             }
         ]
     },
@@ -174,28 +69,7 @@ function initMap() {
         "elementType": "all",
         "stylers": [
             {
-                "saturation": -100
-            },
-            {
-                "lightness": 45
-            }
-        ]
-    },
-    {
-        "featureType": "road",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            {
-                "color": "#583816"
-            }
-        ]
-    },
-    {
-        "featureType": "road",
-        "elementType": "labels.text.stroke",
-        "stylers": [
-            {
-                "weight": "0"
+                "saturation": "-100"
             }
         ]
     },
@@ -210,10 +84,19 @@ function initMap() {
     },
     {
         "featureType": "road.arterial",
-        "elementType": "labels.icon",
+        "elementType": "all",
         "stylers": [
             {
-                "visibility": "off"
+                "lightness": "30"
+            }
+        ]
+    },
+    {
+        "featureType": "road.local",
+        "elementType": "all",
+        "stylers": [
+            {
+                "lightness": "40"
             }
         ]
     },
@@ -222,76 +105,37 @@ function initMap() {
         "elementType": "all",
         "stylers": [
             {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "transit",
-        "elementType": "geometry.fill",
-        "stylers": [
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "transit",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            {
-                "color": "#544f4f"
-            }
-        ]
-    },
-    {
-        "featureType": "transit",
-        "elementType": "labels.text.stroke",
-        "stylers": [
-            {
-                "color": "#ff0000"
-            }
-        ]
-    },
-    {
-        "featureType": "water",
-        "elementType": "all",
-        "stylers": [
-            {
-                "color": "#46bcec"
+                "saturation": -100
             },
             {
-                "visibility": "on"
+                "visibility": "simplified"
             }
         ]
     },
     {
         "featureType": "water",
-        "elementType": "geometry.fill",
+        "elementType": "geometry",
         "stylers": [
             {
-                "color": "#d0c1b1"
+                "hue": "#ffff00"
             },
             {
-                "weight": "1.00"
+                "lightness": -25
+            },
+            {
+                "saturation": -97
             }
         ]
     },
     {
         "featureType": "water",
-        "elementType": "labels.text.fill",
+        "elementType": "labels",
         "stylers": [
             {
-                "color": "#544f4f"
-            }
-        ]
-    },
-    {
-        "featureType": "water",
-        "elementType": "labels.text.stroke",
-        "stylers": [
+                "lightness": -25
+            },
             {
-                "color": "#ffffff"
+                "saturation": -100
             }
         ]
     }
@@ -329,7 +173,7 @@ function initMap() {
       position: position,
       title: title,
       animation: google.maps.Animation.DROP,
-	  icon: 'img/coffeeMarkerRed31x45.png',
+	  icon: 'img/coffee_marker_green.png',
       id: i
     });
 	
@@ -344,10 +188,10 @@ function initMap() {
 	// Two event listeners - one for mouseover, one for mouseout,
     // to change the colors back and forth.
     marker.addListener('mouseover', function() {
-      this.setIcon('img/coffeeMarkerYellow31x45.png');
+      this.setIcon('img/coffee_marker_teal.png');
     });
     marker.addListener('mouseout', function() {
-      this.setIcon('img/coffeeMarkerRed31x45.png');
+      this.setIcon('img/coffee_marker_green.png');
     });
 	
   } // end of for (var i = 0; i < locations.length; i++)

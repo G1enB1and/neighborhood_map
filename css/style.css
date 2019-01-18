@@ -7,8 +7,29 @@ body {
 }
 
 .container {
+  display: flex;
+  flex-flow: row nowrap;
   height: 100%;
-  position: relative;
+  width: 100%;
+}
+
+.header_map_wrapper {
+	display: flex;
+	flex-flow: row wrap;
+	width: 100%;
+}
+
+.header {
+  display: flex;
+  height: 50px;
+  width: 100%;
+  background: #baa89b;
+  color: #422404;
+  border: 1px solid #999;
+  align-items: center; /* center vertically, does not affect horizontal */
+  justify-content: flex-start; /* left */
+  padding-left: 10px;
+  font-size: 1.6em;
 }
 
 input {
@@ -16,7 +37,6 @@ input {
 }
 
 h1 {
-  color: #525454;
   font-size: 22px;
   margin: 0 0 10px 0;
   text-align: center;
@@ -28,17 +48,14 @@ h1 {
 }
 
 #map {
-  position: absolute;
   height: 100%;
-  bottom: 0;
-  left: 362px;
-  right: 0;
+  width: 100%;
 }
 
 .options-box {
-  background: #fff;
+  background: #524439;
+  color: #dfe0df;
   border: 1px solid #999;
-  border-radius: 3px;
   height: 100%;
   line-height: 35px;
   padding: 10px 10px 30px 10px;
