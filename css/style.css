@@ -11,12 +11,17 @@ body {
   flex-flow: row nowrap;
   height: 100%;
   width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 .header_map_wrapper {
 	display: flex;
 	flex-flow: row wrap;
 	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
 }
 
 .header {
@@ -28,7 +33,7 @@ body {
   border: 1px solid #999;
   align-items: center; /* center vertically, does not affect horizontal */
   justify-content: flex-start; /* left */
-  padding-left: 10px;
+  padding: 0 0 0 10px; /* top right bottom left */
   font-size: 1.6em;
 }
 
@@ -38,7 +43,7 @@ input {
 
 h1 {
   font-size: 22px;
-  margin: 0 0 10px 0;
+  margin: 0 0 10px 0; /* top right bottom left */
   text-align: center;
 }
 
@@ -46,10 +51,10 @@ h1 {
 #show-listings {
   width: 48%;
 }
-
+/* https://github.com/google-map-react/google-map-react/issues/142 */
 #map {
-  height: 100%;
   width: 100%;
+  height: 100%;
 }
 
 .options-box {
@@ -58,7 +63,8 @@ h1 {
   border: 1px solid #999;
   height: 100%;
   line-height: 35px;
-  padding: 10px 10px 30px 10px;
+  padding: 10px 10px 0 10px; /* top right bottom left */
   text-align: left;
   width: 340px;
+  
 }
