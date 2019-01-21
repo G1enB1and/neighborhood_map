@@ -78,3 +78,7 @@ h1 {
   text-align: left;
   width: 340px;
 }
+
+.menu-btn {
+	cursor: pointer;
+}
