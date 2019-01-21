@@ -152,6 +152,7 @@ function initMap() {
   // Fix heights (JQuery method)
   // Flex does not work properly with google maps to fill remaining height as it would with an image.
   // The header at 50px and 2 borders at 1px each extend the map size beyond 100% by 52px.
+  // TODO: change to knockout observables to update when changed.
   // Set initial height of map to height of map_container - 52px (JQuery method)
   $('#map').height($('#map_container').height()-52);
   // set initial height of options-box to itself - 52px (JQuery method)
