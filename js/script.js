@@ -143,8 +143,8 @@ function initMap() {
 
   // Constructor creates a new map - only center and zoom are required.
   map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: 40.7413549, lng: -73.9980244},
-    zoom: 13,
+    center: {lat: 32.776664, lng: -96.796988},
+    zoom: 11,
 	styles: styles,
 	mapTypeControl: false
   });
@@ -152,12 +152,25 @@ function initMap() {
   // These are the listings that will be shown to the user.
   // Normally we'd have these in a database instead.
   var locations = [
-    {title: 'Park Ave Penthouse', location: {lat: 40.7713024, lng: -73.9632393}},
-    {title: 'Chelsea Loft', location: {lat: 40.7444883, lng: -73.9949465}},
-    {title: 'Union Square Open Floor Plan', location: {lat: 40.7347062, lng: -73.9895759}},
-    {title: 'East Village Hip Studio', location: {lat: 40.7281777, lng: -73.984377}},
-    {title: 'TriBeCa Artsy Bachelor Pad', location: {lat: 40.7195264, lng: -74.0089934}},
-    {title: 'Chinatown Homey Space', location: {lat: 40.7180628, lng: -73.9961237}}
+    {title: 'Cafe Brazil', location: {lat: 32.844404, lng: -96.773435}},
+	{title: 'Cafe Brazil', location: {lat: 32.784975, lng: -96.783027}},
+    {title: 'Starbucks', location: {lat: 32.864403, lng: -96.660265}},
+	{title: 'Starbucks', location: {lat: 32.811152, lng: -96.623135}},
+	{title: 'Starbucks', location: {lat: 32.746236, lng: -96.585969}},
+	{title: 'Starbucks', location: {lat: 32.866008, lng: -96.763481}},
+	{title: 'Black Forest Coffee', location: {lat: 32.86609, lng: -96.764503}},
+    {title: 'Dennys', location: {lat: 32.864872, lng: -96.660885}},
+	{title: 'Dennys', location: {lat: 32.819224, lng: -96.786784}},
+	{title: 'Dennys', location: {lat: 32.841681, lng: -96.593621}},
+	{title: 'Dennys', location: {lat: 32.789396, lng: -96.594197}},
+    {title: 'iHop', location: {lat: 32.857431, lng: -96.647735}},
+	{title: 'iHop', location: {lat: 32.859325, lng: -96.769432}},
+	{title: 'iHop', location: {lat: 32.768661, lng: -96.625545}},
+    {title: 'Goldmine', location: {lat: 32.876755, lng: -96.631224}},
+	{title: 'Beef House', location: {lat: 32.878382, lng: -96.647637}},
+	{title: 'Dunkin Donuts', location: {lat: 32.861236, lng: -96.643064}},
+	{title: 'Dunkin Donuts', location: {lat: 32.952197, lng: -96.769473}},
+	{title: 'White Rock Coffee', location: {lat: 32.864607, lng: -96.712334}}
   ];
   
   var largeInfowindow = new google.maps.InfoWindow();
