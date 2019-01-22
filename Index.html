@@ -53,8 +53,8 @@
 	<script> <!-- start with menu closed and toggle onclick -->
 	  var btnMenu = document.querySelector(".menu-btn");
       var optionsBox = document.querySelector(".options-box");
-      var menuStatus = false; //closed
-      optionsBox.style.marginLeft = "-362px";
+      var menuStatus = true; // opened
+      optionsBox.style.marginLeft = "0px";
 
       function menuToggle() {
         if (menuStatus == false) {
