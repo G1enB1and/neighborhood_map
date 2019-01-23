@@ -3,6 +3,9 @@ let map;
 // Create a new blank array for all the listing markers.
 let markers = [];
 
+/**
+* @description Initialize Map
+*/
 function initMap() {
 	
   // Create a styles array to use with the map.
@@ -96,7 +99,10 @@ function initMap() {
     }]
   }]; // end of map styles array
 
-  // Constructor creates a new map - only center and zoom are required.
+  /**
+  * @description creates a new map - only center and zoom are required.
+  * @constructor
+  */
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 32.776664, lng: -96.796988},
     zoom: 11,
@@ -143,7 +149,7 @@ function initMap() {
       animation: google.maps.Animation.DROP,
 	  icon: 'img/coffee_marker_green.png',
       id: i
-    });
+    }); // end of let marker = new google.maps.Marker({})
 	
     // Push the marker to our array of markers.
     markers.push(marker);
@@ -164,26 +170,33 @@ function initMap() {
 	
   } // end of for (var i = 0; i < locations.length; i++)
   
-  document.getElementById('show-listings').addEventListener('click', showListings);
-  document.getElementById('hide-listings').addEventListener('click', hideListings);
+  document.getElementById('showListings').addEventListener('click', showListings);
+  document.getElementById('hideListings').addEventListener('click', hideListings);
   
 } // end of initMap()
 
-// This function populates the infowindow when the marker is clicked.
+/**
+* @description This function populates the infowindow when the marker is clicked.
+* @param {object} marker
+* @param {object} inforwindow
+*/
 function populateInfoWindow(marker, infowindow) {
   // Check to make sure the infowindow is not already opened on this marker.
   if (infowindow.marker != marker) {
     infowindow.marker = marker;
     infowindow.setContent('<div>' + marker.title + '</div>');
     infowindow.open(map, marker);
+	
     // Make sure the marker property is cleared if the infowindow is closed.
     infowindow.addListener('closeclick',function(){
       infowindow.setMarker = null;
     });
-  }
-} //end of populateInfoWindow()
+  } // end of if(infowindow.marker != marker)
+} // end of populateInfoWindow()
 
-// This function will loop through the markers array and display them all.
+/**
+* @description This function will loop through the markers array and display them all.
+*/
 function showListings() {
   let bounds = new google.maps.LatLngBounds();
   // Extend the boundaries of the map for each marker and display the marker
@@ -192,11 +205,13 @@ function showListings() {
     bounds.extend(markers[i].position);
   }
   map.fitBounds(bounds);
-}
+} // end of showListings()
 
-// This function will loop through the listings and hide them all.
+/**
+* @description This function will loop through the listings and hide them all.
+*/
 function hideListings() {
   for (let i = 0; i < markers.length; i++) {
     markers[i].setMap(null);
   }
-}
+} // end of hideListings

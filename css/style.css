@@ -15,7 +15,7 @@ body {
   padding: 0;
 }
 
-.header_map_wrapper {
+.headerMapWrapper {
 	display: flex;
 	flex-flow: row wrap;
 	width: 100%;
@@ -48,12 +48,12 @@ h1 {
   text-align: center;
 }
 
-#hide-listings,
-#show-listings {
+#hideListings,
+#showListings {
   width: 48%;
 }
 
-#map_container {
+#mapContainer {
   position: relative;
   height: 100%;
   flex: 2 2 auto;
@@ -67,7 +67,7 @@ h1 {
   bottom: 0;
 }
 
-.options-box {
+.optionsBox {
   background: #524439;
   color: #dfe0df;
   border: 1px solid #999;
@@ -78,6 +78,6 @@ h1 {
   width: 340px;
 }
 
-.menu-btn {
+.menuBtn {
 	cursor: pointer;
 }

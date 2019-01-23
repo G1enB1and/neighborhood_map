@@ -14,17 +14,24 @@ Tracking click events on list items should be handled with knockout.js.
 Creating markers as a part of the ViewModel in knockout is recommended, but NOT as observables.
 knockout.js should not be used for anything the Maps API is used for, creating markers, tracking click events on markers, making the map, refreshing the map.
 
-Code is properly separated based upon Knockout best practices (follow an MVVM pattern, avoid updating the DOM manually with jQuery or JS, use observables rather than forcing refreshes manually, etc). Knockout should not be used to handle the Google Map API.
+Code is properly separated based upon Knockout best practices (follow an MVVM pattern, avoid updating the DOM manually with jQuery or JS, use observables rather than forcing refreshes manually, etc). 
+Knockout should not be used to handle the Google Map API.
 
 All data APIs should load asynchronously and gracefully handle errors.
 
-Data requests that fail are handled gracefully using common fallback techniques (i.e. AJAX error or fail methods). 'Gracefully' means the user isn’t left wondering why a component isn’t working. If an API doesn’t load there should be some visible indication on the page (an alert box is ok) that it didn’t load. Note: You do not need to handle cases where the user goes offline.
+Data requests that fail are handled gracefully using common fallback techniques (i.e. AJAX error or fail methods). 
+'Gracefully' means the user isn’t left wondering why a component isn’t working. 
+If an API doesn’t load there should be some visible indication on the page (an alert box is ok) that it didn’t load. 
+Note: You do not need to handle cases where the user goes offline.
 
 The map should display at least 5 location markers by default when the page is loaded.
 
 Implement a list view of the location markers.
 
-Provide a filter option that uses an input field to filter both the list view and the map markers displayed by default on load. The list view and the markers should update accordingly in real time. Providing a search function through a third-party API is not enough to meet specifications. This filter can be a text input or a dropdown menu.
+Provide a filter option that uses an input field to filter both the list view and the map markers displayed by default on load. 
+The list view and the markers should update accordingly in real time. 
+Providing a search function through a third-party API is not enough to meet specifications. 
+This filter can be a text input or a dropdown menu.
 
 Add functionality using third-party APIs (at least one non-Google API) to provide information when a map marker or list view entry is clicked (ex: Yelp reviews, Wikipedia, Flickr images, etc). Note that StreetView and Places don't count as an additional 3rd party API. provide attribution to the data sources/APIs you use. For example if you are using Foursquare, indicate somewhere in your interface and in your README that you used Foursquare's API.
 

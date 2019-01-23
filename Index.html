@@ -27,32 +27,32 @@
   <body>
   
     <div class='container'>
-      <div class='options-box'>
+      <div class='optionsBox'>
 	  
         <h1>Coffee Shop Locations</h1>
 		
         <div>
-          <input id='show-listings' type='button' value='Show Listings'>
-          <input id='hide-listings' type='button' value='Hide Listings'>
+          <input id='showListings' type='button' value='Show Listings'>
+          <input id='hideListings' type='button' value='Hide Listings'>
         </div>
 		
       </div> <!-- end of div class='options-box' -->
 	  
-	  <div class='header_map_wrapper'>
+	  <div class='headerMapWrapper'>
 	    <div class='header'>
-	      <i class='fas fa-bars menu-btn'></i>
+	      <i class='fas fa-bars menuBtn'></i>
 	    </div> <!-- end of header div -->
 	  
-	    <div id='map_container'>
+	    <div id='mapContainer'>
           <div id='map'></div>
-		</div> <!-- end of map_container -->
-      </div> <!-- end of header_map_wrapper -->
+		</div> <!-- end of mapContainer -->
+      </div> <!-- end of headerMapWrapper -->
 	  
     </div> <!-- end of div class='container' -->
 
 	<script> <!-- start with menu closed and toggle onclick -->
-	  let btnMenu = document.querySelector('.menu-btn');
-      let optionsBox = document.querySelector('.options-box');
+	  let btnMenu = document.querySelector('.menuBtn');
+      let optionsBox = document.querySelector('.optionsBox');
       let menuStatus = true; // opened
       optionsBox.style.marginLeft = '0px';
 
@@ -69,22 +69,24 @@
       btnMenu.onclick = menuToggle; // don't us onclick() or it will run automatically.
 	</script>
 	
-	<script>
-	  // Fix heights (JQuery method)
+	<script> <!-- Fix heights of map container and optionsBox (JQuery method) -->
       // Flex does not work properly with google maps to fill remaining height as it would with an image.
       // The header at 50px and 2 borders at 1px each extend the map size beyond 100% by 52px.
+	  /**
+	  * @description Fix heights of map container to window height - header height 
+	  */
 	  function fixHeight() {
         // Set initial height of map to height of container - 52px
         $('#map').height($('.container').height()-52);
         // Set initial height of options-box to height of container - 12px
-        $('.options-box').height($('.container').height()-12);
+        $('.optionsBox').height($('.container').height()-12);
         // Set initial height of header_ma_wrapper to height of container - 52px
-        $('.header_map_wrapper').height($('.container').height()-52);
+        $('.headerMapWrapper').height($('.container').height()-52);
 	  }
 	  fixHeight(); // call on load
 	  $(window).resize(fixHeight); //call on window resize
 	  
-    </script>
+    </script> <!-- end of script to fix heights of map container and optionsBox-->
 	
 	<!-- google maps initMap callback script-->
     <script async defer
