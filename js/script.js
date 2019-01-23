@@ -1,12 +1,12 @@
-var map;
+let map;
 
 // Create a new blank array for all the listing markers.
-var markers = [];
+let markers = [];
 
 function initMap() {
 	
   // Create a styles array to use with the map.
-  var styles = [
+  let styles = [
     {
       "featureType": "administrative",
       "elementType": "all",
@@ -151,7 +151,7 @@ function initMap() {
   
   // These are the listings that will be shown to the user.
   // Normally we'd have these in a database instead.
-  var locations = [
+  let locations = [
     {title: 'Cafe Brazil', location: {lat: 32.844404, lng: -96.773435}},
 	{title: 'Cafe Brazil', location: {lat: 32.784975, lng: -96.783027}},
     {title: 'Starbucks', location: {lat: 32.864403, lng: -96.660265}},
@@ -173,16 +173,16 @@ function initMap() {
 	{title: 'White Rock Coffee', location: {lat: 32.864607, lng: -96.712334}}
   ];
   
-  var largeInfowindow = new google.maps.InfoWindow();
+  let largeInfowindow = new google.maps.InfoWindow();
 
   // The following group uses the location array to create an array of markers on initialize.
   for (var i = 0; i < locations.length; i++) {
     // Get the position from the location array.
-    var position = locations[i].location;
-    var title = locations[i].title;
+    let position = locations[i].location;
+    let title = locations[i].title;
 	
     // Create a marker per location, and put into markers array.
-    var marker = new google.maps.Marker({
+    let marker = new google.maps.Marker({
       position: position,
       title: title,
       animation: google.maps.Animation.DROP,
@@ -230,9 +230,9 @@ function populateInfoWindow(marker, infowindow) {
 
 // This function will loop through the markers array and display them all.
 function showListings() {
-  var bounds = new google.maps.LatLngBounds();
+  let bounds = new google.maps.LatLngBounds();
   // Extend the boundaries of the map for each marker and display the marker
-  for (var i = 0; i < markers.length; i++) {
+  for (let i = 0; i < markers.length; i++) {
     markers[i].setMap(map);
     bounds.extend(markers[i].position);
   }
@@ -241,7 +241,7 @@ function showListings() {
 
 // This function will loop through the listings and hide them all.
 function hideListings() {
-  for (var i = 0; i < markers.length; i++) {
+  for (let i = 0; i < markers.length; i++) {
     markers[i].setMap(null);
   }
 }
