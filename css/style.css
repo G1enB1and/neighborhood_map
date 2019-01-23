@@ -52,7 +52,6 @@ h1 {
 #show-listings {
   width: 48%;
 }
-/* https://github.com/google-map-react/google-map-react/issues/142 */
 
 #map_container {
   position: relative;

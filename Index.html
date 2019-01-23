@@ -5,64 +5,64 @@
   <head>
   
     <title>Neighborhood Map</title>
-    <meta name="description" content="Udacity - Fullstack Web Developer Nanodegree - The Frontend: Javascript and AJAX - Neighborhood Map Project">
-    <meta name="keywords" content="Udacity, Fullstack, Web, Developer, Nanodegree, Frontend, Javascript, AJAX, Neighborhood, Map, Project, Google, Yelp, API, Foursquare, Asynchronous">
-    <meta name="author" content="Glen Bland">
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name='description' content='Udacity - Fullstack Web Developer Nanodegree - The Frontend: Javascript and AJAX - Neighborhood Map Project'>
+    <meta name='keywords' content='Udacity, Fullstack, Web, Developer, Nanodegree, Frontend, Javascript, AJAX, Neighborhood, Map, Project, Google, Yelp, API, Foursquare, Asynchronous'>
+    <meta name='author' content='Glen Bland'>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, shrink-to-fit=no'>
 	  
     <!-- style sheets -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel='stylesheet' href='css/style.css'>
 	
 	<!-- font awesome icons -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.6.3/css/all.css' integrity='sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/' crossorigin='anonymous'>
 	
 	<!-- javascripts -->
-	<script src="js/libs/jquery.min.js"></script>
-	<script src="js/libs/knockout-3.4.2.js"></script>
-	<script src="js/script.js"></script>
+	<script src='js/libs/jquery.min.js'></script>
+	<script src='js/libs/knockout-3.4.2.js'></script>
+	<script src='js/script.js'></script>
 	
   </head>
   
   <body>
   
-    <div class="container">
-      <div class="options-box">
+    <div class='container'>
+      <div class='options-box'>
 	  
         <h1>Coffee Shop Locations</h1>
 		
         <div>
-          <input id="show-listings" type="button" value="Show Listings">
-          <input id="hide-listings" type="button" value="Hide Listings">
+          <input id='show-listings' type='button' value='Show Listings'>
+          <input id='hide-listings' type='button' value='Hide Listings'>
         </div>
 		
-      </div> <!-- end of div class="options-box" -->
+      </div> <!-- end of div class='options-box' -->
 	  
-	  <div class="header_map_wrapper">
-	    <div class="header">
-	      <i class="fas fa-bars menu-btn"></i>
+	  <div class='header_map_wrapper'>
+	    <div class='header'>
+	      <i class='fas fa-bars menu-btn'></i>
 	    </div> <!-- end of header div -->
 	  
-	    <div id="map_container">
-          <div id="map"></div>
+	    <div id='map_container'>
+          <div id='map'></div>
 		</div> <!-- end of map_container -->
       </div> <!-- end of header_map_wrapper -->
 	  
-    </div> <!-- end of div class="container" -->
+    </div> <!-- end of div class='container' -->
 
 	<script> <!-- start with menu closed and toggle onclick -->
-	  let btnMenu = document.querySelector(".menu-btn");
-      let optionsBox = document.querySelector(".options-box");
+	  let btnMenu = document.querySelector('.menu-btn');
+      let optionsBox = document.querySelector('.options-box');
       let menuStatus = true; // opened
-      optionsBox.style.marginLeft = "0px";
+      optionsBox.style.marginLeft = '0px';
 
       function menuToggle() {
         if (menuStatus == false) {
-	      optionsBox.style.marginLeft = "0px";
+	      optionsBox.style.marginLeft = '0px';
 	      menuStatus = true;
         }
         else if (menuStatus == true) {
-	      optionsBox.style.marginLeft = "-362px";
+	      optionsBox.style.marginLeft = '-362px';
 	      menuStatus = false;
         }
       }
@@ -88,7 +88,7 @@
 	
 	<!-- google maps initMap callback script-->
     <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqQry8xCE6UqTuRaXy1OQnIOhZa0AIo2A&v=3&callback=initMap">
+        src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDqQry8xCE6UqTuRaXy1OQnIOhZa0AIo2A&v=3&callback=initMap'>
     </script>
 
   </body>
