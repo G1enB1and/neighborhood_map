@@ -4,7 +4,6 @@ let map;
 let markers = [];
 
 // These are the listings that will be shown to the user.
-// Normally we'd have these in a database instead.
 let locations = [
   {title: 'Cafe Brazil', location: {lat: 32.844404, lng: -96.773435}},
   {title: 'Cafe Brazil', location: {lat: 32.784975, lng: -96.783027}},
@@ -25,7 +24,21 @@ let locations = [
   {title: 'Dunkin Donuts', location: {lat: 32.861236, lng: -96.643064}},
   {title: 'Dunkin Donuts', location: {lat: 32.952197, lng: -96.769473}},
   {title: 'White Rock Coffee', location: {lat: 32.864607, lng: -96.712334}}
-];
+]; //end of locations[]
+
+// Data Model
+let locationsDataModel = function() {
+  var self = this;
+  
+} // end of locationsDataModel
+
+// ViewModel
+function locationsViewModel() {
+  var self = this;
+  
+} // end of locationsViewModel()
+
+// ko.applyBindings(new locationsViewModel());
 
 /**
 * @description Initialize Map
