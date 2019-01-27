@@ -170,8 +170,8 @@ function initMap() {
 	
   } // end of for (var i = 0; i < locations.length; i++)
   
-  document.getElementById('showListings').addEventListener('click', showListings);
-  document.getElementById('hideListings').addEventListener('click', hideListings);
+  // Show listings at load.
+  showListings(); 
   
 } // end of initMap()
 
