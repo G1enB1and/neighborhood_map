@@ -3,6 +3,30 @@ let map;
 // Create a new blank array for all the listing markers.
 let markers = [];
 
+// These are the listings that will be shown to the user.
+// Normally we'd have these in a database instead.
+let locations = [
+  {title: 'Cafe Brazil', location: {lat: 32.844404, lng: -96.773435}},
+  {title: 'Cafe Brazil', location: {lat: 32.784975, lng: -96.783027}},
+  {title: 'Starbucks', location: {lat: 32.864403, lng: -96.660265}},
+  {title: 'Starbucks', location: {lat: 32.811152, lng: -96.623135}},
+  {title: 'Starbucks', location: {lat: 32.746236, lng: -96.585969}},
+  {title: 'Starbucks', location: {lat: 32.866008, lng: -96.763481}},
+  {title: 'Black Forest Coffee', location: {lat: 32.86609, lng: -96.764503}},
+  {title: 'Dennys', location: {lat: 32.864872, lng: -96.660885}},
+  {title: 'Dennys', location: {lat: 32.819224, lng: -96.786784}},
+  {title: 'Dennys', location: {lat: 32.841681, lng: -96.593621}},
+  {title: 'Dennys', location: {lat: 32.789396, lng: -96.594197}},
+  {title: 'iHop', location: {lat: 32.857431, lng: -96.647735}},
+  {title: 'iHop', location: {lat: 32.859325, lng: -96.769432}},
+  {title: 'iHop', location: {lat: 32.768661, lng: -96.625545}},
+  {title: 'Goldmine', location: {lat: 32.876755, lng: -96.631224}},
+  {title: 'Beef House', location: {lat: 32.878382, lng: -96.647637}},
+  {title: 'Dunkin Donuts', location: {lat: 32.861236, lng: -96.643064}},
+  {title: 'Dunkin Donuts', location: {lat: 32.952197, lng: -96.769473}},
+  {title: 'White Rock Coffee', location: {lat: 32.864607, lng: -96.712334}}
+];
+
 /**
 * @description Initialize Map
 */
@@ -109,30 +133,6 @@ function initMap() {
 	styles: styles,
 	mapTypeControl: false
   });
-  
-  // These are the listings that will be shown to the user.
-  // Normally we'd have these in a database instead.
-  let locations = [
-    {title: 'Cafe Brazil', location: {lat: 32.844404, lng: -96.773435}},
-	{title: 'Cafe Brazil', location: {lat: 32.784975, lng: -96.783027}},
-    {title: 'Starbucks', location: {lat: 32.864403, lng: -96.660265}},
-	{title: 'Starbucks', location: {lat: 32.811152, lng: -96.623135}},
-	{title: 'Starbucks', location: {lat: 32.746236, lng: -96.585969}},
-	{title: 'Starbucks', location: {lat: 32.866008, lng: -96.763481}},
-	{title: 'Black Forest Coffee', location: {lat: 32.86609, lng: -96.764503}},
-    {title: 'Dennys', location: {lat: 32.864872, lng: -96.660885}},
-	{title: 'Dennys', location: {lat: 32.819224, lng: -96.786784}},
-	{title: 'Dennys', location: {lat: 32.841681, lng: -96.593621}},
-	{title: 'Dennys', location: {lat: 32.789396, lng: -96.594197}},
-    {title: 'iHop', location: {lat: 32.857431, lng: -96.647735}},
-	{title: 'iHop', location: {lat: 32.859325, lng: -96.769432}},
-	{title: 'iHop', location: {lat: 32.768661, lng: -96.625545}},
-    {title: 'Goldmine', location: {lat: 32.876755, lng: -96.631224}},
-	{title: 'Beef House', location: {lat: 32.878382, lng: -96.647637}},
-	{title: 'Dunkin Donuts', location: {lat: 32.861236, lng: -96.643064}},
-	{title: 'Dunkin Donuts', location: {lat: 32.952197, lng: -96.769473}},
-	{title: 'White Rock Coffee', location: {lat: 32.864607, lng: -96.712334}}
-  ];
   
   let largeInfowindow = new google.maps.InfoWindow();
 
