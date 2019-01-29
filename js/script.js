@@ -26,19 +26,42 @@ let locations = [
   {title: 'White Rock Coffee', location: {lat: 32.864607, lng: -96.712334}}
 ]; //end of locations[]
 
-// Data Model
-let locationsDataModel = function() {
-  var self = this;
-  
-} // end of locationsDataModel
+// TODO: remove locations above and change code in markers to get locations from coffeeShopLocations
 
-// ViewModel
+// Overall viewmodel for this screen, along with initial state
 function locationsViewModel() {
   var self = this;
-  
+
+  self.coffeeShopLocations = ko.observableArray([
+    {title: 'Cafe Brazil 1', location: {lat: 32.844404, lng: -96.773435}},
+    {title: 'Cafe Brazil 2', location: {lat: 32.784975, lng: -96.783027}},
+    {title: 'Starbucks 1', location: {lat: 32.864403, lng: -96.660265}},
+    {title: 'Starbucks 2', location: {lat: 32.811152, lng: -96.623135}},
+    {title: 'Starbucks 3', location: {lat: 32.746236, lng: -96.585969}},
+    {title: 'Starbucks 4', location: {lat: 32.866008, lng: -96.763481}},
+    {title: 'Black Forest Coffee', location: {lat: 32.86609, lng: -96.764503}},
+    {title: 'Dennys 1', location: {lat: 32.864872, lng: -96.660885}},
+    {title: 'Dennys 2', location: {lat: 32.819224, lng: -96.786784}},
+    {title: 'Dennys 3', location: {lat: 32.841681, lng: -96.593621}},
+    {title: 'Dennys 4', location: {lat: 32.789396, lng: -96.594197}},
+    {title: 'iHop 1', location: {lat: 32.857431, lng: -96.647735}},
+    {title: 'iHop 2', location: {lat: 32.859325, lng: -96.769432}},
+    {title: 'iHop 3', location: {lat: 32.768661, lng: -96.625545}},
+    {title: 'Goldmine', location: {lat: 32.876755, lng: -96.631224}},
+    {title: 'Beef House', location: {lat: 32.878382, lng: -96.647637}},
+    {title: 'Dunkin Donuts 1', location: {lat: 32.861236, lng: -96.643064}},
+    {title: 'Dunkin Donuts 2', location: {lat: 32.952197, lng: -96.769473}},
+    {title: 'White Rock Coffee', location: {lat: 32.864607, lng: -96.712334}}
+  ]);
+    
 } // end of locationsViewModel()
 
-// ko.applyBindings(new locationsViewModel());
+// activate knockout.js and apply bindings in locationsViewModel
+// when all dependant DOM elements have been loaded and are ready.
+$(document).ready(function() {
+    ko.applyBindings(new locationsViewModel());
+});
+
 
 /**
 * @description Initialize Map
