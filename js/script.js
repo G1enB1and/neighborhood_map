@@ -4,70 +4,40 @@ let map;
 let markers = [];
 
 // These are the listings that will be shown to the user.
-let locations = [
-  {title: 'Cafe Brazil', location: {lat: 32.844404, lng: -96.773435}},
-  {title: 'Cafe Brazil', location: {lat: 32.784975, lng: -96.783027}},
-  {title: 'Starbucks', location: {lat: 32.864403, lng: -96.660265}},
-  {title: 'Starbucks', location: {lat: 32.811152, lng: -96.623135}},
-  {title: 'Starbucks', location: {lat: 32.746236, lng: -96.585969}},
-  {title: 'Starbucks', location: {lat: 32.866008, lng: -96.763481}},
+coffeeShopLocations = ko.observableArray([
+  {title: 'Cafe Brazil 1', location: {lat: 32.844404, lng: -96.773435}},
+  {title: 'Cafe Brazil 2', location: {lat: 32.784975, lng: -96.783027}},
+  {title: 'Starbucks 1', location: {lat: 32.864403, lng: -96.660265}},
+  {title: 'Starbucks 2', location: {lat: 32.811152, lng: -96.623135}},
+  {title: 'Starbucks 3', location: {lat: 32.746236, lng: -96.585969}},
+  {title: 'Starbucks 4', location: {lat: 32.866008, lng: -96.763481}},
   {title: 'Black Forest Coffee', location: {lat: 32.86609, lng: -96.764503}},
-  {title: 'Dennys', location: {lat: 32.864872, lng: -96.660885}},
-  {title: 'Dennys', location: {lat: 32.819224, lng: -96.786784}},
-  {title: 'Dennys', location: {lat: 32.841681, lng: -96.593621}},
-  {title: 'Dennys', location: {lat: 32.789396, lng: -96.594197}},
-  {title: 'iHop', location: {lat: 32.857431, lng: -96.647735}},
-  {title: 'iHop', location: {lat: 32.859325, lng: -96.769432}},
-  {title: 'iHop', location: {lat: 32.768661, lng: -96.625545}},
+  {title: 'Dennys 1', location: {lat: 32.864872, lng: -96.660885}},
+  {title: 'Dennys 2', location: {lat: 32.819224, lng: -96.786784}},
+  {title: 'Dennys 3', location: {lat: 32.841681, lng: -96.593621}},
+  {title: 'Dennys 4', location: {lat: 32.789396, lng: -96.594197}},
+  {title: 'iHop 1', location: {lat: 32.857431, lng: -96.647735}},
+  {title: 'iHop 2', location: {lat: 32.859325, lng: -96.769432}},
+  {title: 'iHop 3', location: {lat: 32.768661, lng: -96.625545}},
   {title: 'Goldmine', location: {lat: 32.876755, lng: -96.631224}},
   {title: 'Beef House', location: {lat: 32.878382, lng: -96.647637}},
-  {title: 'Dunkin Donuts', location: {lat: 32.861236, lng: -96.643064}},
-  {title: 'Dunkin Donuts', location: {lat: 32.952197, lng: -96.769473}},
+  {title: 'Dunkin Donuts 1', location: {lat: 32.861236, lng: -96.643064}},
+  {title: 'Dunkin Donuts 2', location: {lat: 32.952197, lng: -96.769473}},
   {title: 'White Rock Coffee', location: {lat: 32.864607, lng: -96.712334}}
-]; //end of locations[]
-
-// TODO: remove locations above and change code in markers to get locations from coffeeShopLocations
-
-// Overall viewmodel for this screen, along with initial state
-function locationsViewModel() {
-  var self = this;
-
-  self.coffeeShopLocations = ko.observableArray([
-    {title: 'Cafe Brazil 1', location: {lat: 32.844404, lng: -96.773435}},
-    {title: 'Cafe Brazil 2', location: {lat: 32.784975, lng: -96.783027}},
-    {title: 'Starbucks 1', location: {lat: 32.864403, lng: -96.660265}},
-    {title: 'Starbucks 2', location: {lat: 32.811152, lng: -96.623135}},
-    {title: 'Starbucks 3', location: {lat: 32.746236, lng: -96.585969}},
-    {title: 'Starbucks 4', location: {lat: 32.866008, lng: -96.763481}},
-    {title: 'Black Forest Coffee', location: {lat: 32.86609, lng: -96.764503}},
-    {title: 'Dennys 1', location: {lat: 32.864872, lng: -96.660885}},
-    {title: 'Dennys 2', location: {lat: 32.819224, lng: -96.786784}},
-    {title: 'Dennys 3', location: {lat: 32.841681, lng: -96.593621}},
-    {title: 'Dennys 4', location: {lat: 32.789396, lng: -96.594197}},
-    {title: 'iHop 1', location: {lat: 32.857431, lng: -96.647735}},
-    {title: 'iHop 2', location: {lat: 32.859325, lng: -96.769432}},
-    {title: 'iHop 3', location: {lat: 32.768661, lng: -96.625545}},
-    {title: 'Goldmine', location: {lat: 32.876755, lng: -96.631224}},
-    {title: 'Beef House', location: {lat: 32.878382, lng: -96.647637}},
-    {title: 'Dunkin Donuts 1', location: {lat: 32.861236, lng: -96.643064}},
-    {title: 'Dunkin Donuts 2', location: {lat: 32.952197, lng: -96.769473}},
-    {title: 'White Rock Coffee', location: {lat: 32.864607, lng: -96.712334}}
-  ]);
-    
-} // end of locationsViewModel()
-
-// activate knockout.js and apply bindings in locationsViewModel
+]);
+  
+// activate knockout.js and apply bindings for coffeeShopLocations
 // when all dependant DOM elements have been loaded and are ready.
- $(document).ready(function() {
-    ko.applyBindings(new locationsViewModel());
- });
-
-
+$(document).ready(function() {
+  ko.applyBindings(coffeeShopLocations);
+});
+ 
 /**
 * @description Initialize Map
 */
 function initMap() {
-	
+  let self = this;
+  
   // Create a styles array to use with the map.
   let styles = [{
     'featureType': 'administrative',
@@ -173,10 +143,10 @@ function initMap() {
   let largeInfowindow = new google.maps.InfoWindow();
 
   // The following group uses the location array to create an array of markers on initialize.
-  for (var i = 0; i < locations.length; i++) {
+  for (let i = 0; i < coffeeShopLocations().length; i++) {
     // Get the position from the location array.
-    let position = locations[i].location;
-    let title = locations[i].title;
+    let position = coffeeShopLocations()[i].location;
+    let title = coffeeShopLocations()[i].title;
 	
     // Create a marker per location, and put into markers array.
     let marker = new google.maps.Marker({
