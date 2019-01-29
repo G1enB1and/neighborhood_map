@@ -17,11 +17,6 @@
 	<!-- font awesome icons -->
     <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.6.3/css/all.css' integrity='sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/' crossorigin='anonymous'>
 	
-	<!-- javascripts -->
-	<script src='js/libs/jquery.min.js'></script>
-	<script src='js/libs/knockout-3.4.2.js'></script>
-	<script src='js/script.js'></script>
-	
   </head>
   
   <body>
@@ -49,7 +44,11 @@
 	  
     </div> <!-- end of div class='container' -->
 
-	<script> <!-- start with menu closed and toggle onclick -->
+	<!-- load jquery -->
+	<script src='js/libs/jquery.min.js'></script>
+	
+	<!-- start with menu closed and toggle onclick -->
+	<script> 
 	  let btnMenu = document.querySelector('.menuBtn');
       let optionsBox = document.querySelector('.optionsBox');
       let menuStatus = true; // opened
@@ -68,7 +67,8 @@
       btnMenu.onclick = menuToggle; // don't us onclick() or it will run automatically.
 	</script>
 	
-	<script> <!-- Fix heights of map container and optionsBox (JQuery method) -->
+	<!-- Fix heights of map container and optionsBox (JQuery method) -->
+	<script> 
       // Flex does not work properly with google maps to fill remaining height as it would with an image.
       // The header at 50px and 2 borders at 1px each extend the map size beyond 100% by 52px.
 	  /**
@@ -91,6 +91,12 @@
     <script async defer
         src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDqQry8xCE6UqTuRaXy1OQnIOhZa0AIo2A&v=3&callback=initMap'>
     </script>
-
+	
+	<!-- load Knockout.js -->
+	<script src='js/libs/knockout-3.4.2.js'></script>
+	
+	<!-- load my main javascript -->
+	<script src='js/script.js'></script>
+	
   </body>
 </html>

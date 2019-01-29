@@ -58,9 +58,9 @@ function locationsViewModel() {
 
 // activate knockout.js and apply bindings in locationsViewModel
 // when all dependant DOM elements have been loaded and are ready.
-$(document).ready(function() {
+ $(document).ready(function() {
     ko.applyBindings(new locationsViewModel());
-});
+ });
 
 
 /**
