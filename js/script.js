@@ -1,7 +1,7 @@
 let map;
 
 // Create a new blank array for all the listing markers.
-let markers = [];
+markers = [];
 
 // These are the listings that will be shown to the user.
 coffeeShopLocations = ko.observableArray([
@@ -10,12 +10,10 @@ coffeeShopLocations = ko.observableArray([
   {title: 'Starbucks 1', location: {lat: 32.864403, lng: -96.660265}},
   {title: 'Starbucks 2', location: {lat: 32.811152, lng: -96.623135}},
   {title: 'Starbucks 3', location: {lat: 32.746236, lng: -96.585969}},
-  {title: 'Starbucks 4', location: {lat: 32.866008, lng: -96.763481}},
   {title: 'Black Forest Coffee', location: {lat: 32.86609, lng: -96.764503}},
-  {title: 'Dennys 1', location: {lat: 32.864872, lng: -96.660885}},
-  {title: 'Dennys 2', location: {lat: 32.819224, lng: -96.786784}},
-  {title: 'Dennys 3', location: {lat: 32.841681, lng: -96.593621}},
-  {title: 'Dennys 4', location: {lat: 32.789396, lng: -96.594197}},
+  {title: 'Dennys 1', location: {lat: 32.819224, lng: -96.786784}},
+  {title: 'Dennys 2', location: {lat: 32.841681, lng: -96.593621}},
+  {title: 'Dennys 3', location: {lat: 32.789396, lng: -96.594197}},
   {title: 'iHop 1', location: {lat: 32.857431, lng: -96.647735}},
   {title: 'iHop 2', location: {lat: 32.859325, lng: -96.769432}},
   {title: 'iHop 3', location: {lat: 32.768661, lng: -96.625545}},
@@ -149,13 +147,13 @@ function initMap() {
     let title = coffeeShopLocations()[i].title;
 	
     // Create a marker per location, and put into markers array.
-    let marker = new google.maps.Marker({
+    marker = new google.maps.Marker({
       position: position,
       title: title,
       animation: google.maps.Animation.DROP,
 	  icon: 'img/coffee_marker_green.png',
       id: i
-    }); // end of let marker = new google.maps.Marker({})
+    }); // end of marker = new google.maps.Marker({})
 	
     // Push the marker to our array of markers.
     markers.push(marker);
@@ -175,12 +173,29 @@ function initMap() {
     });
 	
   } // end of for (var i = 0; i < locations.length; i++)
-  
+	  
   // Show listings at load.
   showListings(); 
   
 } // end of initMap()
 
+/**
+* @description This function changes the marker icon of the selected location.
+* @param {object} coffeeShopLocation
+*/
+selectLocation = function(coffeeShopLocation) {
+  let locationIndex = coffeeShopLocations().indexOf(coffeeShopLocation);
+  
+  // set all marker icons back to green
+  for (let i = 0; i < markers.length; i++) {
+    markers[i].setIcon('img/coffee_marker_green.png');
+  }
+  
+  // set the selected location marker icon to teal
+  markers[locationIndex].setIcon('img/coffee_marker_teal.png');
+} // end of SelectLocation
+
+  
 /**
 * @description This function populates the infowindow when the marker is clicked.
 * @param {object} marker

@@ -27,7 +27,7 @@
         <h1>Coffee Shop Locations</h1>
 		
         <div data-bind='foreach: coffeeShopLocations'>
-          <span data-bind='text: title'></span><br />
+          <span class='locationTitle' data-bind='text: title, click: selectLocation'></span><br />
         </div>
 		
       </div> <!-- end of div class='options-box' -->

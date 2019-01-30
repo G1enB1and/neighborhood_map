@@ -81,3 +81,12 @@ h1 {
 .menuBtn {
 	cursor: pointer;
 }
+
+.locationTitle:hover {
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.locationTitleBold {
+	font-weight: bold;
+}
