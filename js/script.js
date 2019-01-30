@@ -186,13 +186,18 @@ function initMap() {
 selectLocation = function(coffeeShopLocation) {
   let locationIndex = coffeeShopLocations().indexOf(coffeeShopLocation);
   
-  // set all marker icons back to green
+  // set all marker icons back to green and remove animations
   for (let i = 0; i < markers.length; i++) {
     markers[i].setIcon('img/coffee_marker_green.png');
+	markers[i].setAnimation(null);
   }
   
-  // set the selected location marker icon to teal
+  // set the selected location's marker icon to teal
   markers[locationIndex].setIcon('img/coffee_marker_teal.png');
+  // set the selected location's marker animation to bounce
+  markers[locationIndex].setAnimation(google.maps.Animation.BOUNCE);
+  // remove bounce animation after 1 bounce (750 ms)
+  setTimeout(function(){ markers[locationIndex].setAnimation(null); }, 750);
 } // end of SelectLocation
 
   
