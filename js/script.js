@@ -196,8 +196,11 @@ selectLocation = function(coffeeShopLocation) {
   markers[locationIndex].setIcon('img/coffee_marker_teal.png');
   // set the selected location's marker animation to bounce
   markers[locationIndex].setAnimation(google.maps.Animation.BOUNCE);
-  // remove bounce animation after 1 bounce (750 ms)
-  setTimeout(function(){ markers[locationIndex].setAnimation(null); }, 750);
+  // remove bounce animation after 1 bounce (700 ms)
+  setTimeout(function(){ markers[locationIndex].setAnimation(null); }, 700);
+  
+  // TODO open InfoWindow
+  
 } // end of SelectLocation
 
   
@@ -214,9 +217,16 @@ function populateInfoWindow(marker, infowindow) {
     infowindow.open(map, marker);
 	
     // Make sure the marker property is cleared if the infowindow is closed.
-    infowindow.addListener('closeclick',function(){
-      infowindow.setMarker = null;
+    infowindow.addListener('closeclick', function() {
+      infowindow.marker = null;
     });
+	
+	// Close infowindow if empty map area is clicked
+	google.maps.event.addListener(map, "click", function(event) {
+      infowindow.close();
+	  infowindow.marker = null;
+    });
+
   } // end of if(infowindow.marker != marker)
 } // end of populateInfoWindow()
 
