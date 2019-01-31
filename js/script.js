@@ -23,6 +23,8 @@ coffeeShopLocations = ko.observableArray([
   {title: 'Dunkin Donuts 2', location: {lat: 32.952197, lng: -96.769473}},
   {title: 'White Rock Coffee', location: {lat: 32.864607, lng: -96.712334}}
 ]);
+
+selectedLocation = "";
   
 // activate knockout.js and apply bindings for coffeeShopLocations
 // when all dependant DOM elements have been loaded and are ready.
@@ -160,17 +162,38 @@ function initMap() {
 	
     // Create an onclick event to open an infowindow at each marker.
     marker.addListener('click', function() {
+	  let self = this;
+	  selectedLocation = self;
+	  
       populateInfoWindow(this, largeInfowindow);
-    });
+	  
+	  // set all marker icons back to green and remove animations
+      for (let x = 0; x < markers.length; x++) {
+        markers[x].setIcon('img/coffee_marker_green.png');
+	    markers[x].setAnimation(null);
+      } // end of for()
+	  
+	  // set the selected location's marker icon to teal
+      self.setIcon('img/coffee_marker_teal.png');
+      // set the selected location's marker animation to bounce
+      self.setAnimation(google.maps.Animation.BOUNCE);
+      // remove bounce animation after 1 bounce (700 ms)
+      setTimeout(function(){ self.setAnimation(null); }, 700);
+
+    }); // end marker.addListener(click)
 	
 	// Two event listeners - one for mouseover, one for mouseout,
     // to change the colors back and forth.
-    marker.addListener('mouseover', function() {
-      this.setIcon('img/coffee_marker_teal.png');
-    });
-    marker.addListener('mouseout', function() {
-      this.setIcon('img/coffee_marker_green.png');
-    });
+	marker.addListener('mouseover', function() {
+	  let self = this;
+      self.setIcon('img/coffee_marker_teal.png');
+    }); // end marker.addListener(mouseover)
+	marker.addListener('mouseout', function() {
+	  let self = this;
+	  if (selectedLocation != self) {
+        self.setIcon('img/coffee_marker_green.png');
+	  } // end if (marker != self)
+    }); // end marker.addListener(mouseout)
 	
   } // end of for (var i = 0; i < locations.length; i++)
 	  
@@ -184,7 +207,9 @@ function initMap() {
 * @param {object} coffeeShopLocation
 */
 selectLocation = function(coffeeShopLocation) {
+  let self = this;
   let locationIndex = coffeeShopLocations().indexOf(coffeeShopLocation);
+  selectedLocation = this;
   
   // set all marker icons back to green and remove animations
   for (let i = 0; i < markers.length; i++) {
@@ -199,18 +224,11 @@ selectLocation = function(coffeeShopLocation) {
   // remove bounce animation after 1 bounce (700 ms)
   setTimeout(function(){ markers[locationIndex].setAnimation(null); }, 700);
   
-  // Set marker icon back to green if empty map area is clicked
-  google.maps.event.addListener(map, "click", function(event) {
-	markers[locationIndex].setIcon('img/coffee_marker_green.png');
-  });
-  
   // Open InfoWindow at the marker for the location clicked
   populateInfoWindow(markers[locationIndex], largeInfowindow);
   
-  
 } // end of SelectLocation
 
-  
 /**
 * @description This function populates the infowindow when the marker is clicked.
 * @param {object} marker
@@ -232,10 +250,12 @@ function populateInfoWindow(marker, infowindow) {
 	google.maps.event.addListener(map, "click", function(event) {
       infowindow.close();
 	  infowindow.marker = null;
+	  // set all marker icons back to green and remove animations
+      for (let y = 0; y < markers.length; y++) {
+        markers[y].setIcon('img/coffee_marker_green.png');
+	    markers[y].setAnimation(null);
+      }
     });
-	
-	// TODO: turn selected marker teal and all others green when clicked.
-	// don't unhighlight when mouse away if clicked
 
   } // end of if(infowindow.marker != marker)
 } // end of populateInfoWindow()
