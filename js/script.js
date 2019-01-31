@@ -138,7 +138,7 @@ function initMap() {
 	mapTypeControl: false
   });
   
-  let largeInfowindow = new google.maps.InfoWindow();
+  largeInfowindow = new google.maps.InfoWindow();
 
   // The following group uses the location array to create an array of markers on initialize.
   for (let i = 0; i < coffeeShopLocations().length; i++) {
@@ -204,7 +204,9 @@ selectLocation = function(coffeeShopLocation) {
 	markers[locationIndex].setIcon('img/coffee_marker_green.png');
   });
   
-  // TODO open InfoWindow
+  // Open InfoWindow at the marker for the location clicked
+  populateInfoWindow(markers[locationIndex], largeInfowindow);
+  
   
 } // end of SelectLocation
 
