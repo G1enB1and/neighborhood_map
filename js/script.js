@@ -199,6 +199,11 @@ selectLocation = function(coffeeShopLocation) {
   // remove bounce animation after 1 bounce (700 ms)
   setTimeout(function(){ markers[locationIndex].setAnimation(null); }, 700);
   
+  // Set marker icon back to green if empty map area is clicked
+  google.maps.event.addListener(map, "click", function(event) {
+	markers[locationIndex].setIcon('img/coffee_marker_green.png');
+  });
+  
   // TODO open InfoWindow
   
 } // end of SelectLocation
@@ -226,6 +231,9 @@ function populateInfoWindow(marker, infowindow) {
       infowindow.close();
 	  infowindow.marker = null;
     });
+	
+	// TODO: turn selected marker teal and all others green when clicked.
+	// don't unhighlight when mouse away if clicked
 
   } // end of if(infowindow.marker != marker)
 } // end of populateInfoWindow()
