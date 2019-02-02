@@ -3,28 +3,37 @@ let map;
 // Create a new blank array for all the listing markers.
 markers = [];
 
-// These are the listings that will be shown to the user.
-coffeeShopLocations = ko.observableArray([
-  {title: 'Cafe Brazil 1', location: {lat: 32.844404, lng: -96.773435}, selected: false},
-  {title: 'Cafe Brazil 2', location: {lat: 32.784975, lng: -96.783027}, selected: false},
-  {title: 'Starbucks 1', location: {lat: 32.864403, lng: -96.660265}, selected: false},
-  {title: 'Starbucks 2', location: {lat: 32.811152, lng: -96.623135}, selected: false},
-  {title: 'Starbucks 3', location: {lat: 32.746236, lng: -96.585969}, selected: false},
-  {title: 'Black Forest Coffee', location: {lat: 32.86609, lng: -96.764503}, selected: false},
-  {title: 'Dennys 1', location: {lat: 32.819224, lng: -96.786784}, selected: false},
-  {title: 'Dennys 2', location: {lat: 32.841681, lng: -96.593621}, selected: false},
-  {title: 'Dennys 3', location: {lat: 32.789396, lng: -96.594197}, selected: false},
-  {title: 'iHop 1', location: {lat: 32.857431, lng: -96.647735}, selected: false},
-  {title: 'iHop 2', location: {lat: 32.859325, lng: -96.769432}, selected: false},
-  {title: 'iHop 3', location: {lat: 32.768661, lng: -96.625545}, selected: false},
-  {title: 'Goldmine', location: {lat: 32.876755, lng: -96.631224}, selected: false},
-  {title: 'Beef House', location: {lat: 32.878382, lng: -96.647637}, selected: false},
-  {title: 'Dunkin Donuts 1', location: {lat: 32.861236, lng: -96.643064}, selected: false},
-  {title: 'Dunkin Donuts 2', location: {lat: 32.952197, lng: -96.769473}, selected: false},
-  {title: 'White Rock Coffee', location: {lat: 32.864607, lng: -96.712334}, selected: false}
-]);
+locationsModel = {
+  // These are the listings that will be shown to the user.
+  coffeeShopLocations = ko.observableArray([
+    {title: 'Cafe Brazil 1', location: {lat: 32.844404, lng: -96.773435}, selected: false},
+    {title: 'Cafe Brazil 2', location: {lat: 32.784975, lng: -96.783027}, selected: false},
+    {title: 'Starbucks 1', location: {lat: 32.864403, lng: -96.660265}, selected: false},
+    {title: 'Starbucks 2', location: {lat: 32.811152, lng: -96.623135}, selected: false},
+    {title: 'Starbucks 3', location: {lat: 32.746236, lng: -96.585969}, selected: false},
+    {title: 'Black Forest Coffee', location: {lat: 32.86609, lng: -96.764503}, selected: false},
+    {title: 'Dennys 1', location: {lat: 32.819224, lng: -96.786784}, selected: false},
+    {title: 'Dennys 2', location: {lat: 32.841681, lng: -96.593621}, selected: false},
+    {title: 'Dennys 3', location: {lat: 32.789396, lng: -96.594197}, selected: false},
+    {title: 'iHop 1', location: {lat: 32.857431, lng: -96.647735}, selected: false},
+    {title: 'iHop 2', location: {lat: 32.859325, lng: -96.769432}, selected: false},
+    {title: 'iHop 3', location: {lat: 32.768661, lng: -96.625545}, selected: false},
+    {title: 'Goldmine', location: {lat: 32.876755, lng: -96.631224}, selected: false},
+    {title: 'Beef House', location: {lat: 32.878382, lng: -96.647637}, selected: false},
+    {title: 'Dunkin Donuts 1', location: {lat: 32.861236, lng: -96.643064}, selected: false},
+    {title: 'Dunkin Donuts 2', location: {lat: 32.952197, lng: -96.769473}, selected: false},
+    {title: 'White Rock Coffee', location: {lat: 32.864607, lng: -96.712334}, selected: false}]),
+  isSelected = ko.observable(function() {
+	let self = this;
+	if (self.selected == true) {
+	  return true;
+	} else {
+	  return false;
+	}
+  }); // end of isSelected
+}; // end of locationsModel
 
-selectedLocation = "";
+
 /*
 coffeeShopLocations.isSelected = ko.observable(function() {
 	let self = this;
@@ -36,6 +45,8 @@ coffeeShopLocations.isSelected = ko.observable(function() {
 });
 */
   
+selectedLocation = "";
+
 // activate knockout.js and apply bindings for coffeeShopLocations
 // when all dependant DOM elements have been loaded and are ready.
 $(document).ready(function() {
