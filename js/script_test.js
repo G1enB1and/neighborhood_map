@@ -3,29 +3,59 @@ let map;
 // Create a new blank array for all the listing markers.
 markers = [];
 
-// These are the listings that will be shown to the user.
-coffeeShopLocations = ko.observableArray([
-  {title: 'Cafe Brazil 1', location: {lat: 32.844404, lng: -96.773435}},
-  {title: 'Cafe Brazil 2', location: {lat: 32.784975, lng: -96.783027}},
-  {title: 'Starbucks 1', location: {lat: 32.864403, lng: -96.660265}},
-  {title: 'Starbucks 2', location: {lat: 32.811152, lng: -96.623135}},
-  {title: 'Starbucks 3', location: {lat: 32.746236, lng: -96.585969}},
-  {title: 'Black Forest Coffee', location: {lat: 32.86609, lng: -96.764503}},
-  {title: 'Dennys 1', location: {lat: 32.819224, lng: -96.786784}},
-  {title: 'Dennys 2', location: {lat: 32.841681, lng: -96.593621}},
-  {title: 'Dennys 3', location: {lat: 32.789396, lng: -96.594197}},
-  {title: 'iHop 1', location: {lat: 32.857431, lng: -96.647735}},
-  {title: 'iHop 2', location: {lat: 32.859325, lng: -96.769432}},
-  {title: 'iHop 3', location: {lat: 32.768661, lng: -96.625545}},
-  {title: 'Goldmine', location: {lat: 32.876755, lng: -96.631224}},
-  {title: 'Beef House', location: {lat: 32.878382, lng: -96.647637}},
-  {title: 'Dunkin Donuts 1', location: {lat: 32.861236, lng: -96.643064}},
-  {title: 'Dunkin Donuts 2', location: {lat: 32.952197, lng: -96.769473}},
-  {title: 'White Rock Coffee', location: {lat: 32.864607, lng: -96.712334}}
-]);
+locationsModel = {
+  // These are the listings that will be shown to the user.
+  coffeeShopLocations: ko.observableArray([
+    {title: 'Cafe Brazil 1', location: {lat: 32.844404, lng: -96.773435}, selected: false},
+    {title: 'Cafe Brazil 2', location: {lat: 32.784975, lng: -96.783027}, selected: false},
+    {title: 'Starbucks 1', location: {lat: 32.864403, lng: -96.660265}, selected: false},
+    {title: 'Starbucks 2', location: {lat: 32.811152, lng: -96.623135}, selected: false},
+    {title: 'Starbucks 3', location: {lat: 32.746236, lng: -96.585969}, selected: false},
+    {title: 'Black Forest Coffee', location: {lat: 32.86609, lng: -96.764503}, selected: false},
+    {title: 'Dennys 1', location: {lat: 32.819224, lng: -96.786784}, selected: false},
+    {title: 'Dennys 2', location: {lat: 32.841681, lng: -96.593621}, selected: false},
+    {title: 'Dennys 3', location: {lat: 32.789396, lng: -96.594197}, selected: false},
+    {title: 'iHop 1', location: {lat: 32.857431, lng: -96.647735}, selected: false},
+    {title: 'iHop 2', location: {lat: 32.859325, lng: -96.769432}, selected: false},
+    {title: 'iHop 3', location: {lat: 32.768661, lng: -96.625545}, selected: false},
+    {title: 'Goldmine', location: {lat: 32.876755, lng: -96.631224}, selected: false},
+    {title: 'Beef House', location: {lat: 32.878382, lng: -96.647637}, selected: false},
+    {title: 'Dunkin Donuts 1', location: {lat: 32.861236, lng: -96.643064}, selected: false},
+    {title: 'Dunkin Donuts 2', location: {lat: 32.952197, lng: -96.769473}, selected: false},
+    {title: 'White Rock Coffee', location: {lat: 32.864607, lng: -96.712334}, selected: false}]),
+  isSelected: ko.observable(function(location) {
+	let self = location;
+	if (self.selected == true) {
+	  return true;
+	} else {
+	  return false;
+	}
+  }) // end of isSelected
+} // end of locationsModel
 
-selectedLocation = "";
+locations = new locationsModel;
+
+
+$(document).ready(function() {
+  ko.applyBindings(locations);
+});
+
+console.log(viewModel.locations);
+
+/*
+coffeeShopLocations.isSelected = ko.observable(function() {
+	let self = this;
+	if (self.selected == true) {
+	  return true;
+	} else {
+	  return false;
+	}
+});
+*/
   
+selectedLocation = "";
+
+/*
 // activate knockout.js and apply bindings for coffeeShopLocations
 // when all dependant DOM elements have been loaded and are ready.
 $(document).ready(function() {
@@ -35,6 +65,8 @@ $(document).ready(function() {
 /**
 * @description Initialize Map
 */
+
+
 function initMap() {
   let self = this;
   
@@ -142,11 +174,14 @@ function initMap() {
   
   largeInfowindow = new google.maps.InfoWindow();
 
+  
+  
   // The following group uses the location array to create an array of markers on initialize.
-  for (let i = 0; i < coffeeShopLocations().length; i++) {
+  for (let i = 0; i < locations.length; i++) {
     // Get the position from the location array.
-    let position = coffeeShopLocations()[i].location;
-    let title = coffeeShopLocations()[i].title;
+    let position = locations[i].location;
+    let title = locations[i].title;
+	let selected = locations[i].selected;
 	
     // Create a marker per location, and put into markers array.
     marker = new google.maps.Marker({
@@ -154,7 +189,8 @@ function initMap() {
       title: title,
       animation: google.maps.Animation.DROP,
 	  icon: 'img/coffee_marker_green.png',
-      id: i
+      id: i,
+	  selected: selected
     }); // end of marker = new google.maps.Marker({})
 	
     // Push the marker to our array of markers.
@@ -167,12 +203,14 @@ function initMap() {
 	  
       populateInfoWindow(this, largeInfowindow);
 	  
-	  // set all marker icons back to green and remove animations
+	  // set all marker icons back to green, remove animations, and set selected to false
       for (let x = 0; x < markers.length; x++) {
         markers[x].setIcon('img/coffee_marker_green.png');
 	    markers[x].setAnimation(null);
+		markers[x].selected = false;
       } // end of for()
 	  
+      self.selected = true;
 	  // set the selected location's marker icon to teal
       self.setIcon('img/coffee_marker_teal.png');
       // set the selected location's marker animation to bounce
@@ -208,15 +246,17 @@ function initMap() {
 */
 selectLocation = function(coffeeShopLocation) {
   let self = this;
-  let locationIndex = coffeeShopLocations().indexOf(coffeeShopLocation);
+  let locationIndex = locations().indexOf(coffeeShopLocation);
   selectedLocation = this;
   
   // set all marker icons back to green and remove animations
   for (let i = 0; i < markers.length; i++) {
     markers[i].setIcon('img/coffee_marker_green.png');
 	markers[i].setAnimation(null);
+	markers[i].selected = false;
   }
   
+  self.selected = true;
   // set the selected location's marker icon to teal
   markers[locationIndex].setIcon('img/coffee_marker_teal.png');
   // set the selected location's marker animation to bounce
@@ -254,7 +294,9 @@ function populateInfoWindow(marker, infowindow) {
       for (let y = 0; y < markers.length; y++) {
         markers[y].setIcon('img/coffee_marker_green.png');
 	    markers[y].setAnimation(null);
+		markers[y].selected = false;
       }
+	  selectedLocation = "";
     });
 
   } // end of if(infowindow.marker != marker)
