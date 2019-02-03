@@ -255,6 +255,7 @@ function populateInfoWindow(marker, infowindow) {
         markers[y].setIcon('img/coffee_marker_green.png');
 	    markers[y].setAnimation(null);
       }
+	  selectedLocation = "";
     });
 
   } // end of if(infowindow.marker != marker)
