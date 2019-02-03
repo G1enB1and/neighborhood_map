@@ -69,3 +69,16 @@ Integrate all application components into a cohesive and enjoyable user experien
 
 
 https://stackoverflow.com/questions/17344935/select-an-item-in-a-list-on-click-with-knockout
+
+
+
+possible workarounds:
+
+use knockout to dynamically assign an element id to each location in the list.
+data-bind="attr: { id: $index()}" ??
+
+https://stackoverflow.com/questions/12859917/dynamic-id-in-knockoutjs-code-block
+
+https://stackoverflow.com/questions/7259999/uniqueid-binding-in-knockout
+
+

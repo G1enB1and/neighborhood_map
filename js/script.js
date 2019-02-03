@@ -165,6 +165,8 @@ function initMap() {
 	  let self = this;
 	  selectedLocation = self;
 	  
+	  console.log(selectedLocation);
+	  
       populateInfoWindow(this, largeInfowindow);
 	  
 	  // set all marker icons back to green and remove animations
