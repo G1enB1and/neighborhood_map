@@ -63,3 +63,9 @@ Style different markers in different (and functionally-useful) ways, depending o
 Implement additional optimizations that improve the performance and user experience of the filter functionality (keyboard shortcuts, autocomplete functionality, filtering of multiple fields, etc).
 
 Integrate all application components into a cohesive and enjoyable user experience.
+
+
+
+
+
+https://stackoverflow.com/questions/17344935/select-an-item-in-a-list-on-click-with-knockout
