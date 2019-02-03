@@ -5,7 +5,7 @@ markers = [];
 
 locationsModel = {
   // These are the listings that will be shown to the user.
-  coffeeShopLocations = ko.observableArray([
+  coffeeShopLocations: ko.observableArray([
     {title: 'Cafe Brazil 1', location: {lat: 32.844404, lng: -96.773435}, selected: false},
     {title: 'Cafe Brazil 2', location: {lat: 32.784975, lng: -96.783027}, selected: false},
     {title: 'Starbucks 1', location: {lat: 32.864403, lng: -96.660265}, selected: false},
@@ -23,16 +23,24 @@ locationsModel = {
     {title: 'Dunkin Donuts 1', location: {lat: 32.861236, lng: -96.643064}, selected: false},
     {title: 'Dunkin Donuts 2', location: {lat: 32.952197, lng: -96.769473}, selected: false},
     {title: 'White Rock Coffee', location: {lat: 32.864607, lng: -96.712334}, selected: false}]),
-  isSelected = ko.observable(function() {
-	let self = this;
+  isSelected: ko.observable(function(location) {
+	let self = location;
 	if (self.selected == true) {
 	  return true;
 	} else {
 	  return false;
 	}
-  }); // end of isSelected
-}; // end of locationsModel
+  }) // end of isSelected
+} // end of locationsModel
 
+locations = new locationsModel;
+
+
+$(document).ready(function() {
+  ko.applyBindings(locations);
+});
+
+console.log(viewModel.locations);
 
 /*
 coffeeShopLocations.isSelected = ko.observable(function() {
@@ -47,6 +55,7 @@ coffeeShopLocations.isSelected = ko.observable(function() {
   
 selectedLocation = "";
 
+/*
 // activate knockout.js and apply bindings for coffeeShopLocations
 // when all dependant DOM elements have been loaded and are ready.
 $(document).ready(function() {
@@ -56,6 +65,8 @@ $(document).ready(function() {
 /**
 * @description Initialize Map
 */
+
+
 function initMap() {
   let self = this;
   
@@ -163,12 +174,14 @@ function initMap() {
   
   largeInfowindow = new google.maps.InfoWindow();
 
+  
+  
   // The following group uses the location array to create an array of markers on initialize.
-  for (let i = 0; i < coffeeShopLocations().length; i++) {
+  for (let i = 0; i < locations.length; i++) {
     // Get the position from the location array.
-    let position = coffeeShopLocations()[i].location;
-    let title = coffeeShopLocations()[i].title;
-	let selected = coffeeShopLocations()[i].selected;
+    let position = locations[i].location;
+    let title = locations[i].title;
+	let selected = locations[i].selected;
 	
     // Create a marker per location, and put into markers array.
     marker = new google.maps.Marker({
@@ -233,7 +246,7 @@ function initMap() {
 */
 selectLocation = function(coffeeShopLocation) {
   let self = this;
-  let locationIndex = coffeeShopLocations().indexOf(coffeeShopLocation);
+  let locationIndex = locations().indexOf(coffeeShopLocation);
   selectedLocation = this;
   
   // set all marker icons back to green and remove animations
