@@ -227,12 +227,22 @@ selectLocation = function(coffeeShopLocation) {
 	markers[i].setAnimation(null);
   }
   
+  // remove locationTitleBold class from all titles elements
+  for (let x = 1; x < markers.length+1; x++) {
+    let elem = document.getElementById(x);
+	elem.classList.remove('locationTitleBold');
+  } // end of for()
+  
   // set the selected location's marker icon to teal
   markers[locationIndex].setIcon('img/coffee_marker_teal.png');
   // set the selected location's marker animation to bounce
   markers[locationIndex].setAnimation(google.maps.Animation.BOUNCE);
   // remove bounce animation after 1 bounce (700 ms)
   setTimeout(function(){ markers[locationIndex].setAnimation(null); }, 700);
+  
+  // apply locationTitleBold class to selected location's title element in list
+  let selectedLocationTitleElementById = document.getElementById(selectedLocation.id);
+  selectedLocationTitleElementById.classList.add('locationTitleBold');
   
   // Open InfoWindow at the marker for the location clicked
   populateInfoWindow(markers[locationIndex], largeInfowindow);
@@ -260,12 +270,20 @@ function populateInfoWindow(marker, infowindow) {
 	google.maps.event.addListener(map, "click", function(event) {
       infowindow.close();
 	  infowindow.marker = null;
+	  
 	  // set all marker icons back to green and remove animations
       for (let y = 0; y < markers.length; y++) {
         markers[y].setIcon('img/coffee_marker_green.png');
 	    markers[y].setAnimation(null);
-      }
-    });
+      } // end of for()
+	  
+	  // remove locationTitleBold class from all titles elements
+      for (let x = 1; x < markers.length+1; x++) {
+        let elem = document.getElementById(x);
+	    elem.classList.remove('locationTitleBold');
+      } // end of for()
+		  
+    }); // end of google.maps.event.addListener(map, "click", function(event)
 
   } // end of if(infowindow.marker != marker)
 } // end of populateInfoWindow()
