@@ -85,10 +85,12 @@ h1 {
 .locationTitle:hover {
   font-weight: bold;
   cursor: pointer;
+  color: #00c7a9;
 }
 
 .locationTitleBold {
   font-weight: bold;
+  color: #00c7a9;
 }
 
 .bg-gradient-brown {

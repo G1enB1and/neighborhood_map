@@ -5,23 +5,23 @@ markers = [];
 
 // These are the listings that will be shown to the user.
 coffeeShopLocations = ko.observableArray([
-  {id: 1, title: 'Cafe Brazil 1', location: {lat: 32.844404, lng: -96.773435}},
-  {id: 2, title: 'Cafe Brazil 2', location: {lat: 32.784975, lng: -96.783027}},
-  {id: 3, title: 'Starbucks 1', location: {lat: 32.864403, lng: -96.660265}},
-  {id: 4, title: 'Starbucks 2', location: {lat: 32.811152, lng: -96.623135}},
-  {id: 5, title: 'Starbucks 3', location: {lat: 32.746236, lng: -96.585969}},
-  {id: 6, title: 'Black Forest Coffee', location: {lat: 32.86609, lng: -96.764503}},
-  {id: 7, title: 'Dennys 1', location: {lat: 32.819224, lng: -96.786784}},
-  {id: 8, title: 'Dennys 2', location: {lat: 32.841681, lng: -96.593621}},
-  {id: 9, title: 'Dennys 3', location: {lat: 32.789396, lng: -96.594197}},
-  {id: 10, title: 'iHop 1', location: {lat: 32.857431, lng: -96.647735}},
-  {id: 11, title: 'iHop 2', location: {lat: 32.859325, lng: -96.769432}},
-  {id: 12, title: 'iHop 3', location: {lat: 32.768661, lng: -96.625545}},
-  {id: 13, title: 'Goldmine', location: {lat: 32.876755, lng: -96.631224}},
-  {id: 14, title: 'Beef House', location: {lat: 32.878382, lng: -96.647637}},
-  {id: 15, title: 'Dunkin Donuts 1', location: {lat: 32.861236, lng: -96.643064}},
-  {id: 16, title: 'Dunkin Donuts 2', location: {lat: 32.952197, lng: -96.769473}},
-  {id: 17, title: 'White Rock Coffee', location: {lat: 32.864607, lng: -96.712334}}
+  {title: 'Cafe Brazil 1', location: {lat: 32.844404, lng: -96.773435}},
+  {title: 'Cafe Brazil 2', location: {lat: 32.784975, lng: -96.783027}},
+  {title: 'Starbucks 1', location: {lat: 32.864403, lng: -96.660265}},
+  {title: 'Starbucks 2', location: {lat: 32.811152, lng: -96.623135}},
+  {title: 'Starbucks 3', location: {lat: 32.746236, lng: -96.585969}},
+  {title: 'Black Forest Coffee', location: {lat: 32.86609, lng: -96.764503}},
+  {title: 'Dennys 1', location: {lat: 32.819224, lng: -96.786784}},
+  {title: 'Dennys 2', location: {lat: 32.841681, lng: -96.593621}},
+  {title: 'Dennys 3', location: {lat: 32.789396, lng: -96.594197}},
+  {title: 'iHop 1', location: {lat: 32.857431, lng: -96.647735}},
+  {title: 'iHop 2', location: {lat: 32.859325, lng: -96.769432}},
+  {title: 'iHop 3', location: {lat: 32.768661, lng: -96.625545}},
+  {title: 'Goldmine', location: {lat: 32.876755, lng: -96.631224}},
+  {title: 'Beef House', location: {lat: 32.878382, lng: -96.647637}},
+  {title: 'Dunkin Donuts 1', location: {lat: 32.861236, lng: -96.643064}},
+  {title: 'Dunkin Donuts 2', location: {lat: 32.952197, lng: -96.769473}},
+  {title: 'White Rock Coffee', location: {lat: 32.864607, lng: -96.712334}}
 ]);
 
 selectedLocation = "";
@@ -165,18 +165,14 @@ function initMap() {
 	  let self = this;
 	  selectedLocation = self;
 	  
+	  console.log(selectedLocation);
+	  
       populateInfoWindow(this, largeInfowindow);
 	  
 	  // set all marker icons back to green and remove animations
       for (let x = 0; x < markers.length; x++) {
         markers[x].setIcon('img/coffee_marker_green.png');
 	    markers[x].setAnimation(null);
-      } // end of for()
-		  
-	  // remove locationTitleBold class from all titles elements
-	  for (let x = 1; x < markers.length+1; x++) {
-        let elem = document.getElementById(x);
-	    elem.classList.remove('locationTitleBold');
       } // end of for()
 	  
 	  // set the selected location's marker icon to teal
@@ -185,11 +181,7 @@ function initMap() {
       self.setAnimation(google.maps.Animation.BOUNCE);
       // remove bounce animation after 1 bounce (700 ms)
       setTimeout(function(){ self.setAnimation(null); }, 700);
-	  
-	  // apply locationTitleBold class to selected location's title element in list
-	  let selectedLocationTitleElementById = document.getElementById(selectedLocation.id+1);
-	  selectedLocationTitleElementById.classList.add('locationTitleBold');
-	  
+
     }); // end marker.addListener(click)
 	
 	// Two event listeners - one for mouseover, one for mouseout,
