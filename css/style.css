@@ -40,12 +40,57 @@ body {
 
 input {
   font-size: 12px;
+  box-sizing: border-box;
 }
 
 h1 {
   font-size: 22px;
   margin: 0 0 10px 0; /* top right bottom left */
   text-align: center;
+}
+
+.filterForm {
+  width: 100%;
+}
+
+.filterForm input {
+  vertical-align: middle;
+  margin: 0 0 10px 0; /* top right bottom left */
+  padding: 10px;
+  background-color: #f1f1f1;
+  border: 1px solid #ddd;
+  float: left;
+  width: 80%;
+  font-size: 16px;
+}
+
+.filterForm button {
+  vertical-align: middle;
+  margin: 0;
+  padding: 10px 10px 10px; /* top left & right bottom */
+  background-color: #306144;
+  border: 1px solid #ddd;
+  color: white;
+  float: left;
+  width: 20%;
+  font-size: 16px;
+}
+
+.filterForm button:hover{
+  background-color: #00c7a9;
+}
+
+.filterForm::after {
+  content: '';
+  clear: both;
+  display: table;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
 }
 
 #hideListings,
@@ -100,8 +145,8 @@ h1 {
   background: -webkit-linear-gradient(45deg, #2c2c2c 0%,#524439 50%,#baa89b 100%); /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(45deg, #2c2c2c 0%,#524439 50%,#baa89b 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2c2c2c', endColorstr='#baa89b',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
-	
+
   /* https://mycolor.space/gradient3?ori=to+right+top&hex=%232C2C2C&hex2=%23524439&hex3=%23BAA89B&submit=submit */
   background-image: linear-gradient(to right top, #2c2c2c, #323032, #3a3437, #43383a, #4b3c3a, #564641, #615049, #6b5b50, #7e6d62, #928074, #a69487, #baa89b);
-	
+
 }

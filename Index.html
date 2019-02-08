@@ -3,52 +3,57 @@
 <html lang="en">
 
   <head>
-  
+
     <title>Neighborhood Map</title>
     <meta name='description' content='Udacity - Fullstack Web Developer Nanodegree - The Frontend: Javascript and AJAX - Neighborhood Map Project'>
     <meta name='keywords' content='Udacity, Fullstack, Web, Developer, Nanodegree, Frontend, Javascript, AJAX, Neighborhood, Map, Project, Google, Yelp, API, Foursquare, Asynchronous'>
     <meta name='author' content='Glen Bland'>
     <meta charset='utf-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0, shrink-to-fit=no'>
-	  
+
     <!-- style sheets -->
     <link rel='stylesheet' href='css/style.css'>
-	
+
 	<!-- font awesome icons -->
     <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.6.3/css/all.css' integrity='sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/' crossorigin='anonymous'>
-	
+
   </head>
-  
+
   <body>
-  
+
     <div class='container'>
       <div class='optionsBox bg-gradient-brown'>
-	  
+
         <h1>Coffee Shop Locations</h1>
-		
+
+        <form class='filterForm'>
+          <input type='text' name='filter' placeholder='Filter By...' id='txtFilter'>
+          <button type='submit' id='btnFilter'><i class="fa fa-filter"></i></button>
+        </form>
+
         <div data-bind='foreach: coffeeShopLocations'>
           <span class='locationTitle' data-bind='text: title, attr: { id: id }, click: selectLocation'></span><br />
         </div>
-		
+
       </div> <!-- end of div class='options-box' -->
-	  
+
 	  <div class='headerMapWrapper'>
 	    <div class='header'>
 	      <i class='fas fa-bars menuBtn'></i>
 	    </div> <!-- end of header div -->
-	  
+
 	    <div id='mapContainer'>
           <div id='map'></div>
 		</div> <!-- end of mapContainer -->
       </div> <!-- end of headerMapWrapper -->
-	  
+
     </div> <!-- end of div class='container' -->
 
 	<!-- load jquery -->
 	<script src='js/libs/jquery.min.js'></script>
-	
+
 	<!-- start with menu closed and toggle onclick -->
-	<script> 
+	<script>
 	  let btnMenu = document.querySelector('.menuBtn');
       let optionsBox = document.querySelector('.optionsBox');
       let menuStatus = true; // opened
@@ -66,13 +71,13 @@
       }
       btnMenu.onclick = menuToggle; // don't us onclick() or it will run automatically.
 	</script>
-	
+
 	<!-- Fix heights of map container and optionsBox (JQuery method) -->
-	<script> 
+	<script>
       // Flex does not work properly with google maps to fill remaining height as it would with an image.
       // The header at 50px and 2 borders at 1px each extend the map size beyond 100% by 52px.
 	  /**
-	  * @description Fix heights of map container to window height - header height 
+	  * @description Fix heights of map container to window height - header height
 	  */
 	  function fixHeight() {
         // Set initial height of map to height of container - 52px
@@ -84,19 +89,19 @@
 	  }
 	  fixHeight(); // call on load
 	  $(window).resize(fixHeight); //call on window resize
-	  
+
     </script> <!-- end of script to fix heights of map container and optionsBox-->
-	
+
 	<!-- google maps initMap callback script-->
     <script async defer
         src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDqQry8xCE6UqTuRaXy1OQnIOhZa0AIo2A&v=3&callback=initMap'>
     </script>
-	
+
 	<!-- load Knockout.js -->
 	<script src='js/libs/knockout-3.4.2.js'></script>
-	
+
 	<!-- load my main javascript -->
 	<script src='js/script.js'></script>
-	
+
   </body>
 </html>
