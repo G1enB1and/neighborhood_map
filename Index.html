@@ -27,12 +27,14 @@
         <h1>Coffee Shop Locations</h1>
 
         <form class='filterForm'>
-          <input type='text' name='filter' placeholder='Filter By...' id='txtFilter'>
+          <input type='text' name='filter' placeholder='Filter By...' id='txtFilterInput' onkeyup='filterFunction()'>
           <button type='submit' id='btnFilter'><i class="fa fa-filter"></i></button>
         </form>
 
-        <div data-bind='foreach: coffeeShopLocations'>
-          <span class='locationTitle' data-bind='text: title, attr: { id: id }, click: selectLocation'></span><br />
+        <div data-bind='foreach: coffeeShopLocations' class='locationTitleList'>
+          <div class='locationTitle'>
+            <span data-bind='text: title, attr: { id: id }, click: selectLocation'></span><br />
+          </div>
         </div>
 
       </div> <!-- end of div class='options-box' -->

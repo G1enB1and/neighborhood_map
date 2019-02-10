@@ -25,19 +25,19 @@ coffeeShopLocations = ko.observableArray([
 ]);
 
 selectedLocation = "";
-  
+
 // activate knockout.js and apply bindings for coffeeShopLocations
 // when all dependant DOM elements have been loaded and are ready.
 $(document).ready(function() {
   ko.applyBindings(coffeeShopLocations);
 });
- 
+
 /**
 * @description Initialize Map
 */
 function initMap() {
   let self = this;
-  
+
   // Create a styles array to use with the map.
   let styles = [{
     'featureType': 'administrative',
@@ -139,7 +139,7 @@ function initMap() {
 	styles: styles,
 	mapTypeControl: false
   });
-  
+
   largeInfowindow = new google.maps.InfoWindow();
 
   // The following group uses the location array to create an array of markers on initialize.
@@ -147,7 +147,7 @@ function initMap() {
     // Get the position from the location array.
     let position = coffeeShopLocations()[i].location;
     let title = coffeeShopLocations()[i].title;
-	
+
     // Create a marker per location, and put into markers array.
     marker = new google.maps.Marker({
       position: position,
@@ -156,42 +156,42 @@ function initMap() {
 	  icon: 'img/coffee_marker_green.png',
       id: i
     }); // end of marker = new google.maps.Marker({})
-	
+
     // Push the marker to our array of markers.
     markers.push(marker);
-	
+
     // Create an onclick event to open an infowindow at each marker.
     marker.addListener('click', function() {
 	  let self = this;
 	  selectedLocation = self;
-	  
+
       populateInfoWindow(this, largeInfowindow);
-	  
+
 	  // set all marker icons back to green and remove animations
       for (let x = 0; x < markers.length; x++) {
         markers[x].setIcon('img/coffee_marker_green.png');
 	    markers[x].setAnimation(null);
       } // end of for()
-		  
+
 	  // remove locationTitleBold class from all titles elements
 	  for (let x = 1; x < markers.length+1; x++) {
         let elem = document.getElementById(x);
 	    elem.classList.remove('locationTitleBold');
       } // end of for()
-	  
+
 	  // set the selected location's marker icon to teal
       self.setIcon('img/coffee_marker_teal.png');
       // set the selected location's marker animation to bounce
       self.setAnimation(google.maps.Animation.BOUNCE);
       // remove bounce animation after 1 bounce (700 ms)
       setTimeout(function(){ self.setAnimation(null); }, 700);
-	  
+
 	  // apply locationTitleBold class to selected location's title element in list
 	  let selectedLocationTitleElementById = document.getElementById(selectedLocation.id+1);
 	  selectedLocationTitleElementById.classList.add('locationTitleBold');
-	  
+
     }); // end marker.addListener(click)
-	
+
 	// Two event listeners - one for mouseover, one for mouseout,
     // to change the colors back and forth.
 	marker.addListener('mouseover', function() {
@@ -204,12 +204,12 @@ function initMap() {
         self.setIcon('img/coffee_marker_green.png');
 	  } // end if (marker != self)
     }); // end marker.addListener(mouseout)
-	
+
   } // end of for (var i = 0; i < locations.length; i++)
-	  
+
   // Show listings at load.
-  showListings(); 
-  
+  showListings();
+
 } // end of initMap()
 
 /**
@@ -220,33 +220,33 @@ selectLocation = function(coffeeShopLocation) {
   let self = this;
   let locationIndex = coffeeShopLocations().indexOf(coffeeShopLocation);
   selectedLocation = this;
-  
+
   // set all marker icons back to green and remove animations
   for (let i = 0; i < markers.length; i++) {
     markers[i].setIcon('img/coffee_marker_green.png');
 	markers[i].setAnimation(null);
   }
-  
+
   // remove locationTitleBold class from all titles elements
   for (let x = 1; x < markers.length+1; x++) {
     let elem = document.getElementById(x);
 	elem.classList.remove('locationTitleBold');
   } // end of for()
-  
+
   // set the selected location's marker icon to teal
   markers[locationIndex].setIcon('img/coffee_marker_teal.png');
   // set the selected location's marker animation to bounce
   markers[locationIndex].setAnimation(google.maps.Animation.BOUNCE);
   // remove bounce animation after 1 bounce (700 ms)
   setTimeout(function(){ markers[locationIndex].setAnimation(null); }, 700);
-  
+
   // apply locationTitleBold class to selected location's title element in list
   let selectedLocationTitleElementById = document.getElementById(selectedLocation.id);
   selectedLocationTitleElementById.classList.add('locationTitleBold');
-  
+
   // Open InfoWindow at the marker for the location clicked
   populateInfoWindow(markers[locationIndex], largeInfowindow);
-  
+
 } // end of SelectLocation
 
 /**
@@ -260,29 +260,29 @@ function populateInfoWindow(marker, infowindow) {
     infowindow.marker = marker;
     infowindow.setContent('<div>' + marker.title + '</div>');
     infowindow.open(map, marker);
-	
+
     // Make sure the marker property is cleared if the infowindow is closed.
     infowindow.addListener('closeclick', function() {
       infowindow.marker = null;
     });
-	
+
 	// Close infowindow if empty map area is clicked
 	google.maps.event.addListener(map, "click", function(event) {
       infowindow.close();
 	  infowindow.marker = null;
-	  
+
 	  // set all marker icons back to green and remove animations
       for (let y = 0; y < markers.length; y++) {
         markers[y].setIcon('img/coffee_marker_green.png');
 	    markers[y].setAnimation(null);
       } // end of for()
-	  
+
 	  // remove locationTitleBold class from all titles elements
       for (let x = 1; x < markers.length+1; x++) {
         let elem = document.getElementById(x);
 	    elem.classList.remove('locationTitleBold');
       } // end of for()
-		  
+
     }); // end of google.maps.event.addListener(map, "click", function(event)
 
   } // end of if(infowindow.marker != marker)
@@ -309,3 +309,28 @@ function hideListings() {
     markers[i].setMap(null);
   }
 } // end of hideListings
+
+function filterFunction() {
+  // Declare variables
+  let filterInput, filter, i, txtValue;
+  filterInput = document.getElementById('txtFilterInput');
+  filter = filterInput.value.toUpperCase();
+
+  // get dom elements and text for each location in list
+  for (let x = 1; x < markers.length+1; x++) {
+    let elem = document.getElementById(x);
+    txtValue = elem.textContent || elem.innerText;
+
+    // compare input to text
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      // remove locationTitleHide class to show elements
+      elem.parentElement.classList.remove('locationTitleHide'); //show
+    } else {
+      // add locationTitleHide class to hide elements
+      elem.parentElement.classList.add('locationTitleHide'); //hide
+    }
+  } // end of for()
+} // end of filterFunction()
+
+// TODO: add filter button click event function to hide map markers
+// make it keep the text that was in it when clicked.
