@@ -28,7 +28,7 @@
 
         <form class='filterForm'>
           <input type='text' name='filter' placeholder='Filter By...' id='txtFilterInput' onkeyup='filterFunction()'>
-          <button type='submit' id='btnFilter'><i class="fa fa-filter"></i></button>
+          <button type='button' id='btnFilter' onclick='filterFunction()'><i class="fa fa-filter"></i></button>
         </form>
 
         <div data-bind='foreach: coffeeShopLocations' class='locationTitleList'>

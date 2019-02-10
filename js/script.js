@@ -325,12 +325,13 @@ function filterFunction() {
     if (txtValue.toUpperCase().indexOf(filter) > -1) {
       // remove locationTitleHide class to show elements
       elem.parentElement.classList.remove('locationTitleHide'); //show
+      // show map marker
+      markers[x-1].setMap(map);
     } else {
       // add locationTitleHide class to hide elements
       elem.parentElement.classList.add('locationTitleHide'); //hide
+      // hide map marker
+      markers[x-1].setMap(null);
     }
   } // end of for()
 } // end of filterFunction()
-
-// TODO: add filter button click event function to hide map markers
-// make it keep the text that was in it when clicked.
