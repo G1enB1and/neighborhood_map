@@ -1,36 +1,51 @@
 my google maps key:
 AIzaSyDqQry8xCE6UqTuRaXy1OQnIOhZa0AIo2A
 
+foursquare client id:
+E2QMBO1XOX1I3HM2TQ4BMEGVLA3ZHCHN1WG4RM40RGZJIZHH
+
+foursquare client secret:
+JSOKMIPYKJW52UBZDXRT3V1NUONCMIEWTJX3VTANTHY4NUC5
+
 To find coordinates use this geocoder:
 https://google-developers.appspot.com/maps/documentation/utils/geocoder/
 
 google maps javascript api tutorial:
 https://developers.google.com/maps/documentation/javascript/tutorial
 
+foursquare api call using javascript:
+fetch('https://api.foursquare.com/v2/venues/explore?client_id=CLIENT_ID&client_secret=CLIENT_SECRET&v=20180323&limit=1&ll=40.7243,-74.0018&query=coffee')
+    .then(function() {
+        // Code for handling API response
+    })
+    .catch(function() {
+        // Code for handling errors
+    });
+
 App requirements:
 
-Knockout.js must be used to handle the list, filter, and any other information that is subject to changing state. 
-Tracking click events on list items should be handled with knockout.js. 
+Knockout.js must be used to handle the list, filter, and any other information that is subject to changing state.
+Tracking click events on list items should be handled with knockout.js.
 Creating markers as a part of the ViewModel in knockout is recommended, but NOT as observables.
 knockout.js should not be used for anything the Maps API is used for, creating markers, tracking click events on markers, making the map, refreshing the map.
 
-Code is properly separated based upon Knockout best practices (follow an MVVM pattern, avoid updating the DOM manually with jQuery or JS, use observables rather than forcing refreshes manually, etc). 
+Code is properly separated based upon Knockout best practices (follow an MVVM pattern, avoid updating the DOM manually with jQuery or JS, use observables rather than forcing refreshes manually, etc).
 Knockout should not be used to handle the Google Map API.
 
 All data APIs should load asynchronously and gracefully handle errors.
 
-Data requests that fail are handled gracefully using common fallback techniques (i.e. AJAX error or fail methods). 
-'Gracefully' means the user isn’t left wondering why a component isn’t working. 
-If an API doesn’t load there should be some visible indication on the page (an alert box is ok) that it didn’t load. 
+Data requests that fail are handled gracefully using common fallback techniques (i.e. AJAX error or fail methods).
+'Gracefully' means the user isnï¿½t left wondering why a component isnï¿½t working.
+If an API doesnï¿½t load there should be some visible indication on the page (an alert box is ok) that it didnï¿½t load.
 Note: You do not need to handle cases where the user goes offline.
 
 The map should display at least 5 location markers by default when the page is loaded.
 
 Implement a list view of the location markers.
 
-Provide a filter option that uses an input field to filter both the list view and the map markers displayed by default on load. 
-The list view and the markers should update accordingly in real time. 
-Providing a search function through a third-party API is not enough to meet specifications. 
+Provide a filter option that uses an input field to filter both the list view and the map markers displayed by default on load.
+The list view and the markers should update accordingly in real time.
+Providing a search function through a third-party API is not enough to meet specifications.
 This filter can be a text input or a dropdown menu.
 
 Add functionality using third-party APIs (at least one non-Google API) to provide information when a map marker or list view entry is clicked (ex: Yelp reviews, Wikipedia, Flickr images, etc). Note that StreetView and Places don't count as an additional 3rd party API. provide attribution to the data sources/APIs you use. For example if you are using Foursquare, indicate somewhere in your interface and in your README that you used Foursquare's API.
@@ -39,7 +54,7 @@ Add functionality to animate a map marker when either the list item associated w
 
 Add functionality to open an infoWindow with information (you can also populate a DOM element with this info, but you should still open an infoWindow, even with minimal info, like location name) when either a location is selected from the list view or its map marker is selected directly.
 
-The app's interface should be intuitive to use. For example, the input text area to filter locations should be easy to locate. It should be easy to understand what set of locations is being filtered. 
+The app's interface should be intuitive to use. For example, the input text area to filter locations should be easy to locate. It should be easy to understand what set of locations is being filtered.
 
 Selecting a location via list item or map marker should cause the map marker to bounce or in some other way animate to indicate that the location has been selected and associated info window should open above the map marker with additional information.
 
@@ -50,7 +65,7 @@ follow style guide here: http://udacity.github.io/frontend-nanodegree-styleguide
 
 Suggestions to Make Your Project Stand Out!
 
-Add unique functionality beyond the minimum requirements (i.e. the ability to “favorite” a location, etc.).
+Add unique functionality beyond the minimum requirements (i.e. the ability to ï¿½favoriteï¿½ a location, etc.).
 
 Incorporate a build process allowing for production quality, minified code, to be delivered to the client.
 
@@ -80,5 +95,3 @@ data-bind="attr: { id: $index()}" ??
 https://stackoverflow.com/questions/12859917/dynamic-id-in-knockoutjs-code-block
 
 https://stackoverflow.com/questions/7259999/uniqueid-binding-in-knockout
-
-
