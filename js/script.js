@@ -32,6 +32,28 @@ $(document).ready(function() {
   ko.applyBindings(coffeeShopLocations);
 });
 
+function getFoursquare(){
+  let self = this;
+  var url = "https://api.foursquare.com/v2/venues/search?v=20180323&ll=32.776664,-96.796988&query=coffee&limit=17&client_id=E2QMBO1XOX1I3HM2TQ4BMEGVLA3ZHCHN1WG4RM40RGZJIZHH&client_secret=JSOKMIPYKJW52UBZDXRT3V1NUONCMIEWTJX3VTANTHY4NUC5";
+  $.ajax({
+    url: url,
+    dataType: 'json',
+    success: function(data) {
+      venues = data.response.venues;
+
+      for (let i = 0; i < venues.length; i++) {
+        coffeeShopLocations()[i].title = venues[i].name;
+        console.log(coffeeShopLocations()[i].title);
+      } // end of for()
+      
+    } // end of success
+  }); // end of $.ajax
+  // coffeeShopLocations()[0].title = 'TEST'; // works outside of $.ajax
+  // TODO: fix concurance or scope or async
+}; //  end of function getFoursquare()
+
+getFoursquare();
+
 /**
 * @description Initialize Map
 */

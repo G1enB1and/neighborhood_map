@@ -26,6 +26,10 @@ https://stackoverflow.com/questions/47522033/getting-json-out-of-jquery-from-fou
 
 https://foursquare.com/dev/overview/tutorial
 
+https://stackoverflow.com/questions/3222347/javascript-global-variables-after-ajax-requests
+
+https://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call
+
 
 App requirements:
 
