@@ -22,6 +22,11 @@ fetch('https://api.foursquare.com/v2/venues/explore?client_id=CLIENT_ID&client_s
         // Code for handling errors
     });
 
+https://stackoverflow.com/questions/47522033/getting-json-out-of-jquery-from-foursquare-api
+
+https://foursquare.com/dev/overview/tutorial
+
+
 App requirements:
 
 Knockout.js must be used to handle the list, filter, and any other information that is subject to changing state.
