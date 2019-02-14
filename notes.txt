@@ -30,6 +30,7 @@ https://stackoverflow.com/questions/3222347/javascript-global-variables-after-aj
 
 https://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call
 
+https://stackoverflow.com/questions/23765186/knockout-js-passing-observable-array-as-argument
 
 App requirements:
 

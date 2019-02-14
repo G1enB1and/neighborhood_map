@@ -32,11 +32,50 @@ $(document).ready(function() {
   ko.applyBindings(coffeeShopLocations);
 });
 
+let fsEndpoint = 'https://api.foursquare.com/v2/venues/search';
+let fsVersion = '20180323';
+let fsLL = '32.776664,-96.796988';
+let fsQuery = 'coffee';
+let fsLimit = '17';
+let fsClientID = 'E2QMBO1XOX1I3HM2TQ4BMEGVLA3ZHCHN1WG4RM40RGZJIZHH';
+let fsClientSecret = 'JSOKMIPYKJW52UBZDXRT3V1NUONCMIEWTJX3VTANTHY4NUC5';
+let fsParams = 'v=' + encodeURIComponent(fsVersion)
+  + '&' + 'll=' + encodeURIComponent(fsLL)
+  + '&' + 'query=' + encodeURIComponent(fsQuery)
+  + '&' + 'limit=' + encodeURIComponent(fsLimit)
+  + '&' + 'client_id=' + encodeURIComponent(fsClientID)
+  + '&' + 'client_secret=' + encodeURIComponent(fsClientSecret);
+let fsURL = fsEndpoint + '?' + fsParams;
+
+let getCoffeeShopsFromFS = new XMLHttpRequest();
+getCoffeeShopsFromFS.open('GET', fsURL);
+
+getCoffeeShopsFromFS.onload = function() {
+  let coffeeShopsFromFS = JSON.parse(getCoffeeShopsFromFS.responseText);
+  let coffeeShopVenues = coffeeShopsFromFS.response.venues;
+
+  console.log(coffeeShopVenues);
+
+  assignCoffeeShops(coffeeShopVenues, coffeeShopLocations);
+
+}; // end of getCoffeeShopsFromFS
+
+getCoffeeShopsFromFS.send();
+
+function assignCoffeeShops(coffeeShopVenues, coffeeShopLocations) {
+  for (let i = 0; i < coffeeShopVenues.length; i++) {
+    coffeeShopLocations()[i].title = coffeeShopVenues[i].name;
+    console.log(coffeeShopLocations()[i].title);
+  } // end of for()
+} // end of function assignCoffeeShops()
+
+
+/*
 function getFoursquare(){
   let self = this;
-  var url = "https://api.foursquare.com/v2/venues/search?v=20180323&ll=32.776664,-96.796988&query=coffee&limit=17&client_id=E2QMBO1XOX1I3HM2TQ4BMEGVLA3ZHCHN1WG4RM40RGZJIZHH&client_secret=JSOKMIPYKJW52UBZDXRT3V1NUONCMIEWTJX3VTANTHY4NUC5";
+
   $.ajax({
-    url: url,
+    url: fsURL,
     dataType: 'json',
     success: function(data) {
       venues = data.response.venues;
@@ -45,7 +84,7 @@ function getFoursquare(){
         coffeeShopLocations()[i].title = venues[i].name;
         console.log(coffeeShopLocations()[i].title);
       } // end of for()
-      
+
     } // end of success
   }); // end of $.ajax
   // coffeeShopLocations()[0].title = 'TEST'; // works outside of $.ajax
@@ -53,6 +92,7 @@ function getFoursquare(){
 }; //  end of function getFoursquare()
 
 getFoursquare();
+*/
 
 /**
 * @description Initialize Map
