@@ -1,10 +1,10 @@
-let map;
+window.map;
 
 // Create a new blank array for all the listing markers.
-markers = [];
+window.markers = [];
 
 // These are the listings that will be shown to the user.
-coffeeShopLocations = ko.observableArray([
+let coffeeShopLocations = ko.observableArray([
   {id: 1, title: 'Cafe Brazil 1', location: {lat: 32.844404, lng: -96.773435}},
   {id: 2, title: 'Cafe Brazil 2', location: {lat: 32.784975, lng: -96.783027}},
   {id: 3, title: 'Starbucks 1', location: {lat: 32.864403, lng: -96.660265}},
@@ -24,7 +24,7 @@ coffeeShopLocations = ko.observableArray([
   {id: 17, title: 'White Rock Coffee', location: {lat: 32.864607, lng: -96.712334}}
 ]);
 
-selectedLocation = "";
+let selectedLocation = "";
 
 // activate knockout.js and apply bindings for coffeeShopLocations
 // when all dependant DOM elements have been loaded and are ready.
