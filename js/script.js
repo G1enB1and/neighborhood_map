@@ -32,6 +32,75 @@ $(document).ready(function() {
   ko.applyBindings(window.coffeeShopLocations);
 });
 
+let fsEndpoint = 'https://api.foursquare.com/v2/venues/search';
+let fsVersion = '20180323';
+let fsIntent = 'match'; // default 'checkin' if searching for more than 1
+//let fsLL = '32.776664,-96.796988'; // center of map area
+let fsLL = '32.844404,-96.773435'; // first location (Cafe Brazil 1)
+let fsName = 'Cafe Brazil';
+//let fsQuery = 'coffee';
+let fsLimit = '1';
+let fsClientID = 'E2QMBO1XOX1I3HM2TQ4BMEGVLA3ZHCHN1WG4RM40RGZJIZHH';
+let fsClientSecret = 'JSOKMIPYKJW52UBZDXRT3V1NUONCMIEWTJX3VTANTHY4NUC5';
+let fsVenueID = '40e0b100f964a52009081fe3'; // Cafe Brazil 1
+
+let fsParams = 'v=' + encodeURIComponent(fsVersion)
+  + '&' + 'intent=' + encodeURIComponent(fsIntent)
+  + '&' + 'll=' + encodeURIComponent(fsLL)
+  + '&' + 'name=' + encodeURIComponent(fsName)
+  //+ '&' + 'query=' + encodeURIComponent(fsQuery)
+  //+ '&' + 'limit=' + encodeURIComponent(fsLimit)
+  + '&' + 'client_id=' + encodeURIComponent(fsClientID)
+  + '&' + 'client_secret=' + encodeURIComponent(fsClientSecret);
+
+let fsURL = fsEndpoint + '?' + fsParams;
+
+let fsPhotoEndpoint = 'https://api.foursquare.com/v2/venues/' + fsVenueID + '/photos';
+let fsGroup = 'venue';
+let fsPhotoLimit = '1';
+let fsPhotoParams = 'v=' + encodeURIComponent(fsVersion)
+  + '&' + 'group=' + encodeURIComponent(fsGroup)
+  + '&' + 'limit=' + encodeURIComponent(fsPhotoLimit)
+  + '&' + 'client_id=' + encodeURIComponent(fsClientID)
+  + '&' + 'client_secret=' + encodeURIComponent(fsClientSecret);
+let fsPhotoURL = fsPhotoEndpoint + '?' + fsPhotoParams;
+
+let fsPhotoPrefix = '';
+let fsPhotoSize = '300x500';
+let fsPhotoSuffix = '';
+
+
+let getVenueIDFromFS = new XMLHttpRequest();
+getVenueIDFromFS.open('GET', fsURL);
+
+getVenueIDFromFS.onload = function() {
+  let responseFromFS = JSON.parse(getVenueIDFromFS.responseText);
+  let fsVenueID = responseFromFS.response.venues[0].id;
+
+  console.log(fsVenueID);
+  let getPhotoFromFS = new XMLHttpRequest();
+  getPhotoFromFS.open('GET', fsPhotoURL);
+
+  getPhotoFromFS.onload = function() {
+    let responseFromPhotoFS = JSON.parse(getPhotoFromFS.responseText);
+    console.log(responseFromPhotoFS);
+
+    let fsPhotoPrefix = responseFromPhotoFS.response.photos.items[0].prefix;
+    let fsPhotoSuffix = responseFromPhotoFS.response.photos.items[0].suffix;
+    let fsPhoto = fsPhotoPrefix + fsPhotoSize + fsPhotoSuffix;
+
+    console.log(fsPhoto);
+
+
+  } // end of function getPhotoFromFS()
+  getPhotoFromFS.send();
+
+}; // end of getVenueIDFromFS
+
+getVenueIDFromFS.send();
+
+
+
 /**
 * @description Initialize Map
 */
@@ -133,7 +202,7 @@ function initMap() {
   * @description creates a new map - only center and zoom are required.
   * @constructor
   */
-  map = new google.maps.Map(document.getElementById('map'), {
+  window.map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 32.776664, lng: -96.796988},
     zoom: 11,
 	styles: styles,
