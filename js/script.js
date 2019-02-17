@@ -4,7 +4,7 @@ window.map;
 window.markers = [];
 
 // These are the listings that will be shown to the user.
-let coffeeShopLocations = ko.observableArray([
+window.coffeeShopLocations = ko.observableArray([
   {id: 1, title: 'Cafe Brazil 1', location: {lat: 32.844404, lng: -96.773435}},
   {id: 2, title: 'Cafe Brazil 2', location: {lat: 32.784975, lng: -96.783027}},
   {id: 3, title: 'Starbucks 1', location: {lat: 32.864403, lng: -96.660265}},
@@ -24,12 +24,12 @@ let coffeeShopLocations = ko.observableArray([
   {id: 17, title: 'White Rock Coffee', location: {lat: 32.864607, lng: -96.712334}}
 ]);
 
-let selectedLocation = "";
+window.selectedLocation = "";
 
 // activate knockout.js and apply bindings for coffeeShopLocations
 // when all dependant DOM elements have been loaded and are ready.
 $(document).ready(function() {
-  ko.applyBindings(coffeeShopLocations);
+  ko.applyBindings(window.coffeeShopLocations);
 });
 
 /**
@@ -140,16 +140,26 @@ function initMap() {
 	mapTypeControl: false
   });
 
-  largeInfowindow = new google.maps.InfoWindow();
+  window.largeInfowindow = new google.maps.InfoWindow();
 
+  setMarkers();
+
+  // Show listings at load.
+  showListings();
+
+} // end of initMap()
+
+function setMarkers() {
   // The following group uses the location array to create an array of markers on initialize.
-  for (let i = 0; i < coffeeShopLocations().length; i++) {
+  for (let i = 0; i < window.coffeeShopLocations().length; i++) {
     // Get the position from the location array.
-    let position = coffeeShopLocations()[i].location;
-    let title = coffeeShopLocations()[i].title;
+    let position = window.coffeeShopLocations()[i].location;
+    let title = window.coffeeShopLocations()[i].title;
+
+    //console.log(coffeeShopLocations()[i].title);
 
     // Create a marker per location, and put into markers array.
-    marker = new google.maps.Marker({
+    window.marker = new google.maps.Marker({
       position: position,
       title: title,
       animation: google.maps.Animation.DROP,
@@ -158,23 +168,23 @@ function initMap() {
     }); // end of marker = new google.maps.Marker({})
 
     // Push the marker to our array of markers.
-    markers.push(marker);
+    window.markers.push(marker);
 
     // Create an onclick event to open an infowindow at each marker.
-    marker.addListener('click', function() {
+    window.marker.addListener('click', function() {
 	  let self = this;
 	  selectedLocation = self;
 
       populateInfoWindow(this, largeInfowindow);
 
 	  // set all marker icons back to green and remove animations
-      for (let x = 0; x < markers.length; x++) {
-        markers[x].setIcon('img/coffee_marker_green.png');
-	    markers[x].setAnimation(null);
+      for (let x = 0; x < window.markers.length; x++) {
+        window.markers[x].setIcon('img/coffee_marker_green.png');
+	    window.markers[x].setAnimation(null);
       } // end of for()
 
 	  // remove locationTitleBold class from all titles elements
-	  for (let x = 1; x < markers.length+1; x++) {
+	  for (let x = 1; x < window.markers.length+1; x++) {
         let elem = document.getElementById(x);
 	    elem.classList.remove('locationTitleBold');
       } // end of for()
@@ -194,11 +204,11 @@ function initMap() {
 
 	// Two event listeners - one for mouseover, one for mouseout,
     // to change the colors back and forth.
-	marker.addListener('mouseover', function() {
+	window.marker.addListener('mouseover', function() {
 	  let self = this;
       self.setIcon('img/coffee_marker_teal.png');
     }); // end marker.addListener(mouseover)
-	marker.addListener('mouseout', function() {
+    window.marker.addListener('mouseout', function() {
 	  let self = this;
 	  if (selectedLocation != self) {
         self.setIcon('img/coffee_marker_green.png');
@@ -206,11 +216,7 @@ function initMap() {
     }); // end marker.addListener(mouseout)
 
   } // end of for (var i = 0; i < locations.length; i++)
-
-  // Show listings at load.
-  showListings();
-
-} // end of initMap()
+} // end of setMarkers()
 
 /**
 * @description This function changes the marker icon of the selected location.
@@ -218,25 +224,25 @@ function initMap() {
 */
 selectLocation = function(coffeeShopLocation) {
   let self = this;
-  let locationIndex = coffeeShopLocations().indexOf(coffeeShopLocation);
+  let locationIndex = window.coffeeShopLocations().indexOf(coffeeShopLocation);
   selectedLocation = this;
 
   // set all marker icons back to green and remove animations
   for (let i = 0; i < markers.length; i++) {
-    markers[i].setIcon('img/coffee_marker_green.png');
-	markers[i].setAnimation(null);
+    window.markers[i].setIcon('img/coffee_marker_green.png');
+	window.markers[i].setAnimation(null);
   }
 
   // remove locationTitleBold class from all titles elements
-  for (let x = 1; x < markers.length+1; x++) {
+  for (let x = 1; x < window.markers.length+1; x++) {
     let elem = document.getElementById(x);
 	elem.classList.remove('locationTitleBold');
   } // end of for()
 
   // set the selected location's marker icon to teal
-  markers[locationIndex].setIcon('img/coffee_marker_teal.png');
+  window.markers[locationIndex].setIcon('img/coffee_marker_teal.png');
   // set the selected location's marker animation to bounce
-  markers[locationIndex].setAnimation(google.maps.Animation.BOUNCE);
+  window.markers[locationIndex].setAnimation(google.maps.Animation.BOUNCE);
   // remove bounce animation after 1 bounce (700 ms)
   setTimeout(function(){ markers[locationIndex].setAnimation(null); }, 700);
 
@@ -245,7 +251,7 @@ selectLocation = function(coffeeShopLocation) {
   selectedLocationTitleElementById.classList.add('locationTitleBold');
 
   // Open InfoWindow at the marker for the location clicked
-  populateInfoWindow(markers[locationIndex], largeInfowindow);
+  populateInfoWindow(window.markers[locationIndex], largeInfowindow);
 
 } // end of SelectLocation
 
@@ -273,8 +279,8 @@ function populateInfoWindow(marker, infowindow) {
 
 	  // set all marker icons back to green and remove animations
       for (let y = 0; y < markers.length; y++) {
-        markers[y].setIcon('img/coffee_marker_green.png');
-	    markers[y].setAnimation(null);
+        window.markers[y].setIcon('img/coffee_marker_green.png');
+	    window.markers[y].setAnimation(null);
       } // end of for()
 
 	  // remove locationTitleBold class from all titles elements
@@ -294,19 +300,19 @@ function populateInfoWindow(marker, infowindow) {
 function showListings() {
   let bounds = new google.maps.LatLngBounds();
   // Extend the boundaries of the map for each marker and display the marker
-  for (let i = 0; i < markers.length; i++) {
-    markers[i].setMap(map);
-    bounds.extend(markers[i].position);
+  for (let i = 0; i < window.markers.length; i++) {
+    window.markers[i].setMap(window.map);
+    bounds.extend(window.markers[i].position);
   }
-  map.fitBounds(bounds);
+  window.map.fitBounds(bounds);
 } // end of showListings()
 
 /**
 * @description This function will loop through the listings and hide them all.
 */
 function hideListings() {
-  for (let i = 0; i < markers.length; i++) {
-    markers[i].setMap(null);
+  for (let i = 0; i < window.markers.length; i++) {
+    window.markers[i].setMap(null);
   }
 } // end of hideListings
 
@@ -317,7 +323,7 @@ function filterFunction() {
   filter = filterInput.value.toUpperCase();
 
   // get dom elements and text for each location in list
-  for (let x = 1; x < markers.length+1; x++) {
+  for (let x = 1; x < window.markers.length+1; x++) {
     let elem = document.getElementById(x);
     txtValue = elem.textContent || elem.innerText;
 
@@ -326,12 +332,12 @@ function filterFunction() {
       // remove locationTitleHide class to show elements
       elem.parentElement.classList.remove('locationTitleHide'); //show
       // show map marker
-      markers[x-1].setMap(map);
+      window.markers[x-1].setMap(map);
     } else {
       // add locationTitleHide class to hide elements
       elem.parentElement.classList.add('locationTitleHide'); //hide
       // hide map marker
-      markers[x-1].setMap(null);
+      window.markers[x-1].setMap(null);
     }
   } // end of for()
 } // end of filterFunction()
