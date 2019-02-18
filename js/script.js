@@ -5,22 +5,22 @@ window.markers = [];
 
 // These are the listings that will be shown to the user.
 window.coffeeShopLocations = ko.observableArray([
-  {id: 1, title: 'Cafe Brazil 1', location: {lat: 32.844404, lng: -96.773435}},
-  {id: 2, title: 'Cafe Brazil 2', location: {lat: 32.784975, lng: -96.783027}},
-  {id: 3, title: 'Starbucks 1', location: {lat: 32.864403, lng: -96.660265}},
-  {id: 4, title: 'Starbucks 2', location: {lat: 32.811152, lng: -96.623135}},
-  {id: 5, title: 'Starbucks 3', location: {lat: 32.746236, lng: -96.585969}},
+  {id: 1, title: 'Cafe Brazil', location: {lat: 32.844404, lng: -96.773435}},
+  {id: 2, title: 'Cafe Brazil', location: {lat: 32.784975, lng: -96.783027}},
+  {id: 3, title: 'Starbucks', location: {lat: 32.864403, lng: -96.660265}},
+  {id: 4, title: 'Starbucks', location: {lat: 32.811152, lng: -96.623135}},
+  {id: 5, title: 'Starbucks', location: {lat: 32.746236, lng: -96.585969}},
   {id: 6, title: 'Black Forest Coffee', location: {lat: 32.86609, lng: -96.764503}},
-  {id: 7, title: 'Dennys 1', location: {lat: 32.819224, lng: -96.786784}},
-  {id: 8, title: 'Dennys 2', location: {lat: 32.841681, lng: -96.593621}},
-  {id: 9, title: 'Dennys 3', location: {lat: 32.789396, lng: -96.594197}},
-  {id: 10, title: 'iHop 1', location: {lat: 32.857431, lng: -96.647735}},
-  {id: 11, title: 'iHop 2', location: {lat: 32.859325, lng: -96.769432}},
-  {id: 12, title: 'iHop 3', location: {lat: 32.768661, lng: -96.625545}},
+  {id: 7, title: 'Dennys', location: {lat: 32.819224, lng: -96.786784}},
+  {id: 8, title: 'Dennys', location: {lat: 32.841681, lng: -96.593621}},
+  {id: 9, title: 'Dennys', location: {lat: 32.789396, lng: -96.594197}},
+  {id: 10, title: 'iHop', location: {lat: 32.857431, lng: -96.647735}},
+  {id: 11, title: 'iHop', location: {lat: 32.859325, lng: -96.769432}},
+  {id: 12, title: 'iHop', location: {lat: 32.768661, lng: -96.625545}},
   {id: 13, title: 'Goldmine', location: {lat: 32.876755, lng: -96.631224}},
   {id: 14, title: 'Beef House', location: {lat: 32.878382, lng: -96.647637}},
-  {id: 15, title: 'Dunkin Donuts 1', location: {lat: 32.861236, lng: -96.643064}},
-  {id: 16, title: 'Dunkin Donuts 2', location: {lat: 32.952197, lng: -96.769473}},
+  {id: 15, title: 'Dunkin Donuts', location: {lat: 32.861236, lng: -96.643064}},
+  {id: 16, title: 'Dunkin Donuts', location: {lat: 32.952197, lng: -96.769473}},
   {id: 17, title: 'White Rock Coffee', location: {lat: 32.864607, lng: -96.712334}}
 ]);
 
@@ -36,7 +36,7 @@ let fsEndpoint = 'https://api.foursquare.com/v2/venues/search';
 let fsVersion = '20180323';
 let fsIntent = 'match'; // default 'checkin' if searching for more than 1
 //let fsLL = '32.776664,-96.796988'; // center of map area
-//let fsLL = '32.844404,-96.773435'; // first location (Cafe Brazil 1)
+
 window.fsLL = [];
 
 function setLLs() {
@@ -47,11 +47,20 @@ function setLLs() {
 
 setLLs();
 
-let fsName = 'Cafe Brazil';
+window.fsName = [];
+
+function setFsNames() {
+  for (let i = 0; i < window.coffeeShopLocations().length; i++) {
+    window.fsName[i] = window.coffeeShopLocations()[i].title;
+  }
+}
+
+setFsNames();
+
 //let fsQuery = 'coffee';
 let fsLimit = '1';
-let fsClientID = 'E2QMBO1XOX1I3HM2TQ4BMEGVLA3ZHCHN1WG4RM40RGZJIZHH';
-let fsClientSecret = 'JSOKMIPYKJW52UBZDXRT3V1NUONCMIEWTJX3VTANTHY4NUC5';
+const fsClientID = 'E2QMBO1XOX1I3HM2TQ4BMEGVLA3ZHCHN1WG4RM40RGZJIZHH';
+const fsClientSecret = 'JSOKMIPYKJW52UBZDXRT3V1NUONCMIEWTJX3VTANTHY4NUC5';
 
 window.fsVenueID = [];
 // window.fsVenueID[0] = '40e0b100f964a52009081fe3'; // Cafe Brazil 1
@@ -70,13 +79,14 @@ let fsPhotoSuffix = '';
 
 window.fsParams = [];
 window.fsURL = [];
+window.fsPhoto = [];
 
 function setFsURLs() {
   for (let i = 0; i < window.coffeeShopLocations().length; i++) {
     window.fsParams[i] = 'v=' + encodeURIComponent(fsVersion)
       + '&' + 'intent=' + encodeURIComponent(fsIntent)
       + '&' + 'll=' + encodeURIComponent(window.fsLL[i])
-      + '&' + 'name=' + encodeURIComponent(fsName)
+      + '&' + 'name=' + encodeURIComponent(window.fsName[i])
       //+ '&' + 'query=' + encodeURIComponent(fsQuery)
       //+ '&' + 'limit=' + encodeURIComponent(fsLimit)
       + '&' + 'client_id=' + encodeURIComponent(fsClientID)
@@ -88,39 +98,42 @@ function setFsURLs() {
 setFsURLs();
 
 let getVenueIDFromFS = new XMLHttpRequest();
-getVenueIDFromFS.open('GET', window.fsURL[0]);
+let getPhotoFromFS = new XMLHttpRequest();
 
-getVenueIDFromFS.onload = function() {
-  let responseFromFS = JSON.parse(getVenueIDFromFS.responseText);
+for (let i = 0; i < window.coffeeShopLocations().length; i++) {
+  getVenueIDFromFS.open('GET', window.fsURL[i]);
 
-  window.fsVenueID[0] = responseFromFS.response.venues[0].id;
+  getVenueIDFromFS.onload = function() {
+    let responseFromFS = JSON.parse(getVenueIDFromFS.responseText);
 
-  let fsPhotoEndpoint = 'https://api.foursquare.com/v2/venues/' + window.fsVenueID[0] + '/photos';
-  let fsPhotoURL = fsPhotoEndpoint + '?' + fsPhotoParams;
+    window.fsVenueID[i] = responseFromFS.response.venues[0].id;
 
-  console.log(fsVenueID);
-  let getPhotoFromFS = new XMLHttpRequest();
-  getPhotoFromFS.open('GET', fsPhotoURL);
+    let fsPhotoEndpoint = 'https://api.foursquare.com/v2/venues/' + window.fsVenueID[i] + '/photos';
+    let fsPhotoURL = fsPhotoEndpoint + '?' + fsPhotoParams;
 
-  getPhotoFromFS.onload = function() {
-    let responseFromPhotoFS = JSON.parse(getPhotoFromFS.responseText);
-    console.log(responseFromPhotoFS);
+    console.log(window.fsVenueID[i]);
 
-    let fsPhotoPrefix = responseFromPhotoFS.response.photos.items[0].prefix;
-    let fsPhotoSuffix = responseFromPhotoFS.response.photos.items[0].suffix;
-    window.fsPhoto = [];
-    window.fsPhoto[0] = fsPhotoPrefix + fsPhotoSize + fsPhotoSuffix;
+    getPhotoFromFS.open('GET', fsPhotoURL);
 
-    console.log(window.fsPhoto[0]);
+    getPhotoFromFS.onload = function() {
+      let responseFromPhotoFS = JSON.parse(getPhotoFromFS.responseText);
+      console.log(responseFromPhotoFS);
 
+      let fsPhotoPrefix = responseFromPhotoFS.response.photos.items[0].prefix;
+      let fsPhotoSuffix = responseFromPhotoFS.response.photos.items[0].suffix;
 
-  } // end of function getPhotoFromFS()
-  getPhotoFromFS.send();
+      window.fsPhoto[i] = fsPhotoPrefix + fsPhotoSize + fsPhotoSuffix;
 
-}; // end of getVenueIDFromFS
+      console.log(window.fsPhoto[i]);
 
-getVenueIDFromFS.send();
+    } // end of function getPhotoFromFS()
+    getPhotoFromFS.send();
 
+  }; // end of getVenueIDFromFS
+
+  getVenueIDFromFS.send();
+
+} // end of for (let i = 0; i < window.coffeeShopLocations().length; i++) {
 
 
 /**
@@ -356,8 +369,10 @@ function populateInfoWindow(marker, infowindow) {
   if (infowindow.marker != marker) {
     infowindow.marker = marker;
 
+    console.log(marker.id);
+
     // set the content for the infowindow
-    infowindow.setContent('<div class="infowindow"><h3>' + marker.title + '</h3><img src="' + window.fsPhoto[0] + '">' + '</div>');
+    infowindow.setContent('<div class="infowindow"><h3>' + marker.title + '</h3><img src="' + window.fsPhoto[marker.id] + '">' + '</div>');
     infowindow.open(map, marker);
 
     // Make sure the marker property is cleared if the infowindow is closed.
