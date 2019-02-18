@@ -148,6 +148,13 @@ button:focus {
   display: none;
 }
 
+.infowindow {
+  align-content: center;
+  align-items: center;
+  font-weight: bold;
+  color: #306144;
+}
+
 .bg-gradient-brown {
   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#2c2c2c+0,524439+50,baa89b+100 */
   background: #2c2c2c; /* Old browsers */

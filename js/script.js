@@ -42,7 +42,9 @@ let fsName = 'Cafe Brazil';
 let fsLimit = '1';
 let fsClientID = 'E2QMBO1XOX1I3HM2TQ4BMEGVLA3ZHCHN1WG4RM40RGZJIZHH';
 let fsClientSecret = 'JSOKMIPYKJW52UBZDXRT3V1NUONCMIEWTJX3VTANTHY4NUC5';
-let fsVenueID = '40e0b100f964a52009081fe3'; // Cafe Brazil 1
+
+window.fsVenueID = [];
+// window.fsVenueID[0] = '40e0b100f964a52009081fe3'; // Cafe Brazil 1
 
 let fsParams = 'v=' + encodeURIComponent(fsVersion)
   + '&' + 'intent=' + encodeURIComponent(fsIntent)
@@ -55,7 +57,6 @@ let fsParams = 'v=' + encodeURIComponent(fsVersion)
 
 let fsURL = fsEndpoint + '?' + fsParams;
 
-let fsPhotoEndpoint = 'https://api.foursquare.com/v2/venues/' + fsVenueID + '/photos';
 let fsGroup = 'venue';
 let fsPhotoLimit = '1';
 let fsPhotoParams = 'v=' + encodeURIComponent(fsVersion)
@@ -63,10 +64,10 @@ let fsPhotoParams = 'v=' + encodeURIComponent(fsVersion)
   + '&' + 'limit=' + encodeURIComponent(fsPhotoLimit)
   + '&' + 'client_id=' + encodeURIComponent(fsClientID)
   + '&' + 'client_secret=' + encodeURIComponent(fsClientSecret);
-let fsPhotoURL = fsPhotoEndpoint + '?' + fsPhotoParams;
+
 
 let fsPhotoPrefix = '';
-let fsPhotoSize = '300x500';
+let fsPhotoSize = '300x300';
 let fsPhotoSuffix = '';
 
 
@@ -75,8 +76,10 @@ getVenueIDFromFS.open('GET', fsURL);
 
 getVenueIDFromFS.onload = function() {
   let responseFromFS = JSON.parse(getVenueIDFromFS.responseText);
-  let fsVenueID = responseFromFS.response.venues[0].id;
-
+  window.fsVenueID[0] = responseFromFS.response.venues[0].id;
+  let fsPhotoEndpoint = 'https://api.foursquare.com/v2/venues/' + window.fsVenueID[0] + '/photos';
+  let fsPhotoURL = fsPhotoEndpoint + '?' + fsPhotoParams;
+  
   console.log(fsVenueID);
   let getPhotoFromFS = new XMLHttpRequest();
   getPhotoFromFS.open('GET', fsPhotoURL);
@@ -87,9 +90,10 @@ getVenueIDFromFS.onload = function() {
 
     let fsPhotoPrefix = responseFromPhotoFS.response.photos.items[0].prefix;
     let fsPhotoSuffix = responseFromPhotoFS.response.photos.items[0].suffix;
-    let fsPhoto = fsPhotoPrefix + fsPhotoSize + fsPhotoSuffix;
+    window.fsPhoto = [];
+    window.fsPhoto[0] = fsPhotoPrefix + fsPhotoSize + fsPhotoSuffix;
 
-    console.log(fsPhoto);
+    console.log(window.fsPhoto[0]);
 
 
   } // end of function getPhotoFromFS()
@@ -333,7 +337,9 @@ function populateInfoWindow(marker, infowindow) {
   // Check to make sure the infowindow is not already opened on this marker.
   if (infowindow.marker != marker) {
     infowindow.marker = marker;
-    infowindow.setContent('<div>' + marker.title + '</div>');
+
+    // set the content for the infowindow
+    infowindow.setContent('<div class="infowindow"><h3>' + marker.title + '</h3><img src="' + window.fsPhoto[0] + '">' + '</div>');
     infowindow.open(map, marker);
 
     // Make sure the marker property is cleared if the infowindow is closed.
