@@ -36,7 +36,17 @@ let fsEndpoint = 'https://api.foursquare.com/v2/venues/search';
 let fsVersion = '20180323';
 let fsIntent = 'match'; // default 'checkin' if searching for more than 1
 //let fsLL = '32.776664,-96.796988'; // center of map area
-let fsLL = '32.844404,-96.773435'; // first location (Cafe Brazil 1)
+//let fsLL = '32.844404,-96.773435'; // first location (Cafe Brazil 1)
+window.fsLL = [];
+
+function setLLs() {
+  for (let i = 0; i < window.coffeeShopLocations().length; i++) {
+    window.fsLL[i] = window.coffeeShopLocations()[i].location.lat + ',' + window.coffeeShopLocations()[i].location.lng;
+  }
+}
+
+setLLs();
+
 let fsName = 'Cafe Brazil';
 //let fsQuery = 'coffee';
 let fsLimit = '1';
@@ -46,17 +56,6 @@ let fsClientSecret = 'JSOKMIPYKJW52UBZDXRT3V1NUONCMIEWTJX3VTANTHY4NUC5';
 window.fsVenueID = [];
 // window.fsVenueID[0] = '40e0b100f964a52009081fe3'; // Cafe Brazil 1
 
-let fsParams = 'v=' + encodeURIComponent(fsVersion)
-  + '&' + 'intent=' + encodeURIComponent(fsIntent)
-  + '&' + 'll=' + encodeURIComponent(fsLL)
-  + '&' + 'name=' + encodeURIComponent(fsName)
-  //+ '&' + 'query=' + encodeURIComponent(fsQuery)
-  //+ '&' + 'limit=' + encodeURIComponent(fsLimit)
-  + '&' + 'client_id=' + encodeURIComponent(fsClientID)
-  + '&' + 'client_secret=' + encodeURIComponent(fsClientSecret);
-
-let fsURL = fsEndpoint + '?' + fsParams;
-
 let fsGroup = 'venue';
 let fsPhotoLimit = '1';
 let fsPhotoParams = 'v=' + encodeURIComponent(fsVersion)
@@ -65,21 +64,40 @@ let fsPhotoParams = 'v=' + encodeURIComponent(fsVersion)
   + '&' + 'client_id=' + encodeURIComponent(fsClientID)
   + '&' + 'client_secret=' + encodeURIComponent(fsClientSecret);
 
-
 let fsPhotoPrefix = '';
 let fsPhotoSize = '300x300';
 let fsPhotoSuffix = '';
 
+window.fsParams = [];
+window.fsURL = [];
+
+function setFsURLs() {
+  for (let i = 0; i < window.coffeeShopLocations().length; i++) {
+    window.fsParams[i] = 'v=' + encodeURIComponent(fsVersion)
+      + '&' + 'intent=' + encodeURIComponent(fsIntent)
+      + '&' + 'll=' + encodeURIComponent(window.fsLL[i])
+      + '&' + 'name=' + encodeURIComponent(fsName)
+      //+ '&' + 'query=' + encodeURIComponent(fsQuery)
+      //+ '&' + 'limit=' + encodeURIComponent(fsLimit)
+      + '&' + 'client_id=' + encodeURIComponent(fsClientID)
+      + '&' + 'client_secret=' + encodeURIComponent(fsClientSecret);
+    window.fsURL[i] = fsEndpoint + '?' + window.fsParams[i];
+  }
+}
+
+setFsURLs();
 
 let getVenueIDFromFS = new XMLHttpRequest();
-getVenueIDFromFS.open('GET', fsURL);
+getVenueIDFromFS.open('GET', window.fsURL[0]);
 
 getVenueIDFromFS.onload = function() {
   let responseFromFS = JSON.parse(getVenueIDFromFS.responseText);
+
   window.fsVenueID[0] = responseFromFS.response.venues[0].id;
+
   let fsPhotoEndpoint = 'https://api.foursquare.com/v2/venues/' + window.fsVenueID[0] + '/photos';
   let fsPhotoURL = fsPhotoEndpoint + '?' + fsPhotoParams;
-  
+
   console.log(fsVenueID);
   let getPhotoFromFS = new XMLHttpRequest();
   getPhotoFromFS.open('GET', fsPhotoURL);
