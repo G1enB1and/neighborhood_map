@@ -32,6 +32,8 @@ https://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-a
 
 https://stackoverflow.com/questions/23765186/knockout-js-passing-observable-array-as-argument
 
+error checking
+https://stackoverflow.com/questions/11351739/xmlhttprequest-open-and-send-how-to-tell-if-it-worked
 App requirements:
 
 Knockout.js must be used to handle the list, filter, and any other information that is subject to changing state.
