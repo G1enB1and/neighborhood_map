@@ -99,22 +99,27 @@ function setFsURLs() {
 
 setFsURLs();
 
-
-// TODO: FIX CODE - IT IS STILL NOT WAITING FOR populateVenueIDs
-// BEFORE CALLING populateFsPhotoRequestURLs
-
 let populateVenueIDs = new Promise(function(resolve, reject) {
+  let promises = [];
+
   for (let y = 0; y < window.coffeeShopLocations().length; y++) {
-    let getVenueIDFromFS = new XMLHttpRequest();
-    getVenueIDFromFS.open('GET', window.fsURL[y]);
-    getVenueIDFromFS.onload = function() {
-      let responseFromFS = JSON.parse(getVenueIDFromFS.responseText);
-      window.fsVenueID[y] = responseFromFS.response.venues[0].id;
-      console.log(window.fsVenueID[y]);
-    }; // end of getVenueIDFromFS.onload
-    getVenueIDFromFS.send();
-  } // end of for (let y = 0; i < window.coffeeShopLocations().length; y++)
-  resolve("done!");
+    promises.push(new Promise(function (resolve) {
+      let getVenueIDFromFS = new XMLHttpRequest();
+      getVenueIDFromFS.open('GET', window.fsURL[y]);
+      getVenueIDFromFS.onload = function() {
+        let responseFromFS = JSON.parse(getVenueIDFromFS.responseText);
+        window.fsVenueID[y] = responseFromFS.response.venues[0].id;
+        console.log(window.fsVenueID[y]);
+        resolve();
+      }; // end of getVenueIDFromFS.onload
+      getVenueIDFromFS.send();
+    })); // end of promises
+  } // end of for
+  return Promise.all(promises)
+    .then(function () {
+      resolve('Done!');
+      populateFsPhotoRequestURLs();
+    }) // end of .then
 }); // end of populateVenueIDs
 
 function populateFsPhotoRequestURLs() {
@@ -123,36 +128,36 @@ function populateFsPhotoRequestURLs() {
       + window.fsVenueID[y] + '/photos';
     window.fsPhotoRequestURL[y] = fsPhotoEndpoint + '?' + fsPhotoParams;
     console.log(window.fsPhotoRequestURL[y]);
-  } // end of for (let y = 0; i < window.coffeeShopLocations().length; y++) {
+  } // end of for
 } // end of populateFsPhotoRequestURLs()
 
+populateVenueIDs;
 
-populateVenueIDs.then(
-  populateFsPhotoRequestURLs()
-);
+// TODO: call this function only after populateFsPhotoRequestURLs fullfills all promises
+// code above to use promises
 
+function getPhotoWrapperFunction() {
+  let getPhotoFromFS = new XMLHttpRequest();
+  let testt = window.fsPhotoRequestURL[2];
+  console.log(testt);
 
-/*
-let getPhotoFromFS = new XMLHttpRequest();
-getPhotoFromFS.open('GET', window.fsPhotoRequestURL[2]);
+  getPhotoFromFS.open('GET', testt);
 
-let testt = window.fsPhotoRequestURL[2];
+  getPhotoFromFS.onload = function(testt) {
+    let responseFromPhotoFS = JSON.parse(getPhotoFromFS.responseText);
+    console.log(responseFromPhotoFS);
 
-getPhotoFromFS.onload = function(testt) {
-  let responseFromPhotoFS = JSON.parse(getPhotoFromFS.responseText);
-  console.log(responseFromPhotoFS);
+    let fsPhotoPrefix = responseFromPhotoFS.response.photos.items[0].prefix;
+    let fsPhotoSuffix = responseFromPhotoFS.response.photos.items[0].suffix;
 
-  let fsPhotoPrefix = responseFromPhotoFS.response.photos.items[0].prefix;
-  let fsPhotoSuffix = responseFromPhotoFS.response.photos.items[0].suffix;
+    window.fsPhoto[2] = fsPhotoPrefix + fsPhotoSize + fsPhotoSuffix;
 
-  window.fsPhoto[2] = fsPhotoPrefix + fsPhotoSize + fsPhotoSuffix;
+    console.log(window.fsPhoto[2]);
 
-  console.log(window.fsPhoto[2]);
-
-} // end of function getPhotoFromFS.onload
+  } // end of function getPhotoFromFS.onload
 
 getPhotoFromFS.send();
-*/
+} // end of getPhotoWrapperFunction
 
 
 /**
