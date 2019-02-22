@@ -118,18 +118,28 @@ let populateVenueIDs = new Promise(function(resolve, reject) {
   return Promise.all(promises)
     .then(function () {
       resolve('Done!');
-      populateFsPhotoRequestURLs();
+      populateFsPhotoRequestURLs;
     }) // end of .then
 }); // end of populateVenueIDs
 
-function populateFsPhotoRequestURLs() {
+let populateFsPhotoRequestURLs = new Promise(function(resolve, reject) {
+  let promises = [];
+
   for (let y = 0; y < window.coffeeShopLocations().length; y++) {
-    window.fsPhotoEndpoint[y] = 'https://api.foursquare.com/v2/venues/'
-      + window.fsVenueID[y] + '/photos';
-    window.fsPhotoRequestURL[y] = fsPhotoEndpoint + '?' + fsPhotoParams;
-    console.log(window.fsPhotoRequestURL[y]);
+    promises.push(new Promise(function (resolve) {
+      window.fsPhotoEndpoint[y] = 'https://api.foursquare.com/v2/venues/'
+        + window.fsVenueID[y] + '/photos';
+      window.fsPhotoRequestURL[y] = fsPhotoEndpoint + '?' + fsPhotoParams;
+      console.log(window.fsPhotoRequestURL[y]);
+      resolve();
+    })); // end of promises
   } // end of for
-} // end of populateFsPhotoRequestURLs()
+  return Promise.all(promises)
+    .then(function () {
+      resolve('Done!');
+      getPhotoWrapperFunction();
+    }) // end of .then
+}); // end of populateFsPhotoRequestURLs
 
 populateVenueIDs;
 
