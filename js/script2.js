@@ -80,6 +80,8 @@ let fsPhotoSuffix = '';
 window.fsParams = [];
 window.fsURL = [];
 window.fsPhoto = [];
+window.fsPhotoEndpoint = [];
+window.fsPhotoRequestURL = [];
 
 function setFsURLs() {
   for (let i = 0; i < window.coffeeShopLocations().length; i++) {
@@ -97,32 +99,46 @@ function setFsURLs() {
 
 setFsURLs();
 
-let getVenueIDFromFS = new XMLHttpRequest();
+
+// TODO: FIX CODE - IT IS STILL NOT WAITING FOR populateVenueIDs
+// BEFORE CALLING populateFsPhotoRequestURLs
+
+let populateVenueIDs = new Promise(function(resolve, reject) {
+  for (let y = 0; y < window.coffeeShopLocations().length; y++) {
+    let getVenueIDFromFS = new XMLHttpRequest();
+    getVenueIDFromFS.open('GET', window.fsURL[y]);
+    getVenueIDFromFS.onload = function() {
+      let responseFromFS = JSON.parse(getVenueIDFromFS.responseText);
+      window.fsVenueID[y] = responseFromFS.response.venues[0].id;
+      console.log(window.fsVenueID[y]);
+    }; // end of getVenueIDFromFS.onload
+    getVenueIDFromFS.send();
+  } // end of for (let y = 0; i < window.coffeeShopLocations().length; y++)
+  resolve("done!");
+}); // end of populateVenueIDs
+
+function populateFsPhotoRequestURLs() {
+  for (let y = 0; y < window.coffeeShopLocations().length; y++) {
+    window.fsPhotoEndpoint[y] = 'https://api.foursquare.com/v2/venues/'
+      + window.fsVenueID[y] + '/photos';
+    window.fsPhotoRequestURL[y] = fsPhotoEndpoint + '?' + fsPhotoParams;
+    console.log(window.fsPhotoRequestURL[y]);
+  } // end of for (let y = 0; i < window.coffeeShopLocations().length; y++) {
+} // end of populateFsPhotoRequestURLs()
+
+
+populateVenueIDs.then(
+  populateFsPhotoRequestURLs()
+);
+
+
+/*
 let getPhotoFromFS = new XMLHttpRequest();
+getPhotoFromFS.open('GET', window.fsPhotoRequestURL[2]);
 
-for (let y = 0; y < window.coffeeShopLocations().length; y++) {
-  getVenueIDFromFS.open('GET', window.fsURL[y]);
+let testt = window.fsPhotoRequestURL[2];
 
-  getVenueIDFromFS.onload = function() {
-    let responseFromFS = JSON.parse(getVenueIDFromFS.responseText);
-
-    window.fsVenueID[y] = responseFromFS.response.venues[0].id;
-
-    let fsPhotoEndpoint = 'https://api.foursquare.com/v2/venues/' + window.fsVenueID[y] + '/photos';
-    let fsPhotoRequestURL = fsPhotoEndpoint + '?' + fsPhotoParams;
-
-    console.log(window.fsVenueID[y]);
-
-    getPhotoFromFS.open('GET', fsPhotoRequestURL);
-    getPhotoFromFS.send();
-
-  }; // end of getVenueIDFromFS
-
-  getVenueIDFromFS.send();
-
-} // end of for (let i = 0; i < window.coffeeShopLocations().length; i++) {
-
-getPhotoFromFS.onload = function(fsPhotoURL) {
+getPhotoFromFS.onload = function(testt) {
   let responseFromPhotoFS = JSON.parse(getPhotoFromFS.responseText);
   console.log(responseFromPhotoFS);
 
@@ -133,7 +149,11 @@ getPhotoFromFS.onload = function(fsPhotoURL) {
 
   console.log(window.fsPhoto[2]);
 
-} // end of function getPhotoFromFS()
+} // end of function getPhotoFromFS.onload
+
+getPhotoFromFS.send();
+*/
+
 
 /**
 * @description Initialize Map
