@@ -74,7 +74,7 @@ let fsPhotoParams = 'v=' + encodeURIComponent(fsVersion)
   + '&' + 'client_secret=' + encodeURIComponent(fsClientSecret);
 
 let fsPhotoPrefix = '';
-let fsPhotoSize = '300x300';
+let fsPhotoSize = '150x150';
 let fsPhotoSuffix = '';
 
 window.fsParams = [];
@@ -100,33 +100,20 @@ setFsURLs();
 let getVenueIDFromFS = new XMLHttpRequest();
 let getPhotoFromFS = new XMLHttpRequest();
 
-for (let i = 0; i < window.coffeeShopLocations().length; i++) {
-  getVenueIDFromFS.open('GET', window.fsURL[i]);
+for (let y = 0; y < window.coffeeShopLocations().length; y++) {
+  getVenueIDFromFS.open('GET', window.fsURL[y]);
 
   getVenueIDFromFS.onload = function() {
     let responseFromFS = JSON.parse(getVenueIDFromFS.responseText);
 
-    window.fsVenueID[i] = responseFromFS.response.venues[0].id;
+    window.fsVenueID[y] = responseFromFS.response.venues[0].id;
 
-    let fsPhotoEndpoint = 'https://api.foursquare.com/v2/venues/' + window.fsVenueID[i] + '/photos';
-    let fsPhotoURL = fsPhotoEndpoint + '?' + fsPhotoParams;
+    let fsPhotoEndpoint = 'https://api.foursquare.com/v2/venues/' + window.fsVenueID[y] + '/photos';
+    let fsPhotoRequestURL = fsPhotoEndpoint + '?' + fsPhotoParams;
 
-    console.log(window.fsVenueID[i]);
+    console.log(window.fsVenueID[y]);
 
-    getPhotoFromFS.open('GET', fsPhotoURL);
-
-    getPhotoFromFS.onload = function() {
-      let responseFromPhotoFS = JSON.parse(getPhotoFromFS.responseText);
-      console.log(responseFromPhotoFS);
-
-      let fsPhotoPrefix = responseFromPhotoFS.response.photos.items[0].prefix;
-      let fsPhotoSuffix = responseFromPhotoFS.response.photos.items[0].suffix;
-
-      window.fsPhoto[i] = fsPhotoPrefix + fsPhotoSize + fsPhotoSuffix;
-
-      console.log(window.fsPhoto[i]);
-
-    } // end of function getPhotoFromFS()
+    getPhotoFromFS.open('GET', fsPhotoRequestURL);
     getPhotoFromFS.send();
 
   }; // end of getVenueIDFromFS
@@ -135,6 +122,18 @@ for (let i = 0; i < window.coffeeShopLocations().length; i++) {
 
 } // end of for (let i = 0; i < window.coffeeShopLocations().length; i++) {
 
+getPhotoFromFS.onload = function(fsPhotoURL) {
+  let responseFromPhotoFS = JSON.parse(getPhotoFromFS.responseText);
+  console.log(responseFromPhotoFS);
+
+  let fsPhotoPrefix = responseFromPhotoFS.response.photos.items[0].prefix;
+  let fsPhotoSuffix = responseFromPhotoFS.response.photos.items[0].suffix;
+
+  window.fsPhoto[2] = fsPhotoPrefix + fsPhotoSize + fsPhotoSuffix;
+
+  console.log(window.fsPhoto[2]);
+
+} // end of function getPhotoFromFS()
 
 /**
 * @description Initialize Map
