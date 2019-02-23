@@ -99,11 +99,12 @@ function setFsURLs() {
 
 setFsURLs();
 
+async function populateVenueIDsAsync() {
 let populateVenueIDs = new Promise(function(resolve, reject) {
-  let promises = [];
+  let promisesA = [];
 
   for (let y = 0; y < window.coffeeShopLocations().length; y++) {
-    promises.push(new Promise(function (resolve) {
+    promisesA.push(new Promise(function (resolve) {
       let getVenueIDFromFS = new XMLHttpRequest();
       getVenueIDFromFS.open('GET', window.fsURL[y]);
       getVenueIDFromFS.onload = function() {
@@ -115,18 +116,20 @@ let populateVenueIDs = new Promise(function(resolve, reject) {
       getVenueIDFromFS.send();
     })); // end of promises
   } // end of for
-  return Promise.all(promises)
+  return Promise.all(promisesA)
     .then(function () {
-      resolve('Done!');
-      populateFsPhotoRequestURLs;
+      resolve('Done getting Venue IDs');
+      populateFsPhotoRequestURLsAsync();
     }) // end of .then
 }); // end of populateVenueIDs
+} // end of async function populateVenueIDsAsync()
 
+async function populateFsPhotoRequestURLsAsync() {
 let populateFsPhotoRequestURLs = new Promise(function(resolve, reject) {
-  let promises = [];
+  let promisesB = [];
 
   for (let y = 0; y < window.coffeeShopLocations().length; y++) {
-    promises.push(new Promise(function (resolve) {
+    promisesB.push(new Promise(function (resolve) {
       window.fsPhotoEndpoint[y] = 'https://api.foursquare.com/v2/venues/'
         + window.fsVenueID[y] + '/photos';
       window.fsPhotoRequestURL[y] = fsPhotoEndpoint + '?' + fsPhotoParams;
@@ -134,14 +137,15 @@ let populateFsPhotoRequestURLs = new Promise(function(resolve, reject) {
       resolve();
     })); // end of promises
   } // end of for
-  return Promise.all(promises)
+  return Promise.all(promisesB)
     .then(function () {
-      resolve('Done!');
+      resolve('Done populating Photo Request URLs');
       getPhotoWrapperFunction();
     }) // end of .then
 }); // end of populateFsPhotoRequestURLs
+} // end of async function populateFsPhotoRequestURLsAsync()
 
-populateVenueIDs;
+populateVenueIDsAsync();
 
 // TODO: call this function only after populateFsPhotoRequestURLs fullfills all promises
 // code above to use promises
