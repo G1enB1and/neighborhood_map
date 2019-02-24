@@ -36,7 +36,7 @@ let fsEndpoint = 'https://api.foursquare.com/v2/venues/search';
 let fsVersion = '20180323';
 let fsIntent = 'match'; // default 'checkin' if searching for more than 1
 //let fsLL = '32.776664,-96.796988'; // center of map area
-//let fsLL = '32.844404,-96.773435'; // first location (Cafe Brazil 1)
+
 window.fsLL = [];
 
 function setLLs() {
@@ -47,11 +47,20 @@ function setLLs() {
 
 setLLs();
 
-let fsName = 'Cafe Brazil';
+window.fsName = [];
+
+function setFsNames() {
+  for (let i = 0; i < window.coffeeShopLocations().length; i++) {
+    window.fsName[i] = window.coffeeShopLocations()[i].title;
+  }
+}
+
+setFsNames();
+
 //let fsQuery = 'coffee';
 let fsLimit = '1';
-let fsClientID = 'E2QMBO1XOX1I3HM2TQ4BMEGVLA3ZHCHN1WG4RM40RGZJIZHH';
-let fsClientSecret = 'JSOKMIPYKJW52UBZDXRT3V1NUONCMIEWTJX3VTANTHY4NUC5';
+const fsClientID = 'E2QMBO1XOX1I3HM2TQ4BMEGVLA3ZHCHN1WG4RM40RGZJIZHH';
+const fsClientSecret = 'JSOKMIPYKJW52UBZDXRT3V1NUONCMIEWTJX3VTANTHY4NUC5';
 
 window.fsVenueID = [];
 // window.fsVenueID[0] = '40e0b100f964a52009081fe3'; // Cafe Brazil 1
@@ -65,18 +74,21 @@ let fsPhotoParams = 'v=' + encodeURIComponent(fsVersion)
   + '&' + 'client_secret=' + encodeURIComponent(fsClientSecret);
 
 let fsPhotoPrefix = '';
-let fsPhotoSize = '300x300';
+let fsPhotoSize = '150x150';
 let fsPhotoSuffix = '';
 
 window.fsParams = [];
 window.fsURL = [];
+window.fsPhoto = [];
+window.fsPhotoEndpoint = [];
+window.fsPhotoRequestURL = [];
 
 function setFsURLs() {
   for (let i = 0; i < window.coffeeShopLocations().length; i++) {
     window.fsParams[i] = 'v=' + encodeURIComponent(fsVersion)
       + '&' + 'intent=' + encodeURIComponent(fsIntent)
       + '&' + 'll=' + encodeURIComponent(window.fsLL[i])
-      + '&' + 'name=' + encodeURIComponent(fsName)
+      + '&' + 'name=' + encodeURIComponent(window.fsName[i])
       //+ '&' + 'query=' + encodeURIComponent(fsQuery)
       //+ '&' + 'limit=' + encodeURIComponent(fsLimit)
       + '&' + 'client_id=' + encodeURIComponent(fsClientID)
@@ -87,40 +99,97 @@ function setFsURLs() {
 
 setFsURLs();
 
-let getVenueIDFromFS = new XMLHttpRequest();
-getVenueIDFromFS.open('GET', window.fsURL[0]);
+async function populateVenueIDsAsync() {
+  let populateVenueIDs = new Promise(function(resolve, reject) {
+    let promisesA = [];
 
-getVenueIDFromFS.onload = function() {
-  let responseFromFS = JSON.parse(getVenueIDFromFS.responseText);
+    for (let y = 0; y < window.coffeeShopLocations().length; y++) {
+      promisesA.push(new Promise(function (resolve) {
+        let getVenueIDFromFS = new XMLHttpRequest();
+        getVenueIDFromFS.open('GET', window.fsURL[y]);
+        getVenueIDFromFS.onload = function() {
+          let responseFromFS = JSON.parse(getVenueIDFromFS.responseText);
+          window.fsVenueID[y] = responseFromFS.response.venues[0].id;
+          resolve(console.log('venue ' + y + ' id: ' + window.fsVenueID[y]));
+        }; // end of getVenueIDFromFS.onload
+        getVenueIDFromFS.send();
+      })); // end of promises
+    } // end of for
 
-  window.fsVenueID[0] = responseFromFS.response.venues[0].id;
+    return Promise.all(promisesA)
+      .then(function () {
+        resolve(console.log('Done getting Venue IDs'));
+        populateFsPhotoRequestURLsAsync();
+      }) // end of .then
 
-  let fsPhotoEndpoint = 'https://api.foursquare.com/v2/venues/' + window.fsVenueID[0] + '/photos';
-  let fsPhotoURL = fsPhotoEndpoint + '?' + fsPhotoParams;
+  }); // end of populateVenueIDs
+} // end of async function populateVenueIDsAsync()
 
-  console.log(fsVenueID);
-  let getPhotoFromFS = new XMLHttpRequest();
-  getPhotoFromFS.open('GET', fsPhotoURL);
+async function populateFsPhotoRequestURLsAsync() {
+  let populateFsPhotoRequestURLs = new Promise(function(resolve, reject) {
+    let promisesB = [];
 
-  getPhotoFromFS.onload = function() {
-    let responseFromPhotoFS = JSON.parse(getPhotoFromFS.responseText);
-    console.log(responseFromPhotoFS);
+    for (let y = 0; y < window.coffeeShopLocations().length; y++) {
+      promisesB.push(new Promise(function (resolve) {
+        window.fsPhotoEndpoint[y] = 'https://api.foursquare.com/v2/venues/' + window.fsVenueID[y] + '/photos';
+        window.fsPhotoRequestURL[y] = window.fsPhotoEndpoint[y] + '?' + fsPhotoParams;
+        resolve(console.log('venue ' + y + ' Photo Request URL =  ' + window.fsPhotoRequestURL[y]));
+      })); // end of promises
+    } // end of for
 
-    let fsPhotoPrefix = responseFromPhotoFS.response.photos.items[0].prefix;
-    let fsPhotoSuffix = responseFromPhotoFS.response.photos.items[0].suffix;
-    window.fsPhoto = [];
-    window.fsPhoto[0] = fsPhotoPrefix + fsPhotoSize + fsPhotoSuffix;
+    return Promise.all(promisesB)
+      .then(function () {
+        resolve(console.log('Done populating Photo Request URLs'));
+        getPhotosWrapperFunction();
+      }) // end of .then
 
-    console.log(window.fsPhoto[0]);
+  }); // end of populateFsPhotoRequestURLs
+} // end of async function populateFsPhotoRequestURLsAsync()
+
+populateVenueIDsAsync();
 
 
-  } // end of function getPhotoFromFS()
-  getPhotoFromFS.send();
+async function getPhotosWrapperFunction() {
+  let populatePhotos = new Promise(function(resolve, reject) {
+    let promisesC = [];
 
-}; // end of getVenueIDFromFS
+    for (let y = 0; y < window.coffeeShopLocations().length; y++) {
+      promisesC.push(new Promise(function (resolve) {
+        let getPhotoFromFS = new XMLHttpRequest();
+        let localFsPhotoRequestURL = window.fsPhotoRequestURL[y];
+        getPhotoFromFS.open('GET', localFsPhotoRequestURL);
+        getPhotoFromFS.onreadystatechange = function (oEvent) {
+          if (getPhotoFromFS.readyState === 4) {
+            if (getPhotoFromFS.status === 200) {
+              let responseFromPhotoFS = JSON.parse(getPhotoFromFS.responseText);
+              console.log('venue ' + y + ': ')
+              console.log(responseFromPhotoFS);
+              try {
+                let fsPhotoPrefix = responseFromPhotoFS.response.photos.items[0].prefix;
+                let fsPhotoSuffix = responseFromPhotoFS.response.photos.items[0].suffix;
+                window.fsPhoto[y] = fsPhotoPrefix + fsPhotoSize + fsPhotoSuffix;
+                resolve();
+              } catch(err) {
+                window.fsPhoto[y] = 'undefined';
+                console.log('venue ' + y + ' responseFromPhotoFS.response.photos.items[0]. ' + err.description);
+              }
+            } else {
+              console.log("Error", getPhotoFromFS.statusText);
+              reject(console.log('venue ' + y + 'failed to get photo from foursquare'));
+          } // end if
+        } //  end if
+        } // end of function getPhotoFromFS.onload
+        getPhotoFromFS.send();
+      })); // end of promises
+    } // end of for
 
-getVenueIDFromFS.send();
+    return Promise.all(promisesC)
+    .then(function () {
+      resolve(console.log('Done populating Photos'));
+    }) // end of .then
 
+  }); // end of populatePhotos
+} // end of async function getPhotosWrapperFunction
 
 
 /**
@@ -356,8 +425,22 @@ function populateInfoWindow(marker, infowindow) {
   if (infowindow.marker != marker) {
     infowindow.marker = marker;
 
-    // set the content for the infowindow
-    infowindow.setContent('<div class="infowindow"><h3>' + marker.title + '</h3><img src="' + window.fsPhoto[0] + '">' + '</div>');
+    console.log('Clicked venue id: ' + marker.id);
+
+
+    if (window.fsPhoto[marker.id] != 'undefined') {
+      // set the content for the infowindow
+      infowindow.setContent('<div class="infowindow"><h3>' +
+        marker.title +
+        '</h3><img src="' +
+        window.fsPhoto[marker.id] +
+        '">' + '</br></br>Provided by</br>' + '<img src="img/Foursquare-logo.png">' + '</div>');
+    } else {
+        infowindow.setContent('<div class="infowindow"><h3>' +
+          marker.title +
+          '</h3>' + 'No Image Available' + '</br></br>Provided by</br>' + '<img src="img/Foursquare-logo.png">' + '</div>');
+    }
+
     infowindow.open(map, marker);
 
     // Make sure the marker property is cleared if the infowindow is closed.
