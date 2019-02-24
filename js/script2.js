@@ -100,79 +100,85 @@ function setFsURLs() {
 setFsURLs();
 
 async function populateVenueIDsAsync() {
-let populateVenueIDs = new Promise(function(resolve, reject) {
-  let promisesA = [];
+  let populateVenueIDs = new Promise(function(resolve, reject) {
+    let promisesA = [];
 
-  for (let y = 0; y < window.coffeeShopLocations().length; y++) {
-    promisesA.push(new Promise(function (resolve) {
-      let getVenueIDFromFS = new XMLHttpRequest();
-      getVenueIDFromFS.open('GET', window.fsURL[y]);
-      getVenueIDFromFS.onload = function() {
-        let responseFromFS = JSON.parse(getVenueIDFromFS.responseText);
-        window.fsVenueID[y] = responseFromFS.response.venues[0].id;
-        console.log(window.fsVenueID[y]);
-        resolve();
-      }; // end of getVenueIDFromFS.onload
-      getVenueIDFromFS.send();
-    })); // end of promises
-  } // end of for
-  return Promise.all(promisesA)
-    .then(function () {
-      resolve('Done getting Venue IDs');
-      populateFsPhotoRequestURLsAsync();
-    }) // end of .then
-}); // end of populateVenueIDs
+    for (let y = 0; y < window.coffeeShopLocations().length; y++) {
+      promisesA.push(new Promise(function (resolve) {
+        let getVenueIDFromFS = new XMLHttpRequest();
+        getVenueIDFromFS.open('GET', window.fsURL[y]);
+        getVenueIDFromFS.onload = function() {
+          let responseFromFS = JSON.parse(getVenueIDFromFS.responseText);
+          window.fsVenueID[y] = responseFromFS.response.venues[0].id;
+          resolve();
+        }; // end of getVenueIDFromFS.onload
+        getVenueIDFromFS.send();
+      })); // end of promises
+    } // end of for
+
+    return Promise.all(promisesA)
+      .then(function () {
+        resolve(console.log('Done getting Venue IDs'));
+        populateFsPhotoRequestURLsAsync();
+      }) // end of .then
+
+  }); // end of populateVenueIDs
 } // end of async function populateVenueIDsAsync()
 
 async function populateFsPhotoRequestURLsAsync() {
-let populateFsPhotoRequestURLs = new Promise(function(resolve, reject) {
-  let promisesB = [];
+  let populateFsPhotoRequestURLs = new Promise(function(resolve, reject) {
+    let promisesB = [];
 
-  for (let y = 0; y < window.coffeeShopLocations().length; y++) {
-    promisesB.push(new Promise(function (resolve) {
-      window.fsPhotoEndpoint[y] = 'https://api.foursquare.com/v2/venues/' + window.fsVenueID[y] + '/photos';
-      window.fsPhotoRequestURL[y] = window.fsPhotoEndpoint[y] + '?' + fsPhotoParams;
-      console.log(window.fsPhotoRequestURL[y]);
-      resolve();
-    })); // end of promises
-  } // end of for
-  return Promise.all(promisesB)
-    .then(function () {
-      resolve('Done populating Photo Request URLs');
-      getPhotoWrapperFunction();
-    }) // end of .then
-}); // end of populateFsPhotoRequestURLs
+    for (let y = 0; y < window.coffeeShopLocations().length; y++) {
+      promisesB.push(new Promise(function (resolve) {
+        window.fsPhotoEndpoint[y] = 'https://api.foursquare.com/v2/venues/' + window.fsVenueID[y] + '/photos';
+        window.fsPhotoRequestURL[y] = window.fsPhotoEndpoint[y] + '?' + fsPhotoParams;
+        resolve();
+      })); // end of promises
+    } // end of for
+
+    return Promise.all(promisesB)
+      .then(function () {
+        resolve(console.log('Done populating Photo Request URLs'));
+        getPhotosWrapperFunction();
+      }) // end of .then
+
+  }); // end of populateFsPhotoRequestURLs
 } // end of async function populateFsPhotoRequestURLsAsync()
 
 populateVenueIDsAsync();
 
 
+async function getPhotosWrapperFunction() {
+  let populatePhotos = new Promise(function(resolve, reject) {
+    let promisesC = [];
 
-// TODO: call this function only after populateFsPhotoRequestURLs fullfills all promises
-// code above to use promises
+    for (let y = 0; y < window.coffeeShopLocations().length; y++) {
+      promisesC.push(new Promise(function (resolve) {
+        let getPhotoFromFS = new XMLHttpRequest();
+        let localFsPhotoRequestURL = window.fsPhotoRequestURL[y];
+        getPhotoFromFS.open('GET', localFsPhotoRequestURL);
+        getPhotoFromFS.onload = function() {
+          let responseFromPhotoFS = JSON.parse(getPhotoFromFS.responseText);
+          let fsPhotoCount = responseFromPhotoFS.response.photos.count;
+          //console.log('venue '+y+' images: '+ fsPhotoCount);
+          let fsPhotoPrefix = responseFromPhotoFS.response.photos.items[0].prefix;
+          let fsPhotoSuffix = responseFromPhotoFS.response.photos.items[0].suffix;
+          window.fsPhoto[y] = fsPhotoPrefix + fsPhotoSize + fsPhotoSuffix;
+          resolve();
+          // TODO: error handling for no photo available (undefined or error)
+        } // end of function getPhotoFromFS.onload
+        getPhotoFromFS.send();
+      })); // end of promises
+    } // end of for
 
-function getPhotoWrapperFunction() {
-  let getPhotoFromFS = new XMLHttpRequest();
-  let testt = window.fsPhotoRequestURL[2];
-  console.log(testt);
+    return Promise.all(promisesC)
+    .then(function () {
+      resolve(console.log('Done populating Photos'));
+    }) // end of .then
 
-  getPhotoFromFS.open('GET', testt);
-
-  getPhotoFromFS.onload = function() {
-    let responseFromPhotoFS = JSON.parse(getPhotoFromFS.responseText);
-    console.log(responseFromPhotoFS);
-
-    let fsPhotoPrefix = responseFromPhotoFS.response.photos.items[0].prefix;
-    let fsPhotoSuffix = responseFromPhotoFS.response.photos.items[0].suffix;
-
-    window.fsPhoto[2] = fsPhotoPrefix + fsPhotoSize + fsPhotoSuffix;
-
-    console.log(window.fsPhoto[2]);
-
-  } // end of function getPhotoFromFS.onload
-
-getPhotoFromFS.send();
-} // end of getPhotoWrapperFunction
+  }); // end of populatePhotos
+} // end of async function getPhotosWrapperFunction
 
 
 /**
