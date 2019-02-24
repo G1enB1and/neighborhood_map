@@ -130,9 +130,8 @@ let populateFsPhotoRequestURLs = new Promise(function(resolve, reject) {
 
   for (let y = 0; y < window.coffeeShopLocations().length; y++) {
     promisesB.push(new Promise(function (resolve) {
-      window.fsPhotoEndpoint[y] = 'https://api.foursquare.com/v2/venues/'
-        + window.fsVenueID[y] + '/photos';
-      window.fsPhotoRequestURL[y] = fsPhotoEndpoint + '?' + fsPhotoParams;
+      window.fsPhotoEndpoint[y] = 'https://api.foursquare.com/v2/venues/' + window.fsVenueID[y] + '/photos';
+      window.fsPhotoRequestURL[y] = window.fsPhotoEndpoint[y] + '?' + fsPhotoParams;
       console.log(window.fsPhotoRequestURL[y]);
       resolve();
     })); // end of promises
@@ -147,6 +146,8 @@ let populateFsPhotoRequestURLs = new Promise(function(resolve, reject) {
 
 populateVenueIDsAsync();
 
+
+
 // TODO: call this function only after populateFsPhotoRequestURLs fullfills all promises
 // code above to use promises
 
@@ -157,7 +158,7 @@ function getPhotoWrapperFunction() {
 
   getPhotoFromFS.open('GET', testt);
 
-  getPhotoFromFS.onload = function(testt) {
+  getPhotoFromFS.onload = function() {
     let responseFromPhotoFS = JSON.parse(getPhotoFromFS.responseText);
     console.log(responseFromPhotoFS);
 
