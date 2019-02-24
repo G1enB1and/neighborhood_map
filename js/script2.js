@@ -110,7 +110,7 @@ async function populateVenueIDsAsync() {
         getVenueIDFromFS.onload = function() {
           let responseFromFS = JSON.parse(getVenueIDFromFS.responseText);
           window.fsVenueID[y] = responseFromFS.response.venues[0].id;
-          resolve();
+          resolve(console.log('venue ' + y + ' id: ' + window.fsVenueID[y]));
         }; // end of getVenueIDFromFS.onload
         getVenueIDFromFS.send();
       })); // end of promises
@@ -133,7 +133,7 @@ async function populateFsPhotoRequestURLsAsync() {
       promisesB.push(new Promise(function (resolve) {
         window.fsPhotoEndpoint[y] = 'https://api.foursquare.com/v2/venues/' + window.fsVenueID[y] + '/photos';
         window.fsPhotoRequestURL[y] = window.fsPhotoEndpoint[y] + '?' + fsPhotoParams;
-        resolve();
+        resolve(console.log('venue ' + y + ' Photo Request URL =  ' + window.fsPhotoRequestURL[y]));
       })); // end of promises
     } // end of for
 
@@ -158,15 +158,26 @@ async function getPhotosWrapperFunction() {
         let getPhotoFromFS = new XMLHttpRequest();
         let localFsPhotoRequestURL = window.fsPhotoRequestURL[y];
         getPhotoFromFS.open('GET', localFsPhotoRequestURL);
-        getPhotoFromFS.onload = function() {
-          let responseFromPhotoFS = JSON.parse(getPhotoFromFS.responseText);
-          let fsPhotoCount = responseFromPhotoFS.response.photos.count;
-          //console.log('venue '+y+' images: '+ fsPhotoCount);
-          let fsPhotoPrefix = responseFromPhotoFS.response.photos.items[0].prefix;
-          let fsPhotoSuffix = responseFromPhotoFS.response.photos.items[0].suffix;
-          window.fsPhoto[y] = fsPhotoPrefix + fsPhotoSize + fsPhotoSuffix;
-          resolve();
-          // TODO: error handling for no photo available (undefined or error)
+        getPhotoFromFS.onreadystatechange = function (oEvent) {
+          if (getPhotoFromFS.readyState === 4) {
+            if (getPhotoFromFS.status === 200) {
+              let responseFromPhotoFS = JSON.parse(getPhotoFromFS.responseText);
+              console.log('venue ' + y + ': ')
+              console.log(responseFromPhotoFS);
+              try {
+                let fsPhotoPrefix = responseFromPhotoFS.response.photos.items[0].prefix;
+                let fsPhotoSuffix = responseFromPhotoFS.response.photos.items[0].suffix;
+                window.fsPhoto[y] = fsPhotoPrefix + fsPhotoSize + fsPhotoSuffix;
+                resolve();
+              } catch(err) {
+                window.fsPhoto[y] = 'undefined';
+                console.log('venue ' + y + ' responseFromPhotoFS.response.photos.items[0]. ' + err.description);
+              }
+            } else {
+              console.log("Error", getPhotoFromFS.statusText);
+              reject(console.log('venue ' + y + 'failed to get photo from foursquare'));
+          } // end if
+        } //  end if
         } // end of function getPhotoFromFS.onload
         getPhotoFromFS.send();
       })); // end of promises
@@ -414,10 +425,22 @@ function populateInfoWindow(marker, infowindow) {
   if (infowindow.marker != marker) {
     infowindow.marker = marker;
 
-    console.log(marker.id);
+    console.log('Clicked venue id: ' + marker.id);
 
-    // set the content for the infowindow
-    infowindow.setContent('<div class="infowindow"><h3>' + marker.title + '</h3><img src="' + window.fsPhoto[marker.id] + '">' + '</div>');
+
+    if (window.fsPhoto[marker.id] != 'undefined') {
+      // set the content for the infowindow
+      infowindow.setContent('<div class="infowindow"><h3>' +
+        marker.title +
+        '</h3><img src="' +
+        window.fsPhoto[marker.id] +
+        '">' + '</br></br>Provided by</br>' + '<img src="img/Foursquare-logo.png">' + '</div>');
+    } else {
+        infowindow.setContent('<div class="infowindow"><h3>' +
+          marker.title +
+          '</h3>' + 'No Image Available' + '</br></br>Provided by</br>' + '<img src="img/Foursquare-logo.png">' + '</div>');
+    }
+
     infowindow.open(map, marker);
 
     // Make sure the marker property is cleared if the infowindow is closed.
