@@ -1,7 +1,34 @@
+const fsEndpoint = 'https://api.foursquare.com/v2/venues/search';
+const fsVersion = '20180323';
+const fsIntent = 'match'; // default 'checkin' if searching for more than 1
+const fsLimit = '1';
+const fsGroup = 'venue';
+const fsPhotoLimit = '1';
+const fsPhotoSize = '150x150';
+const fsClientID = 'E2QMBO1XOX1I3HM2TQ4BMEGVLA3ZHCHN1WG4RM40RGZJIZHH';
+const fsClientSecret = 'JSOKMIPYKJW52UBZDXRT3V1NUONCMIEWTJX3VTANTHY4NUC5';
+//const centerLL = '32.776664,-96.796988'; // center of map area
+//const fsQuery = 'coffee';
+let fsPhotoParams = 'v=' + encodeURIComponent(fsVersion)
+  + '&' + 'group=' + encodeURIComponent(fsGroup)
+  + '&' + 'limit=' + encodeURIComponent(fsPhotoLimit)
+  + '&' + 'client_id=' + encodeURIComponent(fsClientID)
+  + '&' + 'client_secret=' + encodeURIComponent(fsClientSecret);
+let fsPhotoPrefix = '';
+let fsPhotoSuffix = '';
+
 window.map;
 
-// Create a new blank array for all the listing markers.
+// Create new blank arrays
 window.markers = [];
+window.fsLL = [];
+window.fsName = [];
+window.fsVenueID = [];
+window.fsParams = [];
+window.fsURL = [];
+window.fsPhoto = [];
+window.fsPhotoEndpoint = [];
+window.fsPhotoRequestURL = [];
 
 // These are the listings that will be shown to the user.
 window.coffeeShopLocations = ko.observableArray([
@@ -26,18 +53,13 @@ window.coffeeShopLocations = ko.observableArray([
 
 window.selectedLocation = "";
 
+
 // activate knockout.js and apply bindings for coffeeShopLocations
 // when all dependant DOM elements have been loaded and are ready.
 $(document).ready(function() {
   ko.applyBindings(window.coffeeShopLocations);
 });
 
-let fsEndpoint = 'https://api.foursquare.com/v2/venues/search';
-let fsVersion = '20180323';
-let fsIntent = 'match'; // default 'checkin' if searching for more than 1
-//let fsLL = '32.776664,-96.796988'; // center of map area
-
-window.fsLL = [];
 
 function setLLs() {
   for (let i = 0; i < window.coffeeShopLocations().length; i++) {
@@ -47,7 +69,6 @@ function setLLs() {
 
 setLLs();
 
-window.fsName = [];
 
 function setFsNames() {
   for (let i = 0; i < window.coffeeShopLocations().length; i++) {
@@ -57,31 +78,6 @@ function setFsNames() {
 
 setFsNames();
 
-//let fsQuery = 'coffee';
-let fsLimit = '1';
-const fsClientID = 'E2QMBO1XOX1I3HM2TQ4BMEGVLA3ZHCHN1WG4RM40RGZJIZHH';
-const fsClientSecret = 'JSOKMIPYKJW52UBZDXRT3V1NUONCMIEWTJX3VTANTHY4NUC5';
-
-window.fsVenueID = [];
-// window.fsVenueID[0] = '40e0b100f964a52009081fe3'; // Cafe Brazil 1
-
-let fsGroup = 'venue';
-let fsPhotoLimit = '1';
-let fsPhotoParams = 'v=' + encodeURIComponent(fsVersion)
-  + '&' + 'group=' + encodeURIComponent(fsGroup)
-  + '&' + 'limit=' + encodeURIComponent(fsPhotoLimit)
-  + '&' + 'client_id=' + encodeURIComponent(fsClientID)
-  + '&' + 'client_secret=' + encodeURIComponent(fsClientSecret);
-
-let fsPhotoPrefix = '';
-let fsPhotoSize = '150x150';
-let fsPhotoSuffix = '';
-
-window.fsParams = [];
-window.fsURL = [];
-window.fsPhoto = [];
-window.fsPhotoEndpoint = [];
-window.fsPhotoRequestURL = [];
 
 function setFsURLs() {
   for (let i = 0; i < window.coffeeShopLocations().length; i++) {
@@ -98,6 +94,7 @@ function setFsURLs() {
 }
 
 setFsURLs();
+
 
 async function populateVenueIDsAsync() {
   let populateVenueIDs = new Promise(function(resolve, reject) {
@@ -124,6 +121,7 @@ async function populateVenueIDsAsync() {
 
   }); // end of populateVenueIDs
 } // end of async function populateVenueIDsAsync()
+
 
 async function populateFsPhotoRequestURLsAsync() {
   let populateFsPhotoRequestURLs = new Promise(function(resolve, reject) {
@@ -176,8 +174,8 @@ async function getPhotosWrapperFunction() {
             } else {
               console.log("Error", getPhotoFromFS.statusText);
               reject(console.log('venue ' + y + 'failed to get photo from foursquare'));
-          } // end if
-        } //  end if
+            } // end if
+          } //  end if
         } // end of function getPhotoFromFS.onload
         getPhotoFromFS.send();
       })); // end of promises
@@ -296,8 +294,8 @@ function initMap() {
   window.map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 32.776664, lng: -96.796988},
     zoom: 11,
-	styles: styles,
-	mapTypeControl: false
+	  styles: styles,
+	  mapTypeControl: false
   });
 
   window.largeInfowindow = new google.maps.InfoWindow();
@@ -316,14 +314,12 @@ function setMarkers() {
     let position = window.coffeeShopLocations()[i].location;
     let title = window.coffeeShopLocations()[i].title;
 
-    //console.log(coffeeShopLocations()[i].title);
-
     // Create a marker per location, and put into markers array.
     window.marker = new google.maps.Marker({
       position: position,
       title: title,
       animation: google.maps.Animation.DROP,
-	  icon: 'img/coffee_marker_green.png',
+	    icon: 'img/coffee_marker_green.png',
       id: i
     }); // end of marker = new google.maps.Marker({})
 
@@ -332,51 +328,53 @@ function setMarkers() {
 
     // Create an onclick event to open an infowindow at each marker.
     window.marker.addListener('click', function() {
-	  let self = this;
-	  selectedLocation = self;
+	    let self = this;
+	    selectedLocation = self;
 
       populateInfoWindow(this, largeInfowindow);
 
-	  // set all marker icons back to green and remove animations
+	    // set all marker icons back to green and remove animations
       for (let x = 0; x < window.markers.length; x++) {
         window.markers[x].setIcon('img/coffee_marker_green.png');
-	    window.markers[x].setAnimation(null);
+	      window.markers[x].setAnimation(null);
       } // end of for()
 
-	  // remove locationTitleBold class from all titles elements
-	  for (let x = 1; x < window.markers.length+1; x++) {
+	    // remove locationTitleBold class from all titles elements
+	    for (let x = 1; x < window.markers.length+1; x++) {
         let elem = document.getElementById(x);
-	    elem.classList.remove('locationTitleBold');
+	      elem.classList.remove('locationTitleBold');
       } // end of for()
 
-	  // set the selected location's marker icon to teal
+	    // set the selected location's marker icon to teal
       self.setIcon('img/coffee_marker_teal.png');
       // set the selected location's marker animation to bounce
       self.setAnimation(google.maps.Animation.BOUNCE);
       // remove bounce animation after 1 bounce (700 ms)
       setTimeout(function(){ self.setAnimation(null); }, 700);
 
-	  // apply locationTitleBold class to selected location's title element in list
-	  let selectedLocationTitleElementById = document.getElementById(selectedLocation.id+1);
-	  selectedLocationTitleElementById.classList.add('locationTitleBold');
+	    // apply locationTitleBold class to selected location's title element in list
+	    let selectedLocationTitleElementById = document.getElementById(selectedLocation.id + 1);
+	    selectedLocationTitleElementById.classList.add('locationTitleBold');
 
     }); // end marker.addListener(click)
 
-	// Two event listeners - one for mouseover, one for mouseout,
+	  // Two event listeners - one for mouseover, one for mouseout,
     // to change the colors back and forth.
-	window.marker.addListener('mouseover', function() {
-	  let self = this;
+	  window.marker.addListener('mouseover', function() {
+	    let self = this;
       self.setIcon('img/coffee_marker_teal.png');
     }); // end marker.addListener(mouseover)
+
     window.marker.addListener('mouseout', function() {
-	  let self = this;
-	  if (selectedLocation != self) {
+	    let self = this;
+	    if (selectedLocation != self) {
         self.setIcon('img/coffee_marker_green.png');
-	  } // end if (marker != self)
+	    } // end if (marker != self)
     }); // end marker.addListener(mouseout)
 
   } // end of for (var i = 0; i < locations.length; i++)
 } // end of setMarkers()
+
 
 /**
 * @description This function changes the marker icon of the selected location.
@@ -390,13 +388,13 @@ selectLocation = function(coffeeShopLocation) {
   // set all marker icons back to green and remove animations
   for (let i = 0; i < markers.length; i++) {
     window.markers[i].setIcon('img/coffee_marker_green.png');
-	window.markers[i].setAnimation(null);
+	  window.markers[i].setAnimation(null);
   }
 
   // remove locationTitleBold class from all titles elements
   for (let x = 1; x < window.markers.length+1; x++) {
     let elem = document.getElementById(x);
-	elem.classList.remove('locationTitleBold');
+	  elem.classList.remove('locationTitleBold');
   } // end of for()
 
   // set the selected location's marker icon to teal
@@ -415,6 +413,7 @@ selectLocation = function(coffeeShopLocation) {
 
 } // end of SelectLocation
 
+
 /**
 * @description This function populates the infowindow when the marker is clicked.
 * @param {object} marker
@@ -427,18 +426,19 @@ function populateInfoWindow(marker, infowindow) {
 
     console.log('Clicked venue id: ' + marker.id);
 
-
     if (window.fsPhoto[marker.id] != 'undefined') {
       // set the content for the infowindow
       infowindow.setContent('<div class="infowindow"><h3>' +
         marker.title +
         '</h3><img src="' +
         window.fsPhoto[marker.id] +
-        '">' + '</br></br>Provided by</br>' + '<img src="img/Foursquare-logo.png">' + '</div>');
+        '">' + '</br></br>Provided by</br>' +
+        '<img src="img/Foursquare-logo.png">' + '</div>');
     } else {
         infowindow.setContent('<div class="infowindow"><h3>' +
           marker.title +
-          '</h3>' + 'No Image Available' + '</br></br>Provided by</br>' + '<img src="img/Foursquare-logo.png">' + '</div>');
+          '</h3>' + 'No Image Available' + '</br></br>Provided by</br>' +
+          '<img src="img/Foursquare-logo.png">' + '</div>');
     }
 
     infowindow.open(map, marker);
@@ -448,27 +448,28 @@ function populateInfoWindow(marker, infowindow) {
       infowindow.marker = null;
     });
 
-	// Close infowindow if empty map area is clicked
-	google.maps.event.addListener(map, "click", function(event) {
+	  // Close infowindow if empty map area is clicked
+	  google.maps.event.addListener(map, "click", function(event) {
       infowindow.close();
-	  infowindow.marker = null;
+	    infowindow.marker = null;
 
-	  // set all marker icons back to green and remove animations
+	    // set all marker icons back to green and remove animations
       for (let y = 0; y < markers.length; y++) {
         window.markers[y].setIcon('img/coffee_marker_green.png');
-	    window.markers[y].setAnimation(null);
+	      window.markers[y].setAnimation(null);
       } // end of for()
 
-	  // remove locationTitleBold class from all titles elements
+	    // remove locationTitleBold class from all titles elements
       for (let x = 1; x < markers.length+1; x++) {
         let elem = document.getElementById(x);
-	    elem.classList.remove('locationTitleBold');
+	      elem.classList.remove('locationTitleBold');
       } // end of for()
 
     }); // end of google.maps.event.addListener(map, "click", function(event)
 
   } // end of if(infowindow.marker != marker)
 } // end of populateInfoWindow()
+
 
 /**
 * @description This function will loop through the markers array and display them all.
@@ -482,6 +483,7 @@ function showListings() {
   }
   window.map.fitBounds(bounds);
 } // end of showListings()
+
 
 /**
 * @description This function will loop through the listings and hide them all.
