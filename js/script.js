@@ -184,6 +184,7 @@ async function getPhotosWrapperFunction() {
                 // no need to alert user with a popup when I have infoWindow
                 // programmed to inform the user that no image is available if
                 // window.fsPhoto[y] = 'undefined'.
+                // I intentionally picked 4 locations without Photos to easily showcase this.
               }
             } else {
               window.fsPhoto[y] = 'undefined'; // this will alert user gracefully (see below)
@@ -193,6 +194,7 @@ async function getPhotosWrapperFunction() {
               // no need to alert user with a popup when I have infoWindow
               // programmed to inform the user that no image is available if
               // window.fsPhoto[y] = 'undefined'.
+              // I intentionally picked 4 locations without Photos to easily showcase this.
             } // end if
           } //  end if
         } // end of function getPhotoFromFS.onload
@@ -449,6 +451,7 @@ function populateInfoWindow(marker, infowindow) {
     // Photos from Foursquare. This checks for the presence of that flag to
     // either show the Photo or show 'No Image Available'.
     // This is my gracefull alternative to an alert.
+    // I intentionally picked 4 locations without Photos to easily showcase this.
     if (window.fsPhoto[marker.id] != 'undefined') {
       // set the content for the infowindow
       infowindow.setContent('<div class="infowindow"><h3>' +
