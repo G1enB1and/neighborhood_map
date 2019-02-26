@@ -94,10 +94,19 @@
 
     </script> <!-- end of script to fix heights of map container and optionsBox-->
 
-	<!-- google maps initMap callback script-->
-    <script async defer
-        src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDqQry8xCE6UqTuRaXy1OQnIOhZa0AIo2A&v=3&callback=initMap'>
-    </script>
+
+  <script>
+    // google maps initMap callback script with error handling
+    let googleMapsScript = document.createElement('script');
+    googleMapsScript.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDqQry8xCE6UqTuRaXy1OQnIOhZa0AIo2A&v=3&callback=initMap';
+    googleMapsScript.async = true;
+    googleMapsScript.defer = true;
+    document.body.append(googleMapsScript);
+
+    googleMapsScript.onerror = function() {
+      alert('Error loading Google Maps.');
+    }    
+  </script>
 
 	<!-- load Knockout.js -->
 	<script src='js/libs/knockout-3.4.2.js'></script>

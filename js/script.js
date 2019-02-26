@@ -63,7 +63,8 @@ $(document).ready(function() {
 
 function setLLs() {
   for (let i = 0; i < window.coffeeShopLocations().length; i++) {
-    window.fsLL[i] = window.coffeeShopLocations()[i].location.lat + ',' + window.coffeeShopLocations()[i].location.lng;
+    window.fsLL[i] = window.coffeeShopLocations()[i].location.lat + ','
+      + window.coffeeShopLocations()[i].location.lng;
   }
 }
 
@@ -101,14 +102,21 @@ async function populateVenueIDsAsync() {
     let promisesA = [];
 
     for (let y = 0; y < window.coffeeShopLocations().length; y++) {
-      promisesA.push(new Promise(function (resolve) {
+      promisesA.push(new Promise(function (resolve, reject) {
         let getVenueIDFromFS = new XMLHttpRequest();
         getVenueIDFromFS.open('GET', window.fsURL[y]);
-        getVenueIDFromFS.onload = function() {
-          let responseFromFS = JSON.parse(getVenueIDFromFS.responseText);
-          window.fsVenueID[y] = responseFromFS.response.venues[0].id;
-          resolve(console.log('venue ' + y + ' id: ' + window.fsVenueID[y]));
-        }; // end of getVenueIDFromFS.onload
+        try {
+          getVenueIDFromFS.onload = function() {
+            let responseFromFS = JSON.parse(getVenueIDFromFS.responseText);
+            window.fsVenueID[y] = responseFromFS.response.venues[0].id;
+            resolve(console.log('venue ' + y + ' id: ' + window.fsVenueID[y]));
+          }; // end of getVenueIDFromFS.onload
+        } catch(error) {
+          alert('Failed to get venue id from Foursquare.');
+          reject(console.log('venue '+ y +
+            ' failed to get vanue id from foursquare. Error: '
+            + error.description));
+        }
         getVenueIDFromFS.send();
       })); // end of promises
     } // end of for
@@ -129,9 +137,11 @@ async function populateFsPhotoRequestURLsAsync() {
 
     for (let y = 0; y < window.coffeeShopLocations().length; y++) {
       promisesB.push(new Promise(function (resolve) {
-        window.fsPhotoEndpoint[y] = 'https://api.foursquare.com/v2/venues/' + window.fsVenueID[y] + '/photos';
-        window.fsPhotoRequestURL[y] = window.fsPhotoEndpoint[y] + '?' + fsPhotoParams;
-        resolve(console.log('venue ' + y + ' Photo Request URL =  ' + window.fsPhotoRequestURL[y]));
+        window.fsPhotoEndpoint[y] = 'https://api.foursquare.com/v2/venues/'
+          + window.fsVenueID[y] + '/photos';
+        window.fsPhotoRequestURL[y] = window.fsPhotoEndpoint[y] + '?'
+          + fsPhotoParams;
+        resolve();
       })); // end of promises
     } // end of for
 
@@ -160,20 +170,29 @@ async function getPhotosWrapperFunction() {
           if (getPhotoFromFS.readyState === 4) {
             if (getPhotoFromFS.status === 200) {
               let responseFromPhotoFS = JSON.parse(getPhotoFromFS.responseText);
-              console.log('venue ' + y + ': ')
-              console.log(responseFromPhotoFS);
               try {
                 let fsPhotoPrefix = responseFromPhotoFS.response.photos.items[0].prefix;
                 let fsPhotoSuffix = responseFromPhotoFS.response.photos.items[0].suffix;
                 window.fsPhoto[y] = fsPhotoPrefix + fsPhotoSize + fsPhotoSuffix;
                 resolve();
               } catch(err) {
-                window.fsPhoto[y] = 'undefined';
-                console.log('venue ' + y + ' responseFromPhotoFS.response.photos.items[0]. ' + err.description);
+                window.fsPhoto[y] = 'undefined'; // this will alert user gracefully (see below)
+                console.log('venue ' + y +
+                  ' responseFromPhotoFS.response.photos.items[0] ' +
+                  err.description);
+                // alert('Foursquare failed to send photo for venue ' + y);
+                // no need to alert user with a popup when I have infoWindow
+                // programmed to inform the user that no image is available if
+                // window.fsPhoto[y] = 'undefined'.
               }
             } else {
-              console.log("Error", getPhotoFromFS.statusText);
-              reject(console.log('venue ' + y + 'failed to get photo from foursquare'));
+              window.fsPhoto[y] = 'undefined'; // this will alert user gracefully (see below)
+              console.log('Error ', getPhotoFromFS.statusText);
+              reject(console.log('venue ' + y + ' failed to get photo from foursquare'));
+              // alert('Foursquare failed to send photo for venue ' + y);
+              // no need to alert user with a popup when I have infoWindow
+              // programmed to inform the user that no image is available if
+              // window.fsPhoto[y] = 'undefined'.
             } // end if
           } //  end if
         } // end of function getPhotoFromFS.onload
@@ -426,6 +445,10 @@ function populateInfoWindow(marker, infowindow) {
 
     console.log('Clicked venue id: ' + marker.id);
 
+    // I set a flag called 'undefined' to show if there was an error getting
+    // Photos from Foursquare. This checks for the presence of that flag to
+    // either show the Photo or show 'No Image Available'.
+    // This is my gracefull alternative to an alert.
     if (window.fsPhoto[marker.id] != 'undefined') {
       // set the content for the infowindow
       infowindow.setContent('<div class="infowindow"><h3>' +
@@ -434,7 +457,7 @@ function populateInfoWindow(marker, infowindow) {
         window.fsPhoto[marker.id] +
         '">' + '</br></br>Provided by</br>' +
         '<img src="img/Foursquare-logo.png">' + '</div>');
-    } else {
+    } else { // show 'No Image Available' in infowindow
         infowindow.setContent('<div class="infowindow"><h3>' +
           marker.title +
           '</h3>' + 'No Image Available' + '</br></br>Provided by</br>' +
