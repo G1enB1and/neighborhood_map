@@ -27,7 +27,7 @@
         <h1>Coffee Shop Locations</h1>
 
         <form class='filterForm'>
-          <input type='text' name='filter' placeholder='Filter By...' id='txtFilterInput' onkeyup='myViewModel.filterFunction()'>
+          <input type='text' name='filter' data-bind='textInput: myViewModel.filterInputKOO' placeholder='Filter By...' id='txtFilterInput' onkeyup='myViewModel.filterFunction()'>
           <button type='button' id='btnFilter' onclick='myViewModel.filterFunction()'><i class="fa fa-filter"></i></button>
         </form>
 

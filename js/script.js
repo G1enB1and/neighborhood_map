@@ -76,14 +76,15 @@ let myViewModel = {
     } // end of for
   }, // end of setFsURLs
 
+  filterInputKOO: ko.observable(''),
+
   filterFunction: function() {
     // Declare variables
-    let filterInput, filter, i, txtValue;
-    filterInput = document.getElementById('txtFilterInput');
-    filter = filterInput.value.toUpperCase();
+    let filter, txtValue;
+    filter = myViewModel.filterInputKOO().toUpperCase();
 
     // get dom elements and text for each location in list
-    for (let x = 1; x < myViewModel.markers.length+1; x++) {
+    for (let x = 1; x < myViewModel.markers.length + 1; x++) {
       let elem = document.getElementById(x);
       txtValue = elem.textContent || elem.innerText;
 
