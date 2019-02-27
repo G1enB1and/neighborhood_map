@@ -14,7 +14,6 @@ window.map;
 
 let myViewModel = {
   // Create new blank arrays
-  fsLL: [],
   fsName: [],
   fsVenueID: [],
   fsParams: [],
@@ -53,7 +52,12 @@ let myViewModel = {
     {id: 17, title: 'White Rock Coffee', location: {lat: 32.864607, lng: -96.712334}}
   ]), // end of myViewModel.locationsKOOA
 
-  selectedLocationKOO: ko.observable('')
+  selectedLocationKOO: ko.observable(''),
+
+  getLL: function(i) {
+    return this.locationsKOOA()[i].location.lat + ','
+      + this.locationsKOOA()[i].location.lng;
+  } // end of getLL
 }; // end of myViewModel
 
 // activate knockout.js and apply bindings for myViewModel
@@ -61,16 +65,6 @@ let myViewModel = {
 $(document).ready(function() {
   ko.applyBindings(myViewModel);
 });
-
-
-function setLLs() {
-  for (let i = 0; i < myViewModel.locationsKOOA().length; i++) {
-    myViewModel.fsLL[i] = myViewModel.locationsKOOA()[i].location.lat + ','
-      + myViewModel.locationsKOOA()[i].location.lng;
-  }
-}
-
-setLLs();
 
 
 function setFsNames() {
@@ -86,9 +80,9 @@ function setFsURLs() {
   for (let i = 0; i < myViewModel.locationsKOOA().length; i++) {
     myViewModel.fsParams[i] = 'v=' + encodeURIComponent(FS_VERSION)
       + '&' + 'intent=' + encodeURIComponent(FS_INTENT)
-      + '&' + 'll=' + encodeURIComponent(myViewModel.fsLL[i])
+      + '&' + 'll=' + encodeURIComponent(myViewModel.getLL(i))
       + '&' + 'name=' + encodeURIComponent(myViewModel.fsName[i])
-      //+ '&' + 'query=' + encodeURIComponent(fsQuery)
+      //+ '&' + 'query=' + encodeURIComponent(FS_QUERY)
       //+ '&' + 'limit=' + encodeURIComponent(FS_LIMIT)
       + '&' + 'client_id=' + encodeURIComponent(FS_CLIENT_ID)
       + '&' + 'client_secret=' + encodeURIComponent(FS_CLIENT_SECRET);
