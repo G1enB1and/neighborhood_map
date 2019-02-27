@@ -73,8 +73,34 @@ let myViewModel = {
         + '&' + 'client_id=' + encodeURIComponent(FS_CLIENT_ID)
         + '&' + 'client_secret=' + encodeURIComponent(FS_CLIENT_SECRET);
       myViewModel.fsURL[i] = FS_ENDPOINT + '?' + myViewModel.fsParams[i];
-  } // end of for
-} // end of setFsURLs
+    } // end of for
+  }, // end of setFsURLs
+
+  filterFunction: function() {
+    // Declare variables
+    let filterInput, filter, i, txtValue;
+    filterInput = document.getElementById('txtFilterInput');
+    filter = filterInput.value.toUpperCase();
+
+    // get dom elements and text for each location in list
+    for (let x = 1; x < myViewModel.markers.length+1; x++) {
+      let elem = document.getElementById(x);
+      txtValue = elem.textContent || elem.innerText;
+
+      // compare input to text
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        // remove locationTitleHide class to show elements
+        elem.parentElement.classList.remove('locationTitleHide'); //show
+        // show map marker
+        myViewModel.markers[x-1].setMap(map);
+      } else {
+        // add locationTitleHide class to hide elements
+        elem.parentElement.classList.add('locationTitleHide'); //hide
+        // hide map marker
+        myViewModel.markers[x-1].setMap(null);
+      }
+    } // end of for()
+  } // end of filterFunction()
 
 }; // end of myViewModel
 
@@ -510,29 +536,3 @@ function hideListings() {
     myViewModel.markers[i].setMap(null);
   }
 } // end of hideListings
-
-function filterFunction() {
-  // Declare variables
-  let filterInput, filter, i, txtValue;
-  filterInput = document.getElementById('txtFilterInput');
-  filter = filterInput.value.toUpperCase();
-
-  // get dom elements and text for each location in list
-  for (let x = 1; x < myViewModel.markers.length+1; x++) {
-    let elem = document.getElementById(x);
-    txtValue = elem.textContent || elem.innerText;
-
-    // compare input to text
-    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-      // remove locationTitleHide class to show elements
-      elem.parentElement.classList.remove('locationTitleHide'); //show
-      // show map marker
-      myViewModel.markers[x-1].setMap(map);
-    } else {
-      // add locationTitleHide class to hide elements
-      elem.parentElement.classList.add('locationTitleHide'); //hide
-      // hide map marker
-      myViewModel.markers[x-1].setMap(null);
-    }
-  } // end of for()
-} // end of filterFunction()

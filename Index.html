@@ -27,8 +27,8 @@
         <h1>Coffee Shop Locations</h1>
 
         <form class='filterForm'>
-          <input type='text' name='filter' placeholder='Filter By...' id='txtFilterInput' onkeyup='filterFunction()'>
-          <button type='button' id='btnFilter' onclick='filterFunction()'><i class="fa fa-filter"></i></button>
+          <input type='text' name='filter' placeholder='Filter By...' id='txtFilterInput' onkeyup='myViewModel.filterFunction()'>
+          <button type='button' id='btnFilter' onclick='myViewModel.filterFunction()'><i class="fa fa-filter"></i></button>
         </form>
 
         <div data-bind='foreach: myViewModel.locationsKOOA' class='locationTitleList'>
