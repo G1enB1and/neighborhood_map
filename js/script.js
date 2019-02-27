@@ -1,19 +1,19 @@
-const fsEndpoint = 'https://api.foursquare.com/v2/venues/search';
-const fsVersion = '20180323';
-const fsIntent = 'match'; // default 'checkin' if searching for more than 1
-const fsLimit = '1';
-const fsGroup = 'venue';
-const fsPhotoLimit = '1';
-const fsPhotoSize = '150x150';
-const fsClientID = 'E2QMBO1XOX1I3HM2TQ4BMEGVLA3ZHCHN1WG4RM40RGZJIZHH';
-const fsClientSecret = 'JSOKMIPYKJW52UBZDXRT3V1NUONCMIEWTJX3VTANTHY4NUC5';
+const FS_ENDPOINT = 'https://api.foursquare.com/v2/venues/search';
+const FS_VERSION = '20180323';
+const FS_INTENT = 'match'; // default 'checkin' if searching for more than 1
+const FS_LIMIT = '1';
+const FS_GROUP = 'venue';
+const FS_PHOTO_LIMIT = '1';
+const FS_PHOTO_SIZE = '150x150';
+const FS_CLIENT_ID = 'E2QMBO1XOX1I3HM2TQ4BMEGVLA3ZHCHN1WG4RM40RGZJIZHH';
+const FS_CLIENT_SECRET = 'JSOKMIPYKJW52UBZDXRT3V1NUONCMIEWTJX3VTANTHY4NUC5';
 //const centerLL = '32.776664,-96.796988'; // center of map area
 //const fsQuery = 'coffee';
-let fsPhotoParams = 'v=' + encodeURIComponent(fsVersion)
-  + '&' + 'group=' + encodeURIComponent(fsGroup)
-  + '&' + 'limit=' + encodeURIComponent(fsPhotoLimit)
-  + '&' + 'client_id=' + encodeURIComponent(fsClientID)
-  + '&' + 'client_secret=' + encodeURIComponent(fsClientSecret);
+let fsPhotoParams = 'v=' + encodeURIComponent(FS_VERSION)
+  + '&' + 'group=' + encodeURIComponent(FS_GROUP)
+  + '&' + 'limit=' + encodeURIComponent(FS_PHOTO_LIMIT)
+  + '&' + 'client_id=' + encodeURIComponent(FS_CLIENT_ID)
+  + '&' + 'client_secret=' + encodeURIComponent(FS_CLIENT_SECRET);
 let fsPhotoPrefix = '';
 let fsPhotoSuffix = '';
 
@@ -82,15 +82,15 @@ setFsNames();
 
 function setFsURLs() {
   for (let i = 0; i < window.coffeeShopLocations().length; i++) {
-    window.fsParams[i] = 'v=' + encodeURIComponent(fsVersion)
-      + '&' + 'intent=' + encodeURIComponent(fsIntent)
+    window.fsParams[i] = 'v=' + encodeURIComponent(FS_VERSION)
+      + '&' + 'intent=' + encodeURIComponent(FS_INTENT)
       + '&' + 'll=' + encodeURIComponent(window.fsLL[i])
       + '&' + 'name=' + encodeURIComponent(window.fsName[i])
       //+ '&' + 'query=' + encodeURIComponent(fsQuery)
-      //+ '&' + 'limit=' + encodeURIComponent(fsLimit)
-      + '&' + 'client_id=' + encodeURIComponent(fsClientID)
-      + '&' + 'client_secret=' + encodeURIComponent(fsClientSecret);
-    window.fsURL[i] = fsEndpoint + '?' + window.fsParams[i];
+      //+ '&' + 'limit=' + encodeURIComponent(FS_LIMIT)
+      + '&' + 'client_id=' + encodeURIComponent(FS_CLIENT_ID)
+      + '&' + 'client_secret=' + encodeURIComponent(FS_CLIENT_SECRET);
+    window.fsURL[i] = FS_ENDPOINT + '?' + window.fsParams[i];
   }
 }
 
@@ -173,7 +173,7 @@ async function getPhotosWrapperFunction() {
               try {
                 let fsPhotoPrefix = responseFromPhotoFS.response.photos.items[0].prefix;
                 let fsPhotoSuffix = responseFromPhotoFS.response.photos.items[0].suffix;
-                window.fsPhoto[y] = fsPhotoPrefix + fsPhotoSize + fsPhotoSuffix;
+                window.fsPhoto[y] = fsPhotoPrefix + FS_PHOTO_SIZE + fsPhotoSuffix;
                 resolve();
               } catch(err) {
                 window.fsPhoto[y] = 'undefined'; // this will alert user gracefully (see below)
@@ -183,7 +183,7 @@ async function getPhotosWrapperFunction() {
                 // alert('Foursquare failed to send photo for venue ' + y);
                 // no need to alert user with a popup when I have infoWindow
                 // programmed to inform the user that no image is available if
-                // window.fsPhoto[y] = 'undefined'.
+                // window.fsPhoto[y] = 'undefined'. -- see code for populateInfoWindow.
                 // I intentionally picked 4 locations without Photos to easily showcase this.
               }
             } else {
@@ -193,7 +193,7 @@ async function getPhotosWrapperFunction() {
               // alert('Foursquare failed to send photo for venue ' + y);
               // no need to alert user with a popup when I have infoWindow
               // programmed to inform the user that no image is available if
-              // window.fsPhoto[y] = 'undefined'.
+              // window.fsPhoto[y] = 'undefined'. -- see code for populateInfoWindow.
               // I intentionally picked 4 locations without Photos to easily showcase this.
             } // end if
           } //  end if
@@ -315,8 +315,8 @@ function initMap() {
   window.map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 32.776664, lng: -96.796988},
     zoom: 11,
-	  styles: styles,
-	  mapTypeControl: false
+	styles: styles,
+	mapTypeControl: false
   });
 
   window.largeInfowindow = new google.maps.InfoWindow();
