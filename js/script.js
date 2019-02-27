@@ -7,64 +7,66 @@ const FS_PHOTO_LIMIT = '1';
 const FS_PHOTO_SIZE = '150x150';
 const FS_CLIENT_ID = 'E2QMBO1XOX1I3HM2TQ4BMEGVLA3ZHCHN1WG4RM40RGZJIZHH';
 const FS_CLIENT_SECRET = 'JSOKMIPYKJW52UBZDXRT3V1NUONCMIEWTJX3VTANTHY4NUC5';
-//const centerLL = '32.776664,-96.796988'; // center of map area
-//const fsQuery = 'coffee';
-let fsPhotoParams = 'v=' + encodeURIComponent(FS_VERSION)
-  + '&' + 'group=' + encodeURIComponent(FS_GROUP)
-  + '&' + 'limit=' + encodeURIComponent(FS_PHOTO_LIMIT)
-  + '&' + 'client_id=' + encodeURIComponent(FS_CLIENT_ID)
-  + '&' + 'client_secret=' + encodeURIComponent(FS_CLIENT_SECRET);
-let fsPhotoPrefix = '';
-let fsPhotoSuffix = '';
+const FS_QUERY = 'coffee';
+const CENTER_LL = {lat: 32.776664, lng: -96.796988}; // center of map area
 
 window.map;
 
-// Create new blank arrays
-window.markers = [];
-window.fsLL = [];
-window.fsName = [];
-window.fsVenueID = [];
-window.fsParams = [];
-window.fsURL = [];
-window.fsPhoto = [];
-window.fsPhotoEndpoint = [];
-window.fsPhotoRequestURL = [];
+let myViewModel = {
+  // Create new blank arrays
+  fsLL: [],
+  fsName: [],
+  fsVenueID: [],
+  fsParams: [],
+  fsURL: [],
+  fsPhoto: [],
+  fsPhotoEndpoint: [],
+  fsPhotoRequestURL: [],
+  markers: [],
 
-// These are the listings that will be shown to the user.
-window.coffeeShopLocations = ko.observableArray([
-  {id: 1, title: 'Cafe Brazil', location: {lat: 32.844404, lng: -96.773435}},
-  {id: 2, title: 'Cafe Brazil', location: {lat: 32.784975, lng: -96.783027}},
-  {id: 3, title: 'Starbucks', location: {lat: 32.864403, lng: -96.660265}},
-  {id: 4, title: 'Starbucks', location: {lat: 32.811152, lng: -96.623135}},
-  {id: 5, title: 'Starbucks', location: {lat: 32.746236, lng: -96.585969}},
-  {id: 6, title: 'Black Forest Coffee', location: {lat: 32.86609, lng: -96.764503}},
-  {id: 7, title: 'Dennys', location: {lat: 32.819224, lng: -96.786784}},
-  {id: 8, title: 'Dennys', location: {lat: 32.841681, lng: -96.593621}},
-  {id: 9, title: 'Dennys', location: {lat: 32.789396, lng: -96.594197}},
-  {id: 10, title: 'iHop', location: {lat: 32.857431, lng: -96.647735}},
-  {id: 11, title: 'iHop', location: {lat: 32.859325, lng: -96.769432}},
-  {id: 12, title: 'iHop', location: {lat: 32.768661, lng: -96.625545}},
-  {id: 13, title: 'Goldmine', location: {lat: 32.876755, lng: -96.631224}},
-  {id: 14, title: 'Beef House', location: {lat: 32.878382, lng: -96.647637}},
-  {id: 15, title: 'Dunkin Donuts', location: {lat: 32.861236, lng: -96.643064}},
-  {id: 16, title: 'Dunkin Donuts', location: {lat: 32.952197, lng: -96.769473}},
-  {id: 17, title: 'White Rock Coffee', location: {lat: 32.864607, lng: -96.712334}}
-]);
+  fsPhotoParams: 'v=' + encodeURIComponent(FS_VERSION)
+    + '&' + 'group=' + encodeURIComponent(FS_GROUP)
+    + '&' + 'limit=' + encodeURIComponent(FS_PHOTO_LIMIT)
+    + '&' + 'client_id=' + encodeURIComponent(FS_CLIENT_ID)
+    + '&' + 'client_secret=' + encodeURIComponent(FS_CLIENT_SECRET),
+  fsPhotoPrefix: '',
+  fsPhotoSuffix: '',
 
-window.selectedLocation = "";
+  // These are the listings that will be shown to the user.
+  locationsKOOA: ko.observableArray([
+    {id: 1, title: 'Cafe Brazil', location: {lat: 32.844404, lng: -96.773435}},
+    {id: 2, title: 'Cafe Brazil', location: {lat: 32.784975, lng: -96.783027}},
+    {id: 3, title: 'Starbucks', location: {lat: 32.864403, lng: -96.660265}},
+    {id: 4, title: 'Starbucks', location: {lat: 32.811152, lng: -96.623135}},
+    {id: 5, title: 'Starbucks', location: {lat: 32.746236, lng: -96.585969}},
+    {id: 6, title: 'Black Forest Coffee', location: {lat: 32.86609, lng: -96.764503}},
+    {id: 7, title: 'Dennys', location: {lat: 32.819224, lng: -96.786784}},
+    {id: 8, title: 'Dennys', location: {lat: 32.841681, lng: -96.593621}},
+    {id: 9, title: 'Dennys', location: {lat: 32.789396, lng: -96.594197}},
+    {id: 10, title: 'iHop', location: {lat: 32.857431, lng: -96.647735}},
+    {id: 11, title: 'iHop', location: {lat: 32.859325, lng: -96.769432}},
+    {id: 12, title: 'iHop', location: {lat: 32.768661, lng: -96.625545}},
+    {id: 13, title: 'Goldmine', location: {lat: 32.876755, lng: -96.631224}},
+    {id: 14, title: 'Beef House', location: {lat: 32.878382, lng: -96.647637}},
+    {id: 15, title: 'Dunkin Donuts', location: {lat: 32.861236, lng: -96.643064}},
+    {id: 16, title: 'Dunkin Donuts', location: {lat: 32.952197, lng: -96.769473}},
+    {id: 17, title: 'White Rock Coffee', location: {lat: 32.864607, lng: -96.712334}}
+  ]), // end of myViewModel.locationsKOOA
 
+  selectedLocationKOO: ko.observable('')
+}; // end of myViewModel
 
-// activate knockout.js and apply bindings for coffeeShopLocations
+// activate knockout.js and apply bindings for myViewModel
 // when all dependant DOM elements have been loaded and are ready.
 $(document).ready(function() {
-  ko.applyBindings(window.coffeeShopLocations);
+  ko.applyBindings(myViewModel);
 });
 
 
 function setLLs() {
-  for (let i = 0; i < window.coffeeShopLocations().length; i++) {
-    window.fsLL[i] = window.coffeeShopLocations()[i].location.lat + ','
-      + window.coffeeShopLocations()[i].location.lng;
+  for (let i = 0; i < myViewModel.locationsKOOA().length; i++) {
+    myViewModel.fsLL[i] = myViewModel.locationsKOOA()[i].location.lat + ','
+      + myViewModel.locationsKOOA()[i].location.lng;
   }
 }
 
@@ -72,8 +74,8 @@ setLLs();
 
 
 function setFsNames() {
-  for (let i = 0; i < window.coffeeShopLocations().length; i++) {
-    window.fsName[i] = window.coffeeShopLocations()[i].title;
+  for (let i = 0; i < myViewModel.locationsKOOA().length; i++) {
+    myViewModel.fsName[i] = myViewModel.locationsKOOA()[i].title;
   }
 }
 
@@ -81,16 +83,16 @@ setFsNames();
 
 
 function setFsURLs() {
-  for (let i = 0; i < window.coffeeShopLocations().length; i++) {
-    window.fsParams[i] = 'v=' + encodeURIComponent(FS_VERSION)
+  for (let i = 0; i < myViewModel.locationsKOOA().length; i++) {
+    myViewModel.fsParams[i] = 'v=' + encodeURIComponent(FS_VERSION)
       + '&' + 'intent=' + encodeURIComponent(FS_INTENT)
-      + '&' + 'll=' + encodeURIComponent(window.fsLL[i])
-      + '&' + 'name=' + encodeURIComponent(window.fsName[i])
+      + '&' + 'll=' + encodeURIComponent(myViewModel.fsLL[i])
+      + '&' + 'name=' + encodeURIComponent(myViewModel.fsName[i])
       //+ '&' + 'query=' + encodeURIComponent(fsQuery)
       //+ '&' + 'limit=' + encodeURIComponent(FS_LIMIT)
       + '&' + 'client_id=' + encodeURIComponent(FS_CLIENT_ID)
       + '&' + 'client_secret=' + encodeURIComponent(FS_CLIENT_SECRET);
-    window.fsURL[i] = FS_ENDPOINT + '?' + window.fsParams[i];
+    myViewModel.fsURL[i] = FS_ENDPOINT + '?' + myViewModel.fsParams[i];
   }
 }
 
@@ -101,15 +103,15 @@ async function populateVenueIDsAsync() {
   let populateVenueIDs = new Promise(function(resolve, reject) {
     let promisesA = [];
 
-    for (let y = 0; y < window.coffeeShopLocations().length; y++) {
+    for (let y = 0; y < myViewModel.locationsKOOA().length; y++) {
       promisesA.push(new Promise(function (resolve, reject) {
         let getVenueIDFromFS = new XMLHttpRequest();
-        getVenueIDFromFS.open('GET', window.fsURL[y]);
+        getVenueIDFromFS.open('GET', myViewModel.fsURL[y]);
         try {
           getVenueIDFromFS.onload = function() {
             let responseFromFS = JSON.parse(getVenueIDFromFS.responseText);
-            window.fsVenueID[y] = responseFromFS.response.venues[0].id;
-            resolve(console.log('venue ' + y + ' id: ' + window.fsVenueID[y]));
+            myViewModel.fsVenueID[y] = responseFromFS.response.venues[0].id;
+            resolve(console.log('venue ' + y + ' id: ' + myViewModel.fsVenueID[y]));
           }; // end of getVenueIDFromFS.onload
         } catch(error) {
           alert('Failed to get venue id from Foursquare.');
@@ -135,12 +137,12 @@ async function populateFsPhotoRequestURLsAsync() {
   let populateFsPhotoRequestURLs = new Promise(function(resolve, reject) {
     let promisesB = [];
 
-    for (let y = 0; y < window.coffeeShopLocations().length; y++) {
+    for (let y = 0; y < myViewModel.locationsKOOA().length; y++) {
       promisesB.push(new Promise(function (resolve) {
-        window.fsPhotoEndpoint[y] = 'https://api.foursquare.com/v2/venues/'
-          + window.fsVenueID[y] + '/photos';
-        window.fsPhotoRequestURL[y] = window.fsPhotoEndpoint[y] + '?'
-          + fsPhotoParams;
+        myViewModel.fsPhotoEndpoint[y] = 'https://api.foursquare.com/v2/venues/'
+          + myViewModel.fsVenueID[y] + '/photos';
+        myViewModel.fsPhotoRequestURL[y] = myViewModel.fsPhotoEndpoint[y] + '?'
+          + myViewModel.fsPhotoParams;
         resolve();
       })); // end of promises
     } // end of for
@@ -161,39 +163,39 @@ async function getPhotosWrapperFunction() {
   let populatePhotos = new Promise(function(resolve, reject) {
     let promisesC = [];
 
-    for (let y = 0; y < window.coffeeShopLocations().length; y++) {
+    for (let y = 0; y < myViewModel.locationsKOOA().length; y++) {
       promisesC.push(new Promise(function (resolve) {
         let getPhotoFromFS = new XMLHttpRequest();
-        let localFsPhotoRequestURL = window.fsPhotoRequestURL[y];
+        let localFsPhotoRequestURL = myViewModel.fsPhotoRequestURL[y];
         getPhotoFromFS.open('GET', localFsPhotoRequestURL);
         getPhotoFromFS.onreadystatechange = function (oEvent) {
           if (getPhotoFromFS.readyState === 4) {
             if (getPhotoFromFS.status === 200) {
               let responseFromPhotoFS = JSON.parse(getPhotoFromFS.responseText);
               try {
-                let fsPhotoPrefix = responseFromPhotoFS.response.photos.items[0].prefix;
-                let fsPhotoSuffix = responseFromPhotoFS.response.photos.items[0].suffix;
-                window.fsPhoto[y] = fsPhotoPrefix + FS_PHOTO_SIZE + fsPhotoSuffix;
+                myViewModel.fsPhotoPrefix = responseFromPhotoFS.response.photos.items[0].prefix;
+                myViewModel.fsPhotoSuffix = responseFromPhotoFS.response.photos.items[0].suffix;
+                myViewModel.fsPhoto[y] = myViewModel.fsPhotoPrefix + FS_PHOTO_SIZE + myViewModel.fsPhotoSuffix;
                 resolve();
               } catch(err) {
-                window.fsPhoto[y] = 'undefined'; // this will alert user gracefully (see below)
+                myViewModel.fsPhoto[y] = 'undefined'; // this will alert user gracefully (see below)
                 console.log('venue ' + y +
                   ' responseFromPhotoFS.response.photos.items[0] ' +
                   err.description);
                 // alert('Foursquare failed to send photo for venue ' + y);
                 // no need to alert user with a popup when I have infoWindow
                 // programmed to inform the user that no image is available if
-                // window.fsPhoto[y] = 'undefined'. -- see code for populateInfoWindow.
+                // myViewModel.fsPhoto[y] = 'undefined'. -- see code for populateInfoWindow.
                 // I intentionally picked 4 locations without Photos to easily showcase this.
               }
             } else {
-              window.fsPhoto[y] = 'undefined'; // this will alert user gracefully (see below)
+              myViewModel.fsPhoto[y] = 'undefined'; // this will alert user gracefully (see below)
               console.log('Error ', getPhotoFromFS.statusText);
               reject(console.log('venue ' + y + ' failed to get photo from foursquare'));
               // alert('Foursquare failed to send photo for venue ' + y);
               // no need to alert user with a popup when I have infoWindow
               // programmed to inform the user that no image is available if
-              // window.fsPhoto[y] = 'undefined'. -- see code for populateInfoWindow.
+              // myViewModel.fsPhoto[y] = 'undefined'. -- see code for populateInfoWindow.
               // I intentionally picked 4 locations without Photos to easily showcase this.
             } // end if
           } //  end if
@@ -313,7 +315,7 @@ function initMap() {
   * @constructor
   */
   window.map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: 32.776664, lng: -96.796988},
+    center: CENTER_LL,
     zoom: 11,
 	styles: styles,
 	mapTypeControl: false
@@ -330,10 +332,10 @@ function initMap() {
 
 function setMarkers() {
   // The following group uses the location array to create an array of markers on initialize.
-  for (let i = 0; i < window.coffeeShopLocations().length; i++) {
+  for (let i = 0; i < myViewModel.locationsKOOA().length; i++) {
     // Get the position from the location array.
-    let position = window.coffeeShopLocations()[i].location;
-    let title = window.coffeeShopLocations()[i].title;
+    let position = myViewModel.locationsKOOA()[i].location;
+    let title = myViewModel.locationsKOOA()[i].title;
 
     // Create a marker per location, and put into markers array.
     window.marker = new google.maps.Marker({
@@ -345,23 +347,23 @@ function setMarkers() {
     }); // end of marker = new google.maps.Marker({})
 
     // Push the marker to our array of markers.
-    window.markers.push(marker);
+    myViewModel.markers.push(marker);
 
     // Create an onclick event to open an infowindow at each marker.
     window.marker.addListener('click', function() {
 	    let self = this;
-	    selectedLocation = self;
+	    myViewModel.selectedLocationKOO = self;
 
       populateInfoWindow(this, largeInfowindow);
 
 	    // set all marker icons back to green and remove animations
-      for (let x = 0; x < window.markers.length; x++) {
-        window.markers[x].setIcon('img/coffee_marker_green.png');
-	      window.markers[x].setAnimation(null);
+      for (let x = 0; x < myViewModel.markers.length; x++) {
+        myViewModel.markers[x].setIcon('img/coffee_marker_green.png');
+	      myViewModel.markers[x].setAnimation(null);
       } // end of for()
 
 	    // remove locationTitleBold class from all titles elements
-	    for (let x = 1; x < window.markers.length+1; x++) {
+	    for (let x = 1; x < myViewModel.markers.length+1; x++) {
         let elem = document.getElementById(x);
 	      elem.classList.remove('locationTitleBold');
       } // end of for()
@@ -374,7 +376,7 @@ function setMarkers() {
       setTimeout(function(){ self.setAnimation(null); }, 700);
 
 	    // apply locationTitleBold class to selected location's title element in list
-	    let selectedLocationTitleElementById = document.getElementById(selectedLocation.id + 1);
+	    let selectedLocationTitleElementById = document.getElementById(myViewModel.selectedLocationKOO.id + 1);
 	    selectedLocationTitleElementById.classList.add('locationTitleBold');
 
     }); // end marker.addListener(click)
@@ -388,7 +390,7 @@ function setMarkers() {
 
     window.marker.addListener('mouseout', function() {
 	    let self = this;
-	    if (selectedLocation != self) {
+	    if (myViewModel.selectedLocationKOO != self) {
         self.setIcon('img/coffee_marker_green.png');
 	    } // end if (marker != self)
     }); // end marker.addListener(mouseout)
@@ -403,34 +405,34 @@ function setMarkers() {
 */
 selectLocation = function(coffeeShopLocation) {
   let self = this;
-  let locationIndex = window.coffeeShopLocations().indexOf(coffeeShopLocation);
-  selectedLocation = this;
+  let locationIndex = myViewModel.locationsKOOA().indexOf(coffeeShopLocation);
+  myViewModel.selectedLocationKOO = this;
 
   // set all marker icons back to green and remove animations
-  for (let i = 0; i < markers.length; i++) {
-    window.markers[i].setIcon('img/coffee_marker_green.png');
-	  window.markers[i].setAnimation(null);
+  for (let i = 0; i < myViewModel.markers.length; i++) {
+    myViewModel.markers[i].setIcon('img/coffee_marker_green.png');
+	  myViewModel.markers[i].setAnimation(null);
   }
 
   // remove locationTitleBold class from all titles elements
-  for (let x = 1; x < window.markers.length+1; x++) {
+  for (let x = 1; x < myViewModel.markers.length+1; x++) {
     let elem = document.getElementById(x);
 	  elem.classList.remove('locationTitleBold');
   } // end of for()
 
   // set the selected location's marker icon to teal
-  window.markers[locationIndex].setIcon('img/coffee_marker_teal.png');
+  myViewModel.markers[locationIndex].setIcon('img/coffee_marker_teal.png');
   // set the selected location's marker animation to bounce
-  window.markers[locationIndex].setAnimation(google.maps.Animation.BOUNCE);
+  myViewModel.markers[locationIndex].setAnimation(google.maps.Animation.BOUNCE);
   // remove bounce animation after 1 bounce (700 ms)
-  setTimeout(function(){ markers[locationIndex].setAnimation(null); }, 700);
+  setTimeout(function(){ myViewModel.markers[locationIndex].setAnimation(null); }, 700);
 
   // apply locationTitleBold class to selected location's title element in list
-  let selectedLocationTitleElementById = document.getElementById(selectedLocation.id);
+  let selectedLocationTitleElementById = document.getElementById(myViewModel.selectedLocationKOO.id);
   selectedLocationTitleElementById.classList.add('locationTitleBold');
 
   // Open InfoWindow at the marker for the location clicked
-  populateInfoWindow(window.markers[locationIndex], largeInfowindow);
+  populateInfoWindow(myViewModel.markers[locationIndex], largeInfowindow);
 
 } // end of SelectLocation
 
@@ -452,12 +454,12 @@ function populateInfoWindow(marker, infowindow) {
     // either show the Photo or show 'No Image Available'.
     // This is my gracefull alternative to an alert.
     // I intentionally picked 4 locations without Photos to easily showcase this.
-    if (window.fsPhoto[marker.id] != 'undefined') {
+    if (myViewModel.fsPhoto[marker.id] != 'undefined') {
       // set the content for the infowindow
       infowindow.setContent('<div class="infowindow"><h3>' +
         marker.title +
         '</h3><img src="' +
-        window.fsPhoto[marker.id] +
+        myViewModel.fsPhoto[marker.id] +
         '">' + '</br></br>Provided by</br>' +
         '<img src="img/Foursquare-logo.png">' + '</div>');
     } else { // show 'No Image Available' in infowindow
@@ -480,13 +482,13 @@ function populateInfoWindow(marker, infowindow) {
 	    infowindow.marker = null;
 
 	    // set all marker icons back to green and remove animations
-      for (let y = 0; y < markers.length; y++) {
-        window.markers[y].setIcon('img/coffee_marker_green.png');
-	      window.markers[y].setAnimation(null);
+      for (let y = 0; y < myViewModel.markers.length; y++) {
+        myViewModel.markers[y].setIcon('img/coffee_marker_green.png');
+	      myViewModel.markers[y].setAnimation(null);
       } // end of for()
 
 	    // remove locationTitleBold class from all titles elements
-      for (let x = 1; x < markers.length+1; x++) {
+      for (let x = 1; x < myViewModel.markers.length + 1; x++) {
         let elem = document.getElementById(x);
 	      elem.classList.remove('locationTitleBold');
       } // end of for()
@@ -503,9 +505,9 @@ function populateInfoWindow(marker, infowindow) {
 function showListings() {
   let bounds = new google.maps.LatLngBounds();
   // Extend the boundaries of the map for each marker and display the marker
-  for (let i = 0; i < window.markers.length; i++) {
-    window.markers[i].setMap(window.map);
-    bounds.extend(window.markers[i].position);
+  for (let i = 0; i < myViewModel.markers.length; i++) {
+    myViewModel.markers[i].setMap(window.map);
+    bounds.extend(myViewModel.markers[i].position);
   }
   window.map.fitBounds(bounds);
 } // end of showListings()
@@ -515,8 +517,8 @@ function showListings() {
 * @description This function will loop through the listings and hide them all.
 */
 function hideListings() {
-  for (let i = 0; i < window.markers.length; i++) {
-    window.markers[i].setMap(null);
+  for (let i = 0; i < myViewModel.markers.length; i++) {
+    myViewModel.markers[i].setMap(null);
   }
 } // end of hideListings
 
@@ -527,7 +529,7 @@ function filterFunction() {
   filter = filterInput.value.toUpperCase();
 
   // get dom elements and text for each location in list
-  for (let x = 1; x < window.markers.length+1; x++) {
+  for (let x = 1; x < myViewModel.markers.length+1; x++) {
     let elem = document.getElementById(x);
     txtValue = elem.textContent || elem.innerText;
 
@@ -536,12 +538,12 @@ function filterFunction() {
       // remove locationTitleHide class to show elements
       elem.parentElement.classList.remove('locationTitleHide'); //show
       // show map marker
-      window.markers[x-1].setMap(map);
+      myViewModel.markers[x-1].setMap(map);
     } else {
       // add locationTitleHide class to hide elements
       elem.parentElement.classList.add('locationTitleHide'); //hide
       // hide map marker
-      window.markers[x-1].setMap(null);
+      myViewModel.markers[x-1].setMap(null);
     }
   } // end of for()
 } // end of filterFunction()
