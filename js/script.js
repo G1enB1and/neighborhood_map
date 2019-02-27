@@ -60,7 +60,21 @@ let myViewModel = {
 
   getTitle: function(i) {
     return this.locationsKOOA()[i].title;
-  } // end of getTitle
+  }, // end of getTitle
+
+  setFsURLs: function() {
+    for (let i = 0; i < myViewModel.locationsKOOA().length; i++) {
+      myViewModel.fsParams[i] = 'v=' + encodeURIComponent(FS_VERSION)
+        + '&' + 'intent=' + encodeURIComponent(FS_INTENT)
+        + '&' + 'll=' + encodeURIComponent(myViewModel.getLL(i))
+        + '&' + 'name=' + encodeURIComponent(myViewModel.getTitle(i))
+        //+ '&' + 'query=' + encodeURIComponent(FS_QUERY)
+        //+ '&' + 'limit=' + encodeURIComponent(FS_LIMIT)
+        + '&' + 'client_id=' + encodeURIComponent(FS_CLIENT_ID)
+        + '&' + 'client_secret=' + encodeURIComponent(FS_CLIENT_SECRET);
+      myViewModel.fsURL[i] = FS_ENDPOINT + '?' + myViewModel.fsParams[i];
+  } // end of for
+} // end of setFsURLs
 
 }; // end of myViewModel
 
@@ -71,21 +85,7 @@ $(document).ready(function() {
 });
 
 
-function setFsURLs() {
-  for (let i = 0; i < myViewModel.locationsKOOA().length; i++) {
-    myViewModel.fsParams[i] = 'v=' + encodeURIComponent(FS_VERSION)
-      + '&' + 'intent=' + encodeURIComponent(FS_INTENT)
-      + '&' + 'll=' + encodeURIComponent(myViewModel.getLL(i))
-      + '&' + 'name=' + encodeURIComponent(myViewModel.getTitle(i))
-      //+ '&' + 'query=' + encodeURIComponent(FS_QUERY)
-      //+ '&' + 'limit=' + encodeURIComponent(FS_LIMIT)
-      + '&' + 'client_id=' + encodeURIComponent(FS_CLIENT_ID)
-      + '&' + 'client_secret=' + encodeURIComponent(FS_CLIENT_SECRET);
-    myViewModel.fsURL[i] = FS_ENDPOINT + '?' + myViewModel.fsParams[i];
-  }
-}
-
-setFsURLs();
+myViewModel.setFsURLs();
 
 
 async function populateVenueIDsAsync() {
