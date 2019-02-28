@@ -123,19 +123,25 @@ async function populateVenueIDsAsync() {
           reject(console.log('venue '+ y +
             ' failed to get vanue id from foursquare durring open. Error: ' +
             error.description));
-        }
+        } // end of try catch
         try {
           getVenueIDFromFS.onload = function() {
             let responseFromFS = JSON.parse(getVenueIDFromFS.responseText);
-            myViewModel.fsVenueID[y] = responseFromFS.response.venues[0].id;
-            resolve(console.log('venue ' + y + ' id: ' + myViewModel.fsVenueID[y]));
+            if (responseFromFS.meta.code == 200) {
+              myViewModel.fsVenueID[y] = responseFromFS.response.venues[0].id;
+              resolve(console.log('venue ' + y + ' id: ' + myViewModel.fsVenueID[y]));
+            } else {
+              let errorCode = responseFromFS.meta.code;
+              alert('Failed to get Venue IDs from Foursquare. Code: ' + errorCode);
+              reject(); // don't loop through the rest
+            } // end of if else
           }; // end of getVenueIDFromFS.onload
         } catch(error) {
           alert('Failed to get venue id from Foursquare durring onload.');
           reject(console.log('venue '+ y +
             ' failed to get vanue id from foursquare durring onload. Error: ' +
             error.description));
-        }
+        } // end of try catch
         try {
           getVenueIDFromFS.send();
         } catch(error) {
@@ -143,7 +149,7 @@ async function populateVenueIDsAsync() {
           reject(console.log('venue '+ y +
             ' failed to get vanue id from foursquare durring send. Error: ' +
             error.description));
-        }
+        } // end of try catch
       })); // end of promises
     } // end of for
 
@@ -174,14 +180,21 @@ async function populateFsPhotoRequestURLsAsync() {
     return Promise.all(promisesB)
       .then(function () {
         resolve(console.log('Done populating Photo Request URLs'));
-        getPhotosWrapperFunction();
+        try {
+          getPhotosWrapperFunction();
+        } catch(error) {
+          alert('Failed to get photos from Foursquare: Error durring getPhotosWrapperFunction()');
+        } // end of catch(error)
       }); // end of .then
 
   }); // end of populateFsPhotoRequestURLs
 } // end of async function populateFsPhotoRequestURLsAsync()
 
-populateVenueIDsAsync();
-
+try {
+  populateVenueIDsAsync();
+} catch(error) {
+  alert('Failed to get VenueIDs from Foursquare.');
+}
 
 async function getPhotosWrapperFunction() {
   let populatePhotos = new Promise(function(resolve, reject) {
@@ -191,29 +204,54 @@ async function getPhotosWrapperFunction() {
       promisesC.push(new Promise(function (resolve) {
         let getPhotoFromFS = new XMLHttpRequest();
         let localFsPhotoRequestURL = myViewModel.fsPhotoRequestURL[y];
-        getPhotoFromFS.open('GET', localFsPhotoRequestURL);
+        try {
+          getPhotoFromFS.open('GET', localFsPhotoRequestURL);
+        } catch(error) {
+          alert('Failed to get Photos from Foursquare durring getPhotoFromFS.open()');
+        }
         getPhotoFromFS.onreadystatechange = function (oEvent) {
           if (getPhotoFromFS.readyState === 4) {
             if (getPhotoFromFS.status === 200) {
               let responseFromPhotoFS = JSON.parse(getPhotoFromFS.responseText);
-              try {
-                myViewModel.fsPhotoPrefix = responseFromPhotoFS.response.photos.items[0].prefix;
-                myViewModel.fsPhotoSuffix = responseFromPhotoFS.response.photos.items[0].suffix;
-                myViewModel.fsPhoto[y] = myViewModel.fsPhotoPrefix + FS_PHOTO_SIZE + myViewModel.fsPhotoSuffix;
-                resolve();
-              } catch(err) {
-                myViewModel.fsPhoto[y] = 'undefined'; // this will alert user gracefully (see below)
-                console.log('venue ' + y +
-                  ' responseFromPhotoFS.response.photos.items[0] ' +
-                  err.description);
-                // alert('Foursquare failed to send photo for venue ' + y);
-                // no need to alert user with a popup when I have infoWindow
-                // programmed to inform the user that no image is available if
-                // myViewModel.fsPhoto[y] = 'undefined'. -- see code for populateInfoWindow.
-                // I intentionally picked 4 locations without Photos to easily showcase this.
-              }
+              let fsCode = responseFromPhotoFS.meta.code;
+              if (fsCode == 200) {
+                try {
+                  myViewModel.fsPhotoPrefix = responseFromPhotoFS.response.photos.items[0].prefix;
+                  myViewModel.fsPhotoSuffix = responseFromPhotoFS.response.photos.items[0].suffix;
+                  myViewModel.fsPhoto[y] = myViewModel.fsPhotoPrefix + FS_PHOTO_SIZE + myViewModel.fsPhotoSuffix;
+                  resolve();
+                } catch(err) {
+                  myViewModel.fsPhoto[y] = 'undefined'; // this will alert user gracefully (see below)
+                  console.log('venue ' + y +
+                    ' responseFromPhotoFS.response.photos.items[0] ' +
+                    err.description);
+                  // alert('Foursquare failed to send photo for venue ' + y);
+                  // no need to alert user with a popup when I have infoWindow
+                  // programmed to inform the user that no image is available if
+                  // myViewModel.fsPhoto[y] = 'undefined'. -- see code for populateInfoWindow.
+                  // I intentionally picked 4 locations without Photos to easily showcase this.
+                } // end of catch(err)
+              } else {
+                alert('Failed to get Photos from Foursquare. Code: ' + fsCode);
+                reject(); // don't loop through the rest
+              } // end of if else
+
             } else {
               myViewModel.fsPhoto[y] = 'undefined'; // this will alert user gracefully (see below)
+              let codeMeaning = '';
+              if (getPhotoFromFS.status === 429)
+              {
+                codeMeaning = 'Quota Limit Reached.';
+              }
+              if (getPhotoFromFS.status === 400)
+              {
+                codeMeaning = 'Bad request or parameter.';
+              }
+              if (getPhotoFromFS.status === 401)
+              {
+                codeMeaning = 'Invalid Authorization.';
+              }
+              alert('Failed to get Photo ' + y + ' of 17 from Foursquare. Code: ' + getPhotoFromFS.status + ' ' + codeMeaning);
               console.log('Error ', getPhotoFromFS.statusText);
               reject(console.log('venue ' + y + ' failed to get photo from foursquare'));
               // alert('Foursquare failed to send photo for venue ' + y);
@@ -224,7 +262,11 @@ async function getPhotosWrapperFunction() {
             } // end if
           } //  end if
         }; // end of function getPhotoFromFS.onload
-        getPhotoFromFS.send();
+        try {
+          getPhotoFromFS.send();
+        } catch(err) {
+          alert('Failed to get Photos from Foursquare durring getPhotoFromFS.send()');
+        } // end of catch(err)
       })); // end of promises
     } // end of for
 
