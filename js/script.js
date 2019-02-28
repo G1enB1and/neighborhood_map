@@ -537,3 +537,7 @@ function hideListings() {
     myViewModel.markers[i].setMap(null);
   }
 } // end of hideListings
+
+let googleMapsScriptError = function() {
+  alert('Error loading Google Maps.');
+}
