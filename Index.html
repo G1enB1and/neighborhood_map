@@ -39,14 +39,14 @@
 
       </div> <!-- end of div class='options-box' -->
 
-	  <div class='headerMapWrapper'>
-	    <div class='header'>
-	      <i class='fas fa-bars menuBtn'></i>
-	    </div> <!-- end of header div -->
+	    <div class='headerMapWrapper'>
+	      <div class='header'>
+	        <i class='fas fa-bars menuBtn'></i>
+	      </div> <!-- end of header div -->
 
-	    <div id='mapContainer'>
-          <div id='map'></div>
-		</div> <!-- end of mapContainer -->
+	      <div class='mapContainer'>
+          <div id='map' class='map-canvas'></div>
+		    </div> <!-- end of mapContainer -->
       </div> <!-- end of headerMapWrapper -->
 
     </div> <!-- end of div class='container' -->
@@ -94,25 +94,17 @@
 
     </script> <!-- end of script to fix heights of map container and optionsBox-->
 
+    <!-- load Knockout.js -->
+  	<script src='js/libs/knockout-3.4.2.js'></script>
 
-  <script>
-    // google maps initMap callback script with error handling
-    let googleMapsScript = document.createElement('script');
-    googleMapsScript.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDqQry8xCE6UqTuRaXy1OQnIOhZa0AIo2A&v=3&callback=initMap';
-    googleMapsScript.async = true;
-    googleMapsScript.defer = true;
-    document.body.append(googleMapsScript);
+  	<!-- load my main javascript -->
+  	<script src='js/script.js'></script>
 
-    googleMapsScript.onerror = function() {
-      alert('Error loading Google Maps.');
-    }
-  </script>
-
-	<!-- load Knockout.js -->
-	<script src='js/libs/knockout-3.4.2.js'></script>
-
-	<!-- load my main javascript -->
-	<script src='js/script.js'></script>
+    <!-- google maps initMap callback script with error handling -->
+    <script async defer
+      src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDqQry8xCE6UqTuRaXy1OQnIOhZa0AIo2A&v=3&callback=initMap'
+      onerror='googleMapsScriptError()'>
+    </script>
 
   </body>
 </html>
