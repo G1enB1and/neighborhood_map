@@ -27,8 +27,10 @@
         <h1>Coffee Shop Locations</h1>
 
         <form class='filterForm'>
-          <input type='text' name='filter' data-bind='textInput: myViewModel.filterInputKOO' placeholder='Filter By...' id='txtFilterInput' onkeyup='myViewModel.filterFunction()'>
-          <button type='button' id='btnFilter' onclick='myViewModel.filterFunction()'><i class="fa fa-filter"></i></button>
+            <!--  old method: onkeyup='myViewModel.filterFunction()' -->
+            <!-- event: { keypress: function} seems to be a keypress or 2 behind compared to onkeyup, but it kinda works and the button click works -->
+          <input type='text' name='filter' data-bind='textInput: myViewModel.filterInputKOO, event: { keypress: myViewModel.filterFunction() }' placeholder='Filter By...' id='txtFilterInput'>
+          <button type='button' id='btnFilter' data-bind='event: { click: myViewModel.filterFunction() }'><i class="fa fa-filter"></i></button>
         </form>
 
         <div data-bind='foreach: myViewModel.locationsKOOA' class='locationTitleList'>
