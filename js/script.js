@@ -22,11 +22,11 @@ let myViewModel = {
   fsPhotoRequestURL: [],
   markers: [],
 
-  fsPhotoParams: 'v=' + encodeURIComponent(FS_VERSION)
-    + '&' + 'group=' + encodeURIComponent(FS_GROUP)
-    + '&' + 'limit=' + encodeURIComponent(FS_PHOTO_LIMIT)
-    + '&' + 'client_id=' + encodeURIComponent(FS_CLIENT_ID)
-    + '&' + 'client_secret=' + encodeURIComponent(FS_CLIENT_SECRET),
+  fsPhotoParams: 'v=' + encodeURIComponent(FS_VERSION) +
+    '&' + 'group=' + encodeURIComponent(FS_GROUP) +
+    '&' + 'limit=' + encodeURIComponent(FS_PHOTO_LIMIT) +
+    '&' + 'client_id=' + encodeURIComponent(FS_CLIENT_ID) +
+    '&' + 'client_secret=' + encodeURIComponent(FS_CLIENT_SECRET),
   fsPhotoPrefix: '',
   fsPhotoSuffix: '',
 
@@ -54,8 +54,8 @@ let myViewModel = {
   selectedLocationKOO: ko.observable(''),
 
   getLL: function(i) {
-    return this.locationsKOOA()[i].location.lat + ','
-      + this.locationsKOOA()[i].location.lng;
+    return this.locationsKOOA()[i].location.lat + ',' +
+      this.locationsKOOA()[i].location.lng;
   }, // end of getLL
 
   getTitle: function(i) {
@@ -64,14 +64,14 @@ let myViewModel = {
 
   setFsURLs: function() {
     for (let i = 0; i < myViewModel.locationsKOOA().length; i++) {
-      myViewModel.fsParams[i] = 'v=' + encodeURIComponent(FS_VERSION)
-        + '&' + 'intent=' + encodeURIComponent(FS_INTENT)
-        + '&' + 'll=' + encodeURIComponent(myViewModel.getLL(i))
-        + '&' + 'name=' + encodeURIComponent(myViewModel.getTitle(i))
+      myViewModel.fsParams[i] = 'v=' + encodeURIComponent(FS_VERSION) +
+        '&' + 'intent=' + encodeURIComponent(FS_INTENT) +
+        '&' + 'll=' + encodeURIComponent(myViewModel.getLL(i)) +
+        '&' + 'name=' + encodeURIComponent(myViewModel.getTitle(i)) +
         //+ '&' + 'query=' + encodeURIComponent(FS_QUERY)
         //+ '&' + 'limit=' + encodeURIComponent(FS_LIMIT)
-        + '&' + 'client_id=' + encodeURIComponent(FS_CLIENT_ID)
-        + '&' + 'client_secret=' + encodeURIComponent(FS_CLIENT_SECRET);
+        '&' + 'client_id=' + encodeURIComponent(FS_CLIENT_ID) +
+        '&' + 'client_secret=' + encodeURIComponent(FS_CLIENT_SECRET);
       myViewModel.fsURL[i] = FS_ENDPOINT + '?' + myViewModel.fsParams[i];
     } // end of for
   }, // end of setFsURLs
@@ -132,8 +132,8 @@ async function populateVenueIDsAsync() {
         } catch(error) {
           alert('Failed to get venue id from Foursquare.');
           reject(console.log('venue '+ y +
-            ' failed to get vanue id from foursquare. Error: '
-            + error.description));
+            ' failed to get vanue id from foursquare. Error: ' +
+            error.description));
         }
         getVenueIDFromFS.send();
       })); // end of promises
@@ -143,7 +143,7 @@ async function populateVenueIDsAsync() {
       .then(function () {
         resolve(console.log('Done getting Venue IDs'));
         populateFsPhotoRequestURLsAsync();
-      }) // end of .then
+      }); // end of .then
 
   }); // end of populateVenueIDs
 } // end of async function populateVenueIDsAsync()
@@ -155,10 +155,10 @@ async function populateFsPhotoRequestURLsAsync() {
 
     for (let y = 0; y < myViewModel.locationsKOOA().length; y++) {
       promisesB.push(new Promise(function (resolve) {
-        myViewModel.fsPhotoEndpoint[y] = 'https://api.foursquare.com/v2/venues/'
-          + myViewModel.fsVenueID[y] + '/photos';
-        myViewModel.fsPhotoRequestURL[y] = myViewModel.fsPhotoEndpoint[y] + '?'
-          + myViewModel.fsPhotoParams;
+        myViewModel.fsPhotoEndpoint[y] = 'https://api.foursquare.com/v2/venues/' +
+          myViewModel.fsVenueID[y] + '/photos';
+        myViewModel.fsPhotoRequestURL[y] = myViewModel.fsPhotoEndpoint[y] + '?' +
+          myViewModel.fsPhotoParams;
         resolve();
       })); // end of promises
     } // end of for
@@ -167,7 +167,7 @@ async function populateFsPhotoRequestURLsAsync() {
       .then(function () {
         resolve(console.log('Done populating Photo Request URLs'));
         getPhotosWrapperFunction();
-      }) // end of .then
+      }); // end of .then
 
   }); // end of populateFsPhotoRequestURLs
 } // end of async function populateFsPhotoRequestURLsAsync()
@@ -215,7 +215,7 @@ async function getPhotosWrapperFunction() {
               // I intentionally picked 4 locations without Photos to easily showcase this.
             } // end if
           } //  end if
-        } // end of function getPhotoFromFS.onload
+        }; // end of function getPhotoFromFS.onload
         getPhotoFromFS.send();
       })); // end of promises
     } // end of for
@@ -223,7 +223,7 @@ async function getPhotosWrapperFunction() {
     return Promise.all(promisesC)
     .then(function () {
       resolve(console.log('Done populating Photos'));
-    }) // end of .then
+    }); // end of .then
 
   }); // end of populatePhotos
 } // end of async function getPhotosWrapperFunction
@@ -233,8 +233,6 @@ async function getPhotosWrapperFunction() {
 * @description Initialize Map
 */
 function initMap() {
-  let self = this;
-
   // Create a styles array to use with the map.
   let styles = [{
     'featureType': 'administrative',
@@ -358,7 +356,7 @@ function setMarkers() {
       position: position,
       title: title,
       animation: google.maps.Animation.DROP,
-	    icon: 'img/coffee_marker_green.png',
+	  icon: 'img/coffee_marker_green.png',
       id: i
     }); // end of marker = new google.maps.Marker({})
 
@@ -367,48 +365,48 @@ function setMarkers() {
 
     // Create an onclick event to open an infowindow at each marker.
     window.marker.addListener('click', function() {
-	    let self = this;
-	    myViewModel.selectedLocationKOO = self;
+	  let self = this;
+	  myViewModel.selectedLocationKOO = self;
 
       populateInfoWindow(this, largeInfowindow);
 
-	    // set all marker icons back to green and remove animations
+	  // set all marker icons back to green and remove animations
       for (let x = 0; x < myViewModel.markers.length; x++) {
         myViewModel.markers[x].setIcon('img/coffee_marker_green.png');
-	      myViewModel.markers[x].setAnimation(null);
+	    myViewModel.markers[x].setAnimation(null);
       } // end of for()
 
-	    // remove locationTitleBold class from all titles elements
-	    for (let x = 1; x < myViewModel.markers.length+1; x++) {
+	  // remove locationTitleBold class from all titles elements
+	  for (let x = 1; x < myViewModel.markers.length+1; x++) {
         let elem = document.getElementById(x);
-	      elem.classList.remove('locationTitleBold');
+	    elem.classList.remove('locationTitleBold');
       } // end of for()
 
-	    // set the selected location's marker icon to teal
+	  // set the selected location's marker icon to teal
       self.setIcon('img/coffee_marker_teal.png');
       // set the selected location's marker animation to bounce
       self.setAnimation(google.maps.Animation.BOUNCE);
       // remove bounce animation after 1 bounce (700 ms)
       setTimeout(function(){ self.setAnimation(null); }, 700);
 
-	    // apply locationTitleBold class to selected location's title element in list
-	    let selectedLocationTitleElementById = document.getElementById(myViewModel.selectedLocationKOO.id + 1);
-	    selectedLocationTitleElementById.classList.add('locationTitleBold');
+	  // apply locationTitleBold class to selected location's title element in list
+	  let selectedLocationTitleElementById = document.getElementById(myViewModel.selectedLocationKOO.id + 1);
+	  selectedLocationTitleElementById.classList.add('locationTitleBold');
 
     }); // end marker.addListener(click)
 
-	  // Two event listeners - one for mouseover, one for mouseout,
+	// Two event listeners - one for mouseover, one for mouseout,
     // to change the colors back and forth.
-	  window.marker.addListener('mouseover', function() {
-	    let self = this;
+	window.marker.addListener('mouseover', function() {
+	  let self = this;
       self.setIcon('img/coffee_marker_teal.png');
     }); // end marker.addListener(mouseover)
 
     window.marker.addListener('mouseout', function() {
-	    let self = this;
-	    if (myViewModel.selectedLocationKOO != self) {
+	  let self = this;
+	  if (myViewModel.selectedLocationKOO != self) {
         self.setIcon('img/coffee_marker_green.png');
-	    } // end if (marker != self)
+	  } // end if (marker != self)
     }); // end marker.addListener(mouseout)
 
   } // end of for (var i = 0; i < locations.length; i++)
@@ -427,13 +425,13 @@ selectLocation = function(coffeeShopLocation) {
   // set all marker icons back to green and remove animations
   for (let i = 0; i < myViewModel.markers.length; i++) {
     myViewModel.markers[i].setIcon('img/coffee_marker_green.png');
-	  myViewModel.markers[i].setAnimation(null);
+	myViewModel.markers[i].setAnimation(null);
   }
 
   // remove locationTitleBold class from all titles elements
   for (let x = 1; x < myViewModel.markers.length+1; x++) {
     let elem = document.getElementById(x);
-	  elem.classList.remove('locationTitleBold');
+	elem.classList.remove('locationTitleBold');
   } // end of for()
 
   // set the selected location's marker icon to teal
@@ -492,21 +490,21 @@ function populateInfoWindow(marker, infowindow) {
       infowindow.marker = null;
     });
 
-	  // Close infowindow if empty map area is clicked
-	  google.maps.event.addListener(map, "click", function(event) {
+	// Close infowindow if empty map area is clicked
+	google.maps.event.addListener(map, "click", function(event) {
       infowindow.close();
-	    infowindow.marker = null;
+	  infowindow.marker = null;
 
-	    // set all marker icons back to green and remove animations
+	  // set all marker icons back to green and remove animations
       for (let y = 0; y < myViewModel.markers.length; y++) {
         myViewModel.markers[y].setIcon('img/coffee_marker_green.png');
-	      myViewModel.markers[y].setAnimation(null);
+	    myViewModel.markers[y].setAnimation(null);
       } // end of for()
 
-	    // remove locationTitleBold class from all titles elements
+	  // remove locationTitleBold class from all titles elements
       for (let x = 1; x < myViewModel.markers.length + 1; x++) {
         let elem = document.getElementById(x);
-	      elem.classList.remove('locationTitleBold');
+	    elem.classList.remove('locationTitleBold');
       } // end of for()
 
     }); // end of google.maps.event.addListener(map, "click", function(event)
