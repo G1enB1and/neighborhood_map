@@ -33,23 +33,23 @@ let myViewModel = {
 
   // These are the listings that will be shown to the user.
   locationsKOOA: ko.observableArray([
-    {id: 1, title: 'Cafe Brazil', location: {lat: 32.844404, lng: -96.773435}},
-    {id: 2, title: 'Cafe Brazil', location: {lat: 32.784975, lng: -96.783027}},
-    {id: 3, title: 'Starbucks', location: {lat: 32.864403, lng: -96.660265}},
-    {id: 4, title: 'Starbucks', location: {lat: 32.811152, lng: -96.623135}},
-    {id: 5, title: 'Starbucks', location: {lat: 32.746236, lng: -96.585969}},
-    {id: 6, title: 'Black Forest Coffee', location: {lat: 32.86609, lng: -96.764503}},
-    {id: 7, title: 'Dennys', location: {lat: 32.819224, lng: -96.786784}},
-    {id: 8, title: 'Dennys', location: {lat: 32.841681, lng: -96.593621}},
-    {id: 9, title: 'Dennys', location: {lat: 32.789396, lng: -96.594197}},
-    {id: 10, title: 'iHop', location: {lat: 32.857431, lng: -96.647735}},
-    {id: 11, title: 'iHop', location: {lat: 32.859325, lng: -96.769432}},
-    {id: 12, title: 'iHop', location: {lat: 32.768661, lng: -96.625545}},
-    {id: 13, title: 'Goldmine', location: {lat: 32.876755, lng: -96.631224}},
-    {id: 14, title: 'Beef House', location: {lat: 32.878382, lng: -96.647637}},
-    {id: 15, title: 'Dunkin Donuts', location: {lat: 32.861236, lng: -96.643064}},
-    {id: 16, title: 'Dunkin Donuts', location: {lat: 32.952197, lng: -96.769473}},
-    {id: 17, title: 'White Rock Coffee', location: {lat: 32.864607, lng: -96.712334}}
+    {id: 1, title: 'Cafe Brazil', location: {lat: 32.844404, lng: -96.773435}, isVisible: ko.observable(true)},
+    {id: 2, title: 'Cafe Brazil', location: {lat: 32.784975, lng: -96.783027}, isVisible: ko.observable(true)},
+    {id: 3, title: 'Starbucks', location: {lat: 32.864403, lng: -96.660265}, isVisible: ko.observable(true)},
+    {id: 4, title: 'Starbucks', location: {lat: 32.811152, lng: -96.623135}, isVisible: ko.observable(true)},
+    {id: 5, title: 'Starbucks', location: {lat: 32.746236, lng: -96.585969}, isVisible: ko.observable(true)},
+    {id: 6, title: 'Black Forest Coffee', location: {lat: 32.86609, lng: -96.764503}, isVisible: ko.observable(true)},
+    {id: 7, title: 'Dennys', location: {lat: 32.819224, lng: -96.786784}, isVisible: ko.observable(true)},
+    {id: 8, title: 'Dennys', location: {lat: 32.841681, lng: -96.593621}, isVisible: ko.observable(true)},
+    {id: 9, title: 'Dennys', location: {lat: 32.789396, lng: -96.594197}, isVisible: ko.observable(true)},
+    {id: 10, title: 'iHop', location: {lat: 32.857431, lng: -96.647735}, isVisible: ko.observable(true)},
+    {id: 11, title: 'iHop', location: {lat: 32.859325, lng: -96.769432}, isVisible: ko.observable(true)},
+    {id: 12, title: 'iHop', location: {lat: 32.768661, lng: -96.625545}, isVisible: ko.observable(true)},
+    {id: 13, title: 'Goldmine', location: {lat: 32.876755, lng: -96.631224}, isVisible: ko.observable(true)},
+    {id: 14, title: 'Beef House', location: {lat: 32.878382, lng: -96.647637}, isVisible: ko.observable(true)},
+    {id: 15, title: 'Dunkin Donuts', location: {lat: 32.861236, lng: -96.643064}, isVisible: ko.observable(true)},
+    {id: 16, title: 'Dunkin Donuts', location: {lat: 32.952197, lng: -96.769473}, isVisible: ko.observable(true)},
+    {id: 17, title: 'White Rock Coffee', location: {lat: 32.864607, lng: -96.712334}, isVisible: ko.observable(true)}
   ]), // end of myViewModel.locationsKOOA
 
   selectedLocationKOO: ko.observable(''),
@@ -80,24 +80,17 @@ let myViewModel = {
   filterInputKOO: ko.observable(''),
 
   filterFunction: function() {
-    // Declare variables
-    let filter, txtValue;
-    filter = myViewModel.filterInputKOO().toUpperCase();
+    let filter = myViewModel.filterInputKOO().toUpperCase();
 
     // get dom elements and text for each location in list
     for (let x = 1; x < myViewModel.markers.length + 1; x++) {
-      let elem = document.getElementById(x);
-      txtValue = elem.textContent || elem.innerText;
-
       // compare input to text
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        // remove locationTitleHide class to show elements
-        elem.parentElement.classList.remove('locationTitleHide'); //show
+      if (myViewModel.getTitle(x-1).toUpperCase().indexOf(filter) > -1) {
+        myViewModel.locationsKOOA()[x-1].isVisible(true); // show
         // show map marker
         myViewModel.markers[x-1].setMap(map);
       } else {
-        // add locationTitleHide class to hide elements
-        elem.parentElement.classList.add('locationTitleHide'); //hide
+        myViewModel.locationsKOOA()[x-1].isVisible(false); // hide
         // hide map marker
         myViewModel.markers[x-1].setMap(null);
       }

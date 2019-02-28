@@ -32,8 +32,8 @@
         </form>
 
         <div data-bind='foreach: myViewModel.locationsKOOA' class='locationTitleList'>
-          <div class='locationTitle'>
-            <span data-bind='text: title, attr: { id: id }, click: selectLocation'></span><br />
+          <div class='locationTitle' data-bind='visible: isVisible'>
+            <span data-bind='text: title, visible: isVisible, attr: { id: id }, click: selectLocation'></span><br />
           </div>
         </div>
 
