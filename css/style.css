@@ -98,13 +98,13 @@ button:focus {
   width: 48%;
 }
 
-#mapContainer {
+.mapContainer {
   position: relative;
   height: 100%;
   flex: 2 2 auto;
 }
 
-#map {
+.map-canvas {
   position: absolute;
   left: 0;
   right: 0;
