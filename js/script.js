@@ -1,13 +1,14 @@
+'use strict';
 const FS_ENDPOINT = 'https://api.foursquare.com/v2/venues/search';
 const FS_VERSION = '20180323';
 const FS_INTENT = 'match'; // default 'checkin' if searching for more than 1
-const FS_LIMIT = '1';
+//const FS_LIMIT = '1';
 const FS_GROUP = 'venue';
 const FS_PHOTO_LIMIT = '1';
 const FS_PHOTO_SIZE = '150x150';
 const FS_CLIENT_ID = 'E2QMBO1XOX1I3HM2TQ4BMEGVLA3ZHCHN1WG4RM40RGZJIZHH';
 const FS_CLIENT_SECRET = 'JSOKMIPYKJW52UBZDXRT3V1NUONCMIEWTJX3VTANTHY4NUC5';
-const FS_QUERY = 'coffee';
+//const FS_QUERY = 'coffee';
 const CENTER_LL = {lat: 32.776664, lng: -96.796988}; // center of map area
 
 let map;
@@ -356,12 +357,12 @@ function setMarkers() {
       position: position,
       title: title,
       animation: google.maps.Animation.DROP,
-	  icon: 'img/coffee_marker_green.png',
+      icon: 'img/coffee_marker_green.png',
       id: i
     }); // end of marker = new google.maps.Marker({})
 
     // Push the marker to our array of markers.
-    myViewModel.markers.push(marker);
+    myViewModel.markers.push(window.marker);
 
     // Create an onclick event to open an infowindow at each marker.
     window.marker.addListener('click', function() {
@@ -417,8 +418,7 @@ function setMarkers() {
 * @description This function changes the marker icon of the selected location.
 * @param {object} coffeeShopLocation
 */
-selectLocation = function(coffeeShopLocation) {
-  let self = this;
+let selectLocation = function(coffeeShopLocation) {
   let locationIndex = myViewModel.locationsKOOA().indexOf(coffeeShopLocation);
   myViewModel.selectedLocationKOO = this;
 
@@ -448,7 +448,7 @@ selectLocation = function(coffeeShopLocation) {
   // Open InfoWindow at the marker for the location clicked
   populateInfoWindow(myViewModel.markers[locationIndex], largeInfowindow);
 
-} // end of SelectLocation
+}; // end of SelectLocation
 
 
 /**
@@ -526,16 +526,9 @@ function showListings() {
   map.fitBounds(bounds);
 } // end of showListings()
 
-
 /**
-* @description This function will loop through the listings and hide them all.
+* @description This function displays an alert for error loading google maps.
 */
-function hideListings() {
-  for (let i = 0; i < myViewModel.markers.length; i++) {
-    myViewModel.markers[i].setMap(null);
-  }
-} // end of hideListings
-
 let googleMapsScriptError = function() {
   alert('Error loading Google Maps.');
-}
+};
