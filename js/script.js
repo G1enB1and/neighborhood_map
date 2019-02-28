@@ -10,7 +10,7 @@ const FS_CLIENT_SECRET = 'JSOKMIPYKJW52UBZDXRT3V1NUONCMIEWTJX3VTANTHY4NUC5';
 const FS_QUERY = 'coffee';
 const CENTER_LL = {lat: 32.776664, lng: -96.796988}; // center of map area
 
-window.map;
+let map;
 
 let myViewModel = {
   // Create new blank arrays
@@ -330,7 +330,7 @@ function initMap() {
   * @description creates a new map - only center and zoom are required.
   * @constructor
   */
-  window.map = new google.maps.Map(document.getElementById('map'), {
+  map = new google.maps.Map(document.getElementById('map'), {
     center: CENTER_LL,
     zoom: 11,
 	styles: styles,
@@ -522,10 +522,10 @@ function showListings() {
   let bounds = new google.maps.LatLngBounds();
   // Extend the boundaries of the map for each marker and display the marker
   for (let i = 0; i < myViewModel.markers.length; i++) {
-    myViewModel.markers[i].setMap(window.map);
+    myViewModel.markers[i].setMap(map);
     bounds.extend(myViewModel.markers[i].position);
   }
-  window.map.fitBounds(bounds);
+  map.fitBounds(bounds);
 } // end of showListings()
 
 
