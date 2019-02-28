@@ -2,8 +2,8 @@
 Udacity Project for Full Stack Web Developer Nanodegree.  
 
 ## Instructions:
-To use this application just open index.html with any modern browser.  
-Internet connection required.
+To use this application just open Index.html with any modern browser or click [here](https://g1enb1and.github.io/neighborhood_map/Index.html) to open this project hosted on GitHub Pages.  
+Internet connection required.  
 
 ## Features:
 This app uses Google Maps and Foursquare APIs to provide a map with markers  
@@ -22,4 +22,4 @@ standard javascript were also used along with html and css. JSON data was
 fetched asynchronously from Foursquare API and Google Maps API.
 
 ## Licence:
-MIT Licesne. 
+MIT Licesne.
