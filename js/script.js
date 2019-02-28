@@ -93,7 +93,7 @@ let myViewModel = {
         myViewModel.locationsKOOA()[x-1].isVisible(false); // hide
         // hide map marker
         myViewModel.markers[x-1].setMap(null);
-      }
+      } // end if else
     } // end of for()
   } // end of filterFunction()
 
@@ -116,7 +116,14 @@ async function populateVenueIDsAsync() {
     for (let y = 0; y < myViewModel.locationsKOOA().length; y++) {
       promisesA.push(new Promise(function (resolve, reject) {
         let getVenueIDFromFS = new XMLHttpRequest();
-        getVenueIDFromFS.open('GET', myViewModel.fsURL[y]);
+        try {
+          getVenueIDFromFS.open('GET', myViewModel.fsURL[y]);
+        } catch(error) {
+          alert('Failed to get venue id from Foursquare durring open.');
+          reject(console.log('venue '+ y +
+            ' failed to get vanue id from foursquare durring open. Error: ' +
+            error.description));
+        }
         try {
           getVenueIDFromFS.onload = function() {
             let responseFromFS = JSON.parse(getVenueIDFromFS.responseText);
@@ -124,12 +131,19 @@ async function populateVenueIDsAsync() {
             resolve(console.log('venue ' + y + ' id: ' + myViewModel.fsVenueID[y]));
           }; // end of getVenueIDFromFS.onload
         } catch(error) {
-          alert('Failed to get venue id from Foursquare.');
+          alert('Failed to get venue id from Foursquare durring onload.');
           reject(console.log('venue '+ y +
-            ' failed to get vanue id from foursquare. Error: ' +
+            ' failed to get vanue id from foursquare durring onload. Error: ' +
             error.description));
         }
-        getVenueIDFromFS.send();
+        try {
+          getVenueIDFromFS.send();
+        } catch(error) {
+          alert('Failed to get venue id from Foursquare durring send.');
+          reject(console.log('venue '+ y +
+            ' failed to get vanue id from foursquare durring send. Error: ' +
+            error.description));
+        }
       })); // end of promises
     } // end of for
 
